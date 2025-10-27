@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Network Sniffer Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; margin: 20px; background: #0d1117; color: #e6edf3; }
+    h1 { color: #58a6ff; text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border-bottom: 1px solid #30363d; text-align: left; }
+    tr:hover { background: #161b22; }
+    .alert { color: #ff6b6b; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Network Sniffer — Live Alerts</h1>
+  <table id="packetTable">
+    <thead>
+      <tr><th>ID</th><th>Timestamp</th><th>Source</th><th>Destination</th><th>Proto</th><th>Length</th><th>Flags</th><th>Alert</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function fetchPackets() {
+      const res = await fetch('/data');
+      const packets = await res.json();
+      const tbody = document.querySelector('#packetTable tbody');
+      tbody.innerHTML = '';
+      for (const pkt of packets) {
+        const row = document.createElement('tr');
+        if (pkt.alert && pkt.alert !== 'None') row.classList.add('alert');
+        row.innerHTML = `
+          <td>${pkt.id}</td>
+          <td>${pkt.timestamp}</td>
+          <td>${pkt.src}</td>
+          <td>${pkt.dst}</td>
+          <td>${pkt.proto}</td>
+          <td>${pkt.length}</td>
+          <td>${pkt.flags}</td>
+          <td>${pkt.alert || ''}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+    setInterval(fetchPackets, 2000);
+    fetchPackets();
+  </script>
+</body>
+</html>
