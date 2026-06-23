@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides six independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, and a real-time ARP spoof detector.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides seven independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, and a subdomain enumerator.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -58,6 +58,14 @@ Passively monitors local network for ARP spoofing and poisoning attacks. Tracks 
 **Tech:** Python, Scapy, Flask, SQLite, Rich
 
 [View source](ARPWatch/) | [README](ARPWatch/README.md)
+
+### SubProbe — Subdomain Enumerator
+
+Enumerate subdomains via wordlist brute-force, Certificate Transparency logs (crt.sh), and DNS record analysis. Resolves IPs, checks HTTP status, flags interesting results (200/403), and detects wildcard DNS.
+
+**Tech:** Python, DNS, Requests, Flask, Rich
+
+[View source](SubProbe/) | [README](SubProbe/README.md)
 
 ## Quick Start
 
@@ -151,6 +159,20 @@ python dashboard.py
 # Open http://127.0.0.1:5400
 ```
 
+### Sub Probe
+
+```bash
+cd SubProbe
+pip install -r requirements.txt
+
+# Full enumeration
+python main.py example.com
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5500
+```
+
 ## Running Tests
 
 ```bash
@@ -212,6 +234,18 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── SubProbe/
+│   ├── main.py              # CLI entry point (Rich tables)
+│   ├── enumerator.py        # Core enumeration engine
+│   ├── resolver.py          # DNS resolution + HTTP status checks
+│   ├── ctlogs.py            # crt.sh API integration
+│   ├── database.py          # SQLite operations
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── wordlists/
+│   │   └── subdomains.txt   # Built-in 500 subdomain wordlist
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 ├── ARPWatch/
 │   ├── main.py              # CLI entry point (Rich live display)
 │   ├── sniffer.py           # Scapy ARP packet capture
@@ -239,6 +273,7 @@ SecureNET-Toolkit--main/
 | PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — | — |
 | HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes | — |
 | ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes |
+| SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
 
 ## Scoring Methodology (HeaderScan)
 
