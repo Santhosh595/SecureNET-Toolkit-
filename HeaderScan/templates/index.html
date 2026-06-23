@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeaderScan — HTTP Security Header Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060a10; --surface: #0c1220; --surface-raised: #111827;
+      --border: #1a2538; --border-light: #243044;
+      --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+      --accent: #0ea5e9; --accent-dim: rgba(14,165,233,0.1);
+      --safe: #22c55e; --safe-dim: rgba(34,197,94,0.1);
+      --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
+      --crit: #ef4444; --crit-dim: rgba(239,68,68,0.1);
+      --radius: 12px; --radius-sm: 8px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--text);
+      font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    .nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+    .nav-logo span:first-child { color: var(--accent); font-family: var(--mono); }
+    .nav-back { font-size: 13px; color: var(--muted); }
+    .nav-back:hover { color: var(--text); }
+
+    /* Hero / Input */
+    .hero { padding: 60px 0 40px; text-align: center; }
+    .hero h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 520px; margin: 0 auto 32px; }
+
+    .input-group {
+      display: flex; gap: 12px; max-width: 640px; margin: 0 auto;
+    }
+    .input-group input {
+      flex: 1; padding: 14px 18px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-size: 15px; font-family: var(--mono);
+      outline: none; transition: border-color 200ms;
+    }
+    .input-group input:focus { border-color: var(--accent); }
+    .input-group input::placeholder { color: var(--dim); }
+    .btn {
+      padding: 14px 28px; border-radius: var(--radius-sm); border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 200ms;
+      white-space: nowrap; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: var(--surface-raised); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+
+    /* Score card */
+    .score-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 32px;
+      display: none; text-align: center;
+    }
+    .score-card.visible { display: block; }
+    .score-value { font-size: 64px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .score-grade { font-size: 24px; font-weight: 700; margin: 8px 0 4px; }
+    .score-meta { color: var(--muted); font-size: 14px; }
+    .score-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 20px 0 12px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 3px; transition: width 600ms ease; }
+    .score-summary { display: flex; justify-content: center; gap: 24px; font-size: 13px; }
+    .score-summary span { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-safe { background: var(--safe); }
+    .dot-warn { background: var(--warn); }
+    .dot-crit { background: var(--crit); }
+
+    /* Results table */
+    .results-wrap { display: none; margin-bottom: 48px; }
+    .results-wrap.visible { display: block; }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .results-header h2 { font-size: 18px; font-weight: 700; }
+
+    .header-row {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden;
+      transition: border-color 200ms;
+    }
+    .header-row:hover { border-color: var(--border-light); }
+    .header-row.safe { border-left: 3px solid var(--safe); }
+    .header-row.warning { border-left: 3px solid var(--warn); }
+    .header-row.critical { border-left: 3px solid var(--crit); }
+
+    .row-main { display: flex; align-items: center; gap: 16px; padding: 16px 20px; }
+    .row-status { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; min-width: 32px; text-align: center; }
+    .row-status.yes { color: var(--safe); }
+    .row-status.no { color: var(--crit); }
+    .row-name { font-family: var(--mono); font-size: 13px; font-weight: 600; min-width: 260px; }
+    .row-risk { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 4px; min-width: 80px; text-align: center; }
+    .row-risk.SAFE { background: var(--safe-dim); color: var(--safe); }
+    .row-risk.WARNING { background: var(--warn-dim); color: var(--warn); }
+    .row-risk.CRITICAL { background: var(--crit-dim); color: var(--crit); }
+    .row-explain { flex: 1; font-size: 13px; color: var(--muted); }
+    .row-toggle { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; }
+    .row-toggle:hover { color: var(--text); }
+
+    .row-detail { display: none; padding: 0 20px 16px 68px; border-top: 1px solid var(--border); }
+    .row-detail.open { display: block; }
+    .detail-value { font-family: var(--mono); font-size: 12px; background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 10px; word-break: break-all; color: var(--text); }
+    .detail-rec { font-size: 13px; color: var(--accent); }
+    .detail-rec strong { color: var(--muted); }
+
+    /* Loading */
+    .loading { display: none; text-align: center; padding: 40px; }
+    .loading.visible { display: block; }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error */
+    .error-box { display: none; background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; color: var(--crit); }
+    .error-box.visible { display: block; }
+
+    /* Disclaimer */
+    .disclaimer { text-align: center; font-size: 12px; color: var(--dim); padding: 32px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+
+    @media (max-width: 768px) {
+      .input-group { flex-direction: column; }
+      .row-main { flex-wrap: wrap; }
+      .row-name { min-width: 100%; }
+      .score-value { font-size: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-logo"><span>&gt;_</span> HeaderScan</div>
+      <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-back">SecureNET Toolkit</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <h1>HTTP Security Header Analyzer</h1>
+      <p>Check any website for missing or misconfigured security headers. Get a scored report with risk levels and fix recommendations.</p>
+      <div class="input-group">
+        <input type="text" id="urlInput" placeholder="https://example.com" autocomplete="off" spellcheck="false">
+        <button class="btn btn-primary" id="scanBtn" onclick="doScan()">Scan Headers</button>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div style="color: var(--muted);">Analyzing headers...</div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="score-card" id="scoreCard">
+      <div class="score-value" id="scoreValue">--</div>
+      <div class="score-grade" id="scoreGrade">--</div>
+      <div class="score-meta" id="scoreMeta">--</div>
+      <div class="score-bar"><div class="score-bar-fill" id="scoreBarFill"></div></div>
+      <div class="score-summary" id="scoreSummary"></div>
+    </div>
+
+    <div class="results-wrap" id="resultsWrap">
+      <div class="results-header">
+        <h2>Header Analysis</h2>
+        <button class="btn btn-secondary" id="exportBtn" onclick="doExport()">Export JSON</button>
+      </div>
+      <div id="resultsBody"></div>
+    </div>
+
+    <div class="disclaimer">
+      For educational and authorized use only. HeaderScan does not store or log any URLs analyzed.
+    </div>
+  </div>
+
+  <script>
+    let currentReport = null;
+
+    document.getElementById("urlInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") doScan();
+    });
+
+    async function doScan() {
+      const url = document.getElementById("urlInput").value.trim();
+      if (!url) return;
+
+      document.getElementById("loading").classList.add("visible");
+      document.getElementById("scoreCard").classList.remove("visible");
+      document.getElementById("resultsWrap").classList.remove("visible");
+      document.getElementById("errorBox").classList.remove("visible");
+      document.getElementById("scanBtn").disabled = true;
+
+      try {
+        const res = await fetch("/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: url }),
+        });
+        const data = await res.json();
+        currentReport = data;
+
+        if (data.error) {
+          showError(data.error);
+          return;
+        }
+
+        renderScore(data);
+        renderResults(data);
+      } catch (err) {
+        showError("Request failed: " + err.message);
+      } finally {
+        document.getElementById("loading").classList.remove("visible");
+        document.getElementById("scanBtn").disabled = false;
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById("errorBox");
+      el.textContent = msg;
+      el.classList.add("visible");
+    }
+
+    function renderScore(data) {
+      const card = document.getElementById("scoreCard");
+      card.classList.add("visible");
+
+      const scoreEl = document.getElementById("scoreValue");
+      scoreEl.textContent = data.score + "/100";
+      scoreEl.style.color = scoreColor(data.grade);
+
+      const gradeEl = document.getElementById("scoreGrade");
+      gradeEl.textContent = "Grade: " + data.grade;
+      gradeEl.style.color = scoreColor(data.grade);
+
+      document.getElementById("scoreMeta").textContent =
+        data.url + "  |  " + data.headers_found + "/" + data.headers_checked + " headers present  |  Status " + data.status_code;
+
+      const fill = document.getElementById("scoreBarFill");
+      fill.style.width = data.score + "%";
+      fill.style.background = scoreColor(data.grade);
+
+      const safe = data.results.filter(r => r.risk === "SAFE").length;
+      const warn = data.results.filter(r => r.risk === "WARNING").length;
+      const crit = data.results.filter(r => r.risk === "CRITICAL").length;
+      document.getElementById("scoreSummary").innerHTML =
+        "<span><span class='dot dot-safe'></span> " + safe + " safe</span>" +
+        "<span><span class='dot dot-warn'></span> " + warn + " warning</span>" +
+        "<span><span class='dot dot-crit'></span> " + crit + " critical</span>";
+    }
+
+    function renderResults(data) {
+      const wrap = document.getElementById("resultsWrap");
+      wrap.classList.add("visible");
+      const body = document.getElementById("resultsBody");
+      body.innerHTML = "";
+
+      data.results.forEach(function(r, i) {
+        const row = document.createElement("div");
+        row.className = "header-row " + r.risk.toLowerCase();
+
+        const main = document.createElement("div");
+        main.className = "row-main";
+
+        const status = document.createElement("div");
+        status.className = "row-status " + (r.present ? "yes" : "no");
+        status.textContent = r.present ? "YES" : "NO";
+
+        const name = document.createElement("div");
+        name.className = "row-name";
+        name.textContent = r.header;
+
+        const risk = document.createElement("div");
+        risk.className = "row-risk " + r.risk;
+        risk.textContent = r.risk;
+
+        const explain = document.createElement("div");
+        explain.className = "row-explain";
+        explain.textContent = r.explanation;
+
+        const toggle = document.createElement("button");
+        toggle.className = "row-toggle";
+        toggle.innerHTML = "&#9662;";
+        toggle.onclick = function() {
+          const detail = document.getElementById("detail-" + i);
+          detail.classList.toggle("open");
+          toggle.innerHTML = detail.classList.contains("open") ? "&#9652;" : "&#9662;";
+        };
+
+        main.appendChild(status);
+        main.appendChild(name);
+        main.appendChild(risk);
+        main.appendChild(explain);
+        main.appendChild(toggle);
+
+        const detail = document.createElement("div");
+        detail.className = "row-detail";
+        detail.id = "detail-" + i;
+
+        if (r.value) {
+          const valEl = document.createElement("div");
+          valEl.className = "detail-value";
+          valEl.textContent = "Current: " + r.value;
+          detail.appendChild(valEl);
+        }
+
+        const recEl = document.createElement("div");
+        recEl.className = "detail-rec";
+        recEl.innerHTML = "<strong>Recommendation:</strong> " + r.recommendation;
+        detail.appendChild(recEl);
+
+        row.appendChild(main);
+        row.appendChild(detail);
+        body.appendChild(row);
+      });
+    }
+
+    function scoreColor(grade) {
+      if (grade === "A") return "#22c55e";
+      if (grade === "B") return "#0ea5e9";
+      if (grade === "C") return "#f59e0b";
+      return "#ef4444";
+    }
+
+    async function doExport() {
+      if (!currentReport) return;
+      const url = currentReport.url;
+      try {
+        const res = await fetch("/export", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: url }),
+        });
+        const blob = await res.blob();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "headerscan_" + url.replace(/[^a-z0-9]/gi, "_") + ".json";
+        a.click();
+      } catch (err) {
+        showError("Export failed: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
