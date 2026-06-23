@@ -11,7 +11,9 @@ import json
 import time
 from typing import Protocol
 
-# --- Thresholds ---
+def reset_cooldowns() -> None:
+    """Clear all alert cooldown timestamps. Useful for testing."""
+    _last_alert_ts.clear()
 PORT_SCAN_WINDOW = 10.0      # seconds to look back
 PORT_SCAN_THRESHOLD = 10     # unique destination ports that trigger an alert
 RATE_WINDOW = 5.0            # seconds to look back
