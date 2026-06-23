@@ -2,50 +2,316 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Network Sniffer Dashboard</title>
+  <title>Sniffer Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: sans-serif; margin: 20px; background: #0d1117; color: #e6edf3; }
-    h1 { color: #58a6ff; text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 10px; border-bottom: 1px solid #30363d; text-align: left; }
-    tr:hover { background: #161b22; }
-    .alert { color: #ff6b6b; font-weight: bold; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1a;
+      --surface: #111827;
+      --border: #1e293b;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #0ea5e9;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+
+    body {
+      font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    header h1 { font-size: 18px; font-weight: 700; color: var(--text); }
+    header h1 span { color: var(--accent); }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .stat { text-align: center; }
+    .stat-value { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .panel-header .badge {
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .panel-header .badge.alert-badge { background: var(--danger); }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .proto { font-weight: 700; font-size: 11px; }
+    .proto-tcp { color: var(--accent); }
+    .proto-udp { color: var(--warning); }
+    .proto-other { color: var(--muted); }
+
+    .alert-row td { color: var(--danger); }
+
+    .rule-tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .rule-port-scan { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .rule-high-rate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      margin-right: 6px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
-  <h1>Network Sniffer — Live Alerts</h1>
-  <table id="packetTable">
-    <thead>
-      <tr><th>ID</th><th>Timestamp</th><th>Source</th><th>Destination</th><th>Proto</th><th>Length</th><th>Flags</th><th>Alert</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div class="container">
+    <header>
+      <h1>&gt;_ <span>SecureNET</span> Sniffer</h1>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="packet-count">0</div>
+          <div class="stat-label">Packets</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="alert-count" style="color: var(--danger);">0</div>
+          <div class="stat-label">Alerts</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" style="color: var(--success); font-size: 14px; padding-top: 4px;">
+            <span class="status-dot"></span>LIVE
+          </div>
+          <div class="stat-label">Status</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="panel-header">
+          <span>Captured Packets</span>
+          <span class="badge" id="packet-badge">0</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Proto</th>
+                <th>Len</th>
+                <th>Flags</th>
+              </tr>
+            </thead>
+            <tbody id="packet-body">
+              <tr><td colspan="6" class="empty-state">Waiting for packets...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span>Security Alerts</span>
+          <span class="badge alert-badge" id="alert-badge">0</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Rule</th>
+                <th>Source</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="alert-body">
+              <tr><td colspan="4" class="empty-state">No alerts detected</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      SecureNET Toolkit v2.0 &mdash; Network Sniffer Dashboard
+    </footer>
+  </div>
 
   <script>
-    async function fetchPackets() {
-      const res = await fetch('/data');
-      const packets = await res.json();
-      const tbody = document.querySelector('#packetTable tbody');
-      tbody.innerHTML = '';
-      for (const pkt of packets) {
-        const row = document.createElement('tr');
-        if (pkt.alert && pkt.alert !== 'None') row.classList.add('alert');
-        row.innerHTML = `
-          <td>${pkt.id}</td>
-          <td>${pkt.timestamp}</td>
-          <td>${pkt.src}</td>
-          <td>${pkt.dst}</td>
-          <td>${pkt.proto}</td>
-          <td>${pkt.length}</td>
-          <td>${pkt.flags}</td>
-          <td>${pkt.alert || ''}</td>
-        `;
-        tbody.appendChild(row);
-      }
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
     }
-    setInterval(fetchPackets, 2000);
-    fetchPackets();
+
+    function protoClass(p) {
+      if (p === 'TCP') return 'proto proto-tcp';
+      if (p === 'UDP') return 'proto proto-udp';
+      return 'proto proto-other';
+    }
+
+    async function fetchPackets() {
+      try {
+        const res = await fetch('/packets');
+        const data = await res.json();
+        const tbody = document.getElementById('packet-body');
+        document.getElementById('packet-badge').textContent = data.length;
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Waiting for packets...</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.map(p => {
+          const cls = p.alert ? ' class="alert-row"' : '';
+          return `<tr${cls}>
+            <td>${esc(p.timestamp.split(' ')[1] || '')}</td>
+            <td>${esc(p.src)}${p.sport ? ':' + p.sport : ''}</td>
+            <td>${esc(p.dst)}${p.dport ? ':' + p.dport : ''}</td>
+            <td><span class="${protoClass(p.proto)}">${esc(p.proto)}</span></td>
+            <td>${p.length}</td>
+            <td>${esc(p.flags)}</td>
+          </tr>`;
+        }).join('');
+      } catch (e) { /* silent retry */ }
+    }
+
+    async function fetchAlerts() {
+      try {
+        const res = await fetch('/alerts');
+        const data = await res.json();
+        const tbody = document.getElementById('alert-body');
+        document.getElementById('alert-badge').textContent = data.length;
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No alerts detected</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.map(a => {
+          const ruleCls = a.rule === 'PORT_SCAN' ? 'rule-port-scan' : 'rule-high-rate';
+          return `<tr>
+            <td>${esc(a.timestamp.split(' ')[1] || '')}</td>
+            <td><span class="rule-tag ${ruleCls}">${esc(a.rule.replace('_', ' '))}</span></td>
+            <td>${esc(a.src)}</td>
+            <td>${esc(a.meta)}</td>
+          </tr>`;
+        }).join('');
+      } catch (e) { /* silent retry */ }
+    }
+
+    async function fetchStats() {
+      try {
+        const res = await fetch('/stats');
+        const data = await res.json();
+        document.getElementById('packet-count').textContent = data.total_packets;
+        document.getElementById('alert-count').textContent = data.total_alerts;
+      } catch (e) { /* silent retry */ }
+    }
+
+    setInterval(() => { fetchPackets(); fetchAlerts(); fetchStats(); }, 2000);
+    fetchPackets(); fetchAlerts(); fetchStats();
   </script>
 </body>
 </html>
