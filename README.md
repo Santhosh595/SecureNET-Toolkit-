@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides five independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, and a hash identifier & cracker.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides six independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, and a real-time ARP spoof detector.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -50,6 +50,14 @@ Identify hash types from any string using length and pattern matching. Supports 
 **Tech:** Python, Flask, hashlib, Rich
 
 [View source](HashDetect/) | [README](HashDetect/README.md)
+
+### ARPWatch — Real-Time ARP Spoof Detector
+
+Passively monitors local network for ARP spoofing and poisoning attacks. Tracks IP-to-MAC mappings against a trusted baseline with 4 detection rules (MAC mismatch, gratuitous ARP, flood, gateway spoof). Real-time alerts with severity levels and SQLite logging.
+
+**Tech:** Python, Scapy, Flask, SQLite, Rich
+
+[View source](ARPWatch/) | [README](ARPWatch/README.md)
 
 ## Quick Start
 
@@ -129,6 +137,20 @@ python dashboard.py
 # Open http://127.0.0.1:5300
 ```
 
+### ARPWatch
+
+```bash
+cd ARPWatch
+pip install -r requirements.txt
+
+# Start monitoring (requires root)
+sudo python main.py
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5400
+```
+
 ## Running Tests
 
 ```bash
@@ -190,6 +212,17 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── ARPWatch/
+│   ├── main.py              # CLI entry point (Rich live display)
+│   ├── sniffer.py           # Scapy ARP packet capture
+│   ├── detector.py          # Detection rules (4 rules)
+│   ├── baseline.py          # Baseline management
+│   ├── database.py          # SQLite operations
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── baseline.json        # Auto-generated baseline
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -198,13 +231,14 @@ SecureNET-Toolkit--main/
 
 ## Tech Stack Summary
 
-| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich | hashlib |
-|------|--------|-------|----------|-------|---------|---------|--------------|------|---------|
-| FileGuard | Yes | — | — | — | Yes | — | Yes | — | — |
-| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — | — |
-| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes | — |
-| PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — |
-| HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes |
+| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich | hashlib | SQLite |
+|------|--------|-------|----------|-------|---------|---------|--------------|------|---------|---------|
+| FileGuard | Yes | — | — | — | Yes | — | Yes | — | — | — |
+| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — | — | — |
+| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes | — | — |
+| PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — | — |
+| HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes | — |
+| ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes |
 
 ## Scoring Methodology (HeaderScan)
 
