@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides four independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, and a multi-threaded port scanner.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides five independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, and a hash identifier & cracker.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -42,6 +42,14 @@ Scan any host for open ports using raw sockets — no Nmap dependency. Identifie
 **Tech:** Python, Sockets, Threading, Flask, Rich
 
 [View source](PortMap/) | [README](PortMap/README.md)
+
+### HashDetect — Hash Identifier & Cracker
+
+Identify hash types from any string using length and pattern matching. Supports 18+ hash formats with confidence scoring and algorithm category tagging. Optional wordlist-based cracking for weak hashes (MD5, SHA-1, etc.). Fully local processing.
+
+**Tech:** Python, Flask, hashlib, Rich
+
+[View source](HashDetect/) | [README](HashDetect/README.md)
 
 ## Quick Start
 
@@ -104,6 +112,23 @@ python dashboard.py
 # Open http://127.0.0.1:5200
 ```
 
+### HashDetect
+
+```bash
+cd HashDetect
+pip install -r requirements.txt
+
+# Identify a hash
+python main.py 5f4dcc3b5aa765d61d8327deb882cf99
+
+# Identify + crack
+python main.py 5f4dcc3b5aa765d61d8327deb882cf99 --crack
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5300
+```
+
 ## Running Tests
 
 ```bash
@@ -155,6 +180,16 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── HashDetect/
+│   ├── main.py              # CLI entry point (Rich tables)
+│   ├── detector.py          # Hash identification logic
+│   ├── cracker.py           # Wordlist cracking engine
+│   ├── wordlists/
+│   │   └── common.txt       # Built-in wordlist (1000 passwords)
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -163,12 +198,13 @@ SecureNET-Toolkit--main/
 
 ## Tech Stack Summary
 
-| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich |
-|------|--------|-------|----------|-------|---------|---------|--------------|------|
-| FileGuard | Yes | — | — | — | Yes | — | Yes | — |
-| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — |
-| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes |
-| PortMap | Yes | Yes | — | — | — | Yes | — | Yes |
+| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich | hashlib |
+|------|--------|-------|----------|-------|---------|---------|--------------|------|---------|
+| FileGuard | Yes | — | — | — | Yes | — | Yes | — | — |
+| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — | — |
+| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes | — |
+| PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — |
+| HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes |
 
 ## Scoring Methodology (HeaderScan)
 
