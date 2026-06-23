@@ -108,7 +108,8 @@ class TestEncryption:
 
 
 class TestDecryption:
-    def test_decrypt_file_restores_original(self, sample_file, password):
+    def test_decrypt_file_restores_original(self, sample_file, password, monkeypatch):
+        monkeypatch.setattr("main.messagebox.showinfo", lambda *a, **kw: None)
         generate_key(password)
         original = Path(sample_file).read_bytes()
         enc_path = encrypt_file(sample_file, password)
@@ -116,13 +117,15 @@ class TestDecryption:
         assert dec_path is not None
         assert dec_path.read_bytes() == original
 
-    def test_decrypt_with_wrong_password_fails(self, sample_file, password):
+    def test_decrypt_with_wrong_password_fails(self, sample_file, password, monkeypatch):
+        monkeypatch.setattr("main.messagebox.showerror", lambda *a, **kw: None)
         generate_key(password)
         enc_path = encrypt_file(sample_file, password)
         dec_path = decrypt_file(str(enc_path), "wrong-password")
         assert dec_path is None
 
-    def test_decrypt_nonexistent_file_fails(self, password):
+    def test_decrypt_nonexistent_file_fails(self, password, monkeypatch):
+        monkeypatch.setattr("main.messagebox.showerror", lambda *a, **kw: None)
         generate_key(password)
         result = decrypt_file("nonexistent.enc", password)
         assert result is None
