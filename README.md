@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides three independent security tools: a file encryption system, a network intrusion detection system, and an HTTP security header analyzer.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides four independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, and a multi-threaded port scanner.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -34,6 +34,14 @@ Analyze any website's HTTP response headers for security misconfigurations. Chec
 **Tech:** Python, Flask, Requests, Rich
 
 [View source](HeaderScan/) | [README](HeaderScan/README.md)
+
+### PortMap — Multi-threaded Port Scanner
+
+Scan any host for open ports using raw sockets — no Nmap dependency. Identifies running services on 70+ known ports, assigns risk levels (LOW / MEDIUM / HIGH), and provides actionable risk notes. Supports 4 scan profiles with multi-threaded scanning (100 workers). Works as both a CLI tool and a web dashboard with live polling.
+
+**Tech:** Python, Sockets, Threading, Flask, Rich
+
+[View source](PortMap/) | [README](PortMap/README.md)
 
 ## Quick Start
 
@@ -82,6 +90,20 @@ python dashboard.py
 # Open http://127.0.0.1:5100
 ```
 
+### PortMap
+
+```bash
+cd PortMap
+pip install -r requirements.txt
+
+# Quick scan
+python main.py 192.168.1.1
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5200
+```
+
 ## Running Tests
 
 ```bash
@@ -125,6 +147,14 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── PortMap/
+│   ├── main.py              # CLI entry point (Rich progress bar)
+│   ├── scanner.py           # Core scanning engine (raw sockets)
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── requirements.txt     # rich, flask
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -133,11 +163,12 @@ SecureNET-Toolkit--main/
 
 ## Tech Stack Summary
 
-| Tool | Python | Flask | Requests | Scapy | Tkinter | cryptography | Rich |
-|------|--------|-------|----------|-------|---------|--------------|------|
-| FileGuard | Yes | — | — | — | Yes | Yes | — |
-| Network Sniffer | Yes | Yes | — | Yes | — | — | — |
-| HeaderScan | Yes | Yes | Yes | — | — | — | Yes |
+| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich |
+|------|--------|-------|----------|-------|---------|---------|--------------|------|
+| FileGuard | Yes | — | — | — | Yes | — | Yes | — |
+| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — |
+| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes |
+| PortMap | Yes | Yes | — | — | — | Yes | — | Yes |
 
 ## Scoring Methodology (HeaderScan)
 
