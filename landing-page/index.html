@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureNET Toolkit — Cybersecurity Tools for Developers</title>
+  <meta name="description" content="Open-source cybersecurity toolkit: AES-256 file encryption, network intrusion detection, and real-time monitoring dashboard.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-icon">&gt;_</span>
+        <span class="nav-logo-text">SecureNET</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#tools">Tools</a>
+        <a href="#architecture">Architecture</a>
+        <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-cta">View on GitHub</a>
+      </div>
+      <button class="nav-mobile-toggle" aria-label="Toggle menu" id="mobileToggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Open-Source Cybersecurity Toolkit</div>
+        <h1 class="hero-title">
+          Security tools<br>
+          <span class="hero-title-accent">built for developers</span>
+        </h1>
+        <p class="hero-sub">
+          AES-256 file encryption with integrity verification. Real-time network intrusion detection with a live dashboard. All in Python, all open source.
+        </p>
+        <div class="hero-actions">
+          <a href="#tools" class="btn btn-primary">Explore Tools</a>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="btn btn-secondary">GitHub Repository</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-value">2</span>
+            <span class="hero-stat-label">Security Tools</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">AES-256</span>
+            <span class="hero-stat-label">Encryption</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">MIT</span>
+            <span class="hero-stat-label">License</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Why SecureNET</div>
+        <h2 class="section-title">Enterprise-grade security, zero cost</h2>
+        <p class="section-sub">Built with proven cryptographic libraries and production-ready patterns. No dependencies on cloud services or paid APIs.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="feature-title">AES-256 Encryption</h3>
+          <p class="feature-desc">Military-grade symmetric encryption via Fernet. Keys derived from passwords using PBKDF2 with 480,000 iterations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-title">Integrity Verification</h3>
+          <p class="feature-desc">SHA-256 hash comparison on every decryption. Detects tampering before you open compromised files.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+          </div>
+          <h3 class="feature-title">Intrusion Detection</h3>
+          <p class="feature-desc">Rule-based IDS detecting port scans and packet floods. Configurable thresholds with alert cooldown.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3 class="feature-title">Live Dashboard</h3>
+          <p class="feature-desc">Real-time Flask web dashboard showing captured packets, alerts, and network statistics.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="feature-title">SQLite Storage</h3>
+          <p class="feature-desc">All packets and alerts persisted to SQLite with indexed columns for fast querying and analysis.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3 class="feature-title">Clean Architecture</h3>
+          <p class="feature-desc">Modular Python codebase with separated concerns: crypto, database, detection, and presentation layers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section class="section tools" id="tools">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Toolkit</div>
+        <h2 class="section-title">Two tools, one mission</h2>
+        <p class="section-sub">Each tool addresses a different aspect of cybersecurity: data-at-rest protection and network-level threat detection.</p>
+      </div>
+
+      <div class="tool-cards">
+        <!-- FileGuard -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">FileGuard</h3>
+              <p class="tool-card-sub">AES-256 + SHA-256 File Encryption</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Encrypt and decrypt files with AES-256 symmetric encryption. Keys are derived from your password using PBKDF2. Every decryption verifies file integrity against a stored SHA-256 hash.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Tkinter</span>
+            <span class="tech-tag">cryptography</span>
+            <span class="tech-tag">hashlib</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>Password-based key derivation (PBKDF2, 480K iterations)</li>
+            <li>AES-256 encryption via Fernet</li>
+            <li>SHA-256 integrity verification on decrypt</li>
+            <li>Desktop GUI with Tkinter</li>
+            <li>Secure key storage with salt</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/FileGuard-AES-SHA256" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
+        <!-- Network Sniffer -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">Network Sniffer</h3>
+              <p class="tool-card-sub">Real-Time IDS with Flask Dashboard</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Capture live network packets, store them in SQLite, and detect intrusion patterns. A Flask web dashboard shows packets and alerts in real time.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Scapy</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">SQLite</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>Live packet capture via Scapy</li>
+            <li>Port scan detection (10+ ports in 10s)</li>
+            <li>High-rate flood detection (50+ packets in 5s)</li>
+            <li>Real-time Flask dashboard</li>
+            <li>Alert cooldown to prevent spam</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/network-sniffer" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section architecture" id="architecture">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Architecture</div>
+        <h2 class="section-title">How it works</h2>
+      </div>
+      <div class="arch-diagram">
+        <div class="arch-row">
+          <div class="arch-box arch-box-input">
+            <div class="arch-box-label">Input</div>
+            <div class="arch-box-items">
+              <span>Files to encrypt</span>
+              <span>Network packets</span>
+            </div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="arch-box arch-box-process">
+            <div class="arch-box-label">Processing</div>
+            <div class="arch-box-items">
+              <span>AES-256 / PBKDF2</span>
+              <span>Scapy + Detection Rules</span>
+            </div>
+          </div>
+          <div class="arch-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="arch-box arch-box-output">
+            <div class="arch-box-label">Output</div>
+            <div class="arch-box-items">
+              <span>Encrypted files + SHA-256</span>
+              <span>Dashboard + Alerts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta">
+    <div class="container">
+      <div class="cta-box">
+        <h2 class="cta-title">Ready to explore?</h2>
+        <p class="cta-sub">Clone the repository, install dependencies, and start securing your data and network.</p>
+        <div class="cta-actions">
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Clone Repository</a>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/blob/main/README.md" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">Read Documentation</a>
+        </div>
+        <div class="cta-terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot terminal-dot-red"></span>
+            <span class="terminal-dot terminal-dot-yellow"></span>
+            <span class="terminal-dot terminal-dot-green"></span>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <div class="terminal-body">
+            <span class="terminal-prompt">$</span> git clone https://github.com/Santhosh595/SecureNET-Toolkit-.git<br>
+            <span class="terminal-prompt">$</span> cd SecureNET-Toolkit--main<br>
+            <span class="terminal-prompt">$</span> pip install -r FileGuard-AES-SHA256/requirements.txt<br>
+            <span class="terminal-prompt">$</span> python FileGuard-AES-SHA256/main.py
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="nav-logo-icon">&gt;_</span>
+          <span class="nav-logo-text">SecureNET</span>
+          <span class="footer-version">v2.0</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/blob/main/FileGuard-AES-SHA256/LICENSE.txt" target="_blank" rel="noopener">MIT License</a>
+          <a href="https://github.com/Santhosh595" target="_blank" rel="noopener">Santhosh L</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
