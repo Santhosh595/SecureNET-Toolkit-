@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides seven independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, and a subdomain enumerator.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides eight independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, and a JWT security analyzer.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -66,6 +66,14 @@ Enumerate subdomains via wordlist brute-force, Certificate Transparency logs (cr
 **Tech:** Python, DNS, Requests, Flask, Rich
 
 [View source](SubProbe/) | [README](SubProbe/README.md)
+
+### JWTInspect — JWT Security Analyzer
+
+Decode and actively test JWT tokens for 8 vulnerability classes: alg:none confusion, weak secret brute-force, RS256→HS256 substitution, expiration issues, sensitive data exposure, kid injection, JKU/X5U abuse, and claim manipulation. Generates proof-of-concept forged tokens.
+
+**Tech:** Python, Flask, PyJWT, Cryptography, Rich
+
+[View source](JWTInspect/) | [README](JWTInspect/README.md)
 
 ## Quick Start
 
@@ -173,6 +181,23 @@ python dashboard.py
 # Open http://127.0.0.1:5500
 ```
 
+### JWTInspect
+
+```bash
+cd JWTInspect
+pip install -r requirements.txt
+
+# Analyze a token
+python main.py eyJhbG...NiIs...
+
+# With secret cracking
+python main.py <token> --crack
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5600
+```
+
 ## Running Tests
 
 ```bash
@@ -257,6 +282,18 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── JWTInspect/
+│   ├── main.py              # CLI entry point (Rich panels)
+│   ├── parser.py            # JWT decode + claims extraction
+│   ├── tests/
+│   │   └── __init__.py      # 8 security test modules
+│   ├── wordlists/
+│   │   └── secrets.txt      # Built-in 1000 JWT secrets
+│   ├── reporter.py          # Report generation
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -274,6 +311,7 @@ SecureNET-Toolkit--main/
 | HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes | — |
 | ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes |
 | SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
+| JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — |
 
 ## Scoring Methodology (HeaderScan)
 
