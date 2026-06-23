@@ -1,86 +1,56 @@
-# 🔐 FileGuard: Secure File Encryption & Integrity Verification
+# FileGuard — Secure File Encryption & Integrity Verification
 
-**Author:** SANTHOSH L  
-**License:** MIT License  
+**Author:** Santhosh L
+**License:** MIT
 
----
+## Overview
 
-## 📘 Overview
-**FileGuard** is a Python-based encryption tool that provides secure AES-256 encryption and SHA-256 integrity verification for your files.  
-It includes a simple **GUI interface** built with Tkinter that allows users to generate keys, encrypt files, decrypt files, and verify data integrity — all in one place.
+FileGuard is a Python-based encryption tool that provides AES-256 encryption and SHA-256 integrity verification for files. It includes a GUI built with Tkinter for key generation, encryption, decryption, and integrity checking.
 
-This project demonstrates real-world cybersecurity principles including **data confidentiality, integrity, and secure cryptographic practices**.
+This project demonstrates real-world cybersecurity principles: data confidentiality, integrity, and secure cryptographic practices.
 
----
+## Features
 
-## ✨ Features
-- 🔑 **AES-256 Encryption** using Python’s `cryptography` library  
-- 🧩 **SHA-256 Hash Verification** for file integrity  
-- 💻 **GUI Interface** using Tkinter  
-- 📂 **Automatic Folder Management** for `encrypted/` and `decrypted/` files  
-- ⚠️ **Integrity Check Alerts** to detect tampering  
-- 🧠 Clean, simple interface for easy demonstration and learning
+- AES-256 encryption via the `cryptography` library (Fernet symmetric encryption)
+- SHA-256 hash verification for file integrity
+- Tkinter GUI for key generation, encryption, and decryption
+- Automatic folder management for `encrypted/` and `decrypted/` output
+- Integrity check alerts to detect tampering
 
----
+## Tech Stack
 
-## 🛠️ Tools & Technologies Used
-- **Python 3.10+**
-- **cryptography** library
-- **hashlib** (for SHA-256)
-- **Tkinter** (for GUI)
+- Python 3.10+
+- `cryptography` library (Fernet)
+- `hashlib` (SHA-256)
+- Tkinter (GUI)
 
----
+## Installation
 
-## ⚙️ Installation & Setup
-
-Follow these simple steps to install and run FileGuard on your system 👇
-
-🪟 For Windows Users
-1️⃣ Clone the Repository
-
-Open Command Prompt or PowerShell, and run:
-
-git clone  https://github.com/Santhosh595/FileGuard-AES-SHA256.git
-cd FileGuard-AES-SHA256
-
-2️⃣ Check if Python is Installed
-
-Run:
-
-python --version
-
-
-✅ You should see something like Python 3.10.0 or higher.
-If not, download it from python.org/downloads
-.
-
-3️⃣ Install the Required Packages
-
-Run this command to install all dependencies:
-
+```bash
+git clone https://github.com/Santhosh595/SecureNET-Toolkit-.git
+cd SecureNET-Toolkit--main/FileGuard-AES-SHA256
 pip install -r requirements.txt
-
-
-This installs:
-
-cryptography → For AES-256 encryption/decryption
-
-tk → For GUI support
-
-4️⃣ Run the Application
-
-Once setup is done, start the app:
-
 python main.py
+```
 
-5️⃣ Use the GUI
+## Usage
 
-You’ll see the FileGuard window open. Now:
+1. Click **Generate Key** — creates `secret.key` (only needed once)
+2. Click **Browse File** — select the file to encrypt
+3. Click **Encrypt File** — file is encrypted and saved to `/encrypted/`
+4. Click **Decrypt File** — decrypts the file and verifies SHA-256 integrity
 
-🗝️ Click Generate Key – creates secret.key (only needed once)
+## Project Structure
 
-📄 Click Browse File – choose the file you want to secure
+```
+FileGuard-AES-SHA256/
+├── main.py            # GUI application entry point
+├── requirements.txt   # Python dependencies
+├── README.md          # This file
+├── LICENSE.txt        # MIT License
+└── sample_files/      # Sample files for testing
+```
 
-🔒 Click Encrypt File – your file is encrypted and saved in /encrypted/
+## License
 
-🔓 Click Decrypt File – decrypts the file and verifies integrity using SHA-256
+MIT License — see [LICENSE.txt](LICENSE.txt) for details.
