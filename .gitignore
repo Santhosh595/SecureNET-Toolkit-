@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+venv/
+env/
+.env
+
+# Database & logs
+*.db
+*.log
+*.sqlite
+*.sqlite3
+logs/
+
+# Encrypted / decrypted output
+encrypted/
+decrypted/
+secret.key
+*.sha256
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Next.js / Node (for landing page)
+node_modules/
+.next/
+out/
+.vercel/
+*.pem
