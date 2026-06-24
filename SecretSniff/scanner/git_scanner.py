@@ -1,6 +1,7 @@
-"""SecretSniff — Git repository scanner.
+"""SecretSniff - Git repository scanner.
 
 Scans git working tree and commit history for secrets.
+Uses gitpython for reliable git access.
 """
 
 from __future__ import annotations
@@ -8,16 +9,22 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 from typing import Optional
 
 from patterns.rules import get_patterns
 from scanner.file_scanner import scan_file, _redact_value
-from scanner.entropy import has_secret_context
 
 
 def is_git_repo(path: Path) -> bool:
     """Check if path is inside a git repository."""
+    try:
+        import git
+        git.Repo(str(path), search_parent_directories=True)
+        return True
+    except Exception:
+        pass    # Fallback to subprocess
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--git-dir"],
@@ -30,6 +37,12 @@ def is_git_repo(path: Path) -> bool:
 
 def get_repo_root(path: Path) -> Optional[Path]:
     """Get git repository root."""
+    try:
+        import git
+        repo = git.Repo(str(path), search_parent_directories=True)
+        return Path(repo.working_tree_dir)
+    except Exception:
+        pass
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--show-toplevel"],
@@ -58,7 +71,64 @@ def scan_git_history(repo_path: Path, depth: int = 0,
     patterns = get_patterns()
 
     try:
-        # Get list of commits
+        import git
+        repo = git.Repo(str(repo_path))
+
+        # Build commit list
+        commits = list(repo.iter_commits(max_count=depth if depth > 0 else None))
+
+        for commit in commits:
+            for blob in commit.tree.traverse():
+                if blob.type != "blob":
+                    continue
+
+                file_name = str(blob.path)
+
+                # Skip binary and large files
+                try:
+                    if blob.size > 10 * 1024 * 1024:
+                        continue
+                except Exception:
+                    continue
+
+                # Read blob content
+                try:
+                    content = blob.data_stream.read().decode("utf-8", errors="ignore")
+                except Exception:
+                    continue
+
+                # Write to temp and scan
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".tmp",
+                                                  delete=False, encoding="utf-8") as tmp:
+                    tmp.write(content)
+                    tmp_path = Path(tmp.name)
+
+                try:
+                    file_findings = scan_file(tmp_path, patterns)
+                    for f in file_findings:
+                        f["file"] = file_name
+                        f["commit_hash"] = commit.hexsha[:8]
+                        f["author"] = commit.author.name or "unknown"
+                        f["date"] = commit.committed_datetime.isoformat()
+                    findings.extend(file_findings)
+                finally:
+                    tmp_path.unlink(missing_ok=True)
+
+    except ImportError:
+        # Fallback to subprocess method
+        findings = _scan_git_history_subprocess(repo_path, depth, include_tests, patterns)
+    except Exception:
+        pass
+
+    return findings
+
+
+def _scan_git_history_subprocess(repo_path: Path, depth: int, include_tests: bool,
+                                  patterns: list) -> list[dict]:
+    """Fallback git history scan using subprocess."""
+    findings = []
+
+    try:
         cmd = ["git", "log", "--format=%H|%an|%ae|%ai", "--name-only"]
         if depth > 0:
             cmd.extend(["-n", str(depth)])
@@ -68,28 +138,19 @@ def scan_git_history(repo_path: Path, depth: int = 0,
         if result.returncode != 0:
             return findings
 
-        # Parse commits
         blocks = result.stdout.split("\n\n")
         for block in blocks:
             lines = block.strip().split("\n")
             if not lines:
                 continue
 
-            # First line has commit info
             parts = lines[0].split("|", 3)
             if len(parts) < 4:
                 continue
             commit_hash, author, email, date = parts
 
-            # Remaining lines are file names
             file_names = [l.strip() for l in lines[1:] if l.strip()]
-
             for file_name in file_names:
-                file_path = repo_path / file_name
-                if not file_path.exists():
-                    continue
-
-                # Scan the file content at this commit
                 try:
                     content_result = subprocess.run(
                         ["git", "show", f"{commit_hash}:{file_name}"],
@@ -100,15 +161,13 @@ def scan_git_history(repo_path: Path, depth: int = 0,
                 except Exception:
                     continue
 
-                # Write to temp and scan
-                import tempfile
                 with tempfile.NamedTemporaryFile(mode="w", suffix=".tmp",
                                                   delete=False, encoding="utf-8") as tmp:
                     tmp.write(content_result.stdout)
                     tmp_path = Path(tmp.name)
 
                 try:
-                    file_findings = scan_file(tmp_path, patterns, include_tests=include_tests)
+                    file_findings = scan_file(tmp_path, patterns)
                     for f in file_findings:
                         f["file"] = file_name
                         f["commit_hash"] = commit_hash[:8]
@@ -140,7 +199,6 @@ def scan_git_worktree(repo_path: Path, include_tests: bool = False) -> list[dict
 
     for file_path in iter_files(repo_path, respect_gitignore=True, include_tests=include_tests):
         file_findings = scan_file(file_path, patterns)
-        # Make paths relative to repo root
         for f in file_findings:
             try:
                 f["file"] = str(file_path.relative_to(repo_path))
