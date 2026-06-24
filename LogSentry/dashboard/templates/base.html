@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LogSentry{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #12122a;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .navbar .brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ff4444;
+            letter-spacing: 1px;
+        }
+        .navbar .brand span { color: #88ccff; }
+        .navbar nav a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .navbar nav a:hover, .navbar nav a.active {
+            color: #fff;
+            background: #2a2a4a;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #16163a;
+            border: 1px solid #2a2a4a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .stat-card .label {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        .stat-card.alert .value { color: #ff4444; }
+        .stat-card.warning .value { color: #ffaa00; }
+        .stat-card.success .value { color: #44cc88; }
+        .panel {
+            background: #16163a;
+            border: 1px solid #2a2a4a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .panel h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            border-bottom: 1px solid #2a2a4a;
+            padding-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #2a2a4a;
+            font-size: 0.9rem;
+        }
+        th {
+            color: #888;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        tr:hover { background: #1a1a40; }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-critical { background: #ff4444; color: #fff; }
+        .badge-high { background: #ff6633; color: #fff; }
+        .badge-medium { background: #ffaa00; color: #000; }
+        .badge-low { background: #4488ff; color: #fff; }
+        .badge-info { background: #666; color: #fff; }
+        .badge-success { background: #44cc88; color: #000; }
+        .upload-area {
+            border: 2px dashed #3a3a5a;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .upload-area:hover {
+            border-color: #ff4444;
+            background: #1a1a30;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #ff4444; color: #fff; }
+        .btn-primary:hover { background: #cc3333; }
+        .btn-secondary { background: #2a2a4a; color: #fff; }
+        .btn-secondary:hover { background: #3a3a5a; }
+        select, input[type="text"] {
+            background: #0a0a1a;
+            border: 1px solid #2a2a4a;
+            color: #e0e0e0;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .chart-placeholder {
+            height: 200px;
+            background: #0a0a20;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+        }
+        .donut-chart {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+        .donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .donut-legend .item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .donut-legend .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .timeline-item {
+            border-left: 3px solid #2a2a4a;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            background: #0a0a20;
+            border-radius: 0 4px 4px 0;
+        }
+        .timeline-item.critical { border-left-color: #ff4444; }
+        .timeline-item.high { border-left-color: #ff6633; }
+        .timeline-item.medium { border-left-color: #ffaa00; }
+        .timeline-item.low { border-left-color: #4488ff; }
+        .raw-log {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #888;
+            background: #0a0a1a;
+            padding: 0.5rem;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            word-break: break-all;
+        }
+        .expandable { cursor: pointer; }
+        .expandable .content { display: none; }
+        .expandable.open .content { display: block; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #555;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">Log<span>Sentry</span></div>
+        <nav>
+            <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Overview</a>
+            <a href="{{ url_for('timeline') }}" class="{% if request.endpoint == 'timeline' %}active{% endif %}">Timeline</a>
+            <a href="{{ url_for('profiles') }}" class="{% if request.endpoint == 'profiles' %}active{% endif %}">Profiles</a>
+            <a href="{{ url_for('rules') }}" class="{% if request.endpoint == 'rules' %}active{% endif %}">Rules</a>
+            <a href="{{ url_for('mitre') }}" class="{% if request.endpoint == 'mitre' %}active{% endif %}">MITRE ATT&CK</a>
+            <a href="{{ url_for('reports') }}" class="{% if request.endpoint == 'reports' %}active{% endif %}">Reports</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        LogSentry v1.0.0 — Multi-Source Log Analyzer & Threat Detector<br>
+        For authorized security operations only. All processing is offline and local.
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

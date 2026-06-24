@@ -1,0 +1,43 @@
+# LogSentry Configuration
+# Customize detection thresholds and behavior
+
+detection:
+  ssh_brute_force:
+    threshold: 5
+    time_window_seconds: 60
+  ssh_success_after_fail:
+    failure_threshold: 3
+  multi_account:
+    threshold: 5
+  off_hours:
+    start_hour: 23
+    end_hour: 6
+  port_scan:
+    port_threshold: 10
+    time_window_seconds: 30
+  repeated_403:
+    threshold: 20
+    time_window_seconds: 300
+  large_transfer:
+    size_threshold_mb: 10
+  geo_anomaly:
+    baseline_days: 7
+
+processing:
+  deduplicate_window_seconds: 1
+  max_file_size_mb: 100
+  chunk_size: 10000
+
+dashboard:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+
+threat_intel:
+  auto_update: false
+  update_url: ""
+  db_path: "data/ip_list.txt"
+
+logging:
+  level: "INFO"
+  file: "logsentry.log"

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}MITRE ATT&CK — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">MITRE ATT&CK Mapping</h1>
+
+{% if techniques %}
+<div class="panel">
+    <h2>Detected Techniques</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Technique ID</th>
+                <th>Name</th>
+                <th>Tactic</th>
+                <th>Detections</th>
+                <th>Triggered By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tech in techniques %}
+            <tr>
+                <td><a href="https://attack.mitre.org/techniques/{{ tech.technique_id|replace('.', '/') }}/" 
+                       target="_blank" style="color: #88ccff; font-family: monospace;">
+                    {{ tech.technique_id }}
+                </a></td>
+                <td>{{ tech.name }}</td>
+                <td><span style="color: #ff88cc;">{{ tech.tactic }}</span></td>
+                <td>{{ tech.count }}</td>
+                <td><small>{{ tech.rules|join(', ') }}</small></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>Tactics Covered</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        {% for tactic in tactics %}
+        <span class="badge badge-medium" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">{{ tactic }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="panel">
+    <h2>ATT&CK Navigator Export</h2>
+    <p style="color: #888; margin-bottom: 1rem;">
+        Export the detected techniques as an ATT&CK Navigator JSON layer.
+        Import this into <a href="https://mitre-attack.github.io/attack-navigator/" target="_blank" style="color: #88ccff;">MITRE ATT&CK Navigator</a>.
+    </p>
+    <a href="{{ url_for('export', format_type='attack') }}" class="btn btn-primary">
+        Download Navigator JSON
+    </a>
+</div>
+
+{% if navigator_layer %}
+<div class="panel">
+    <h2>Navigator Layer Preview</h2>
+    <pre style="background: #0a0a1a; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; color: #88ccaa; max-height: 300px;">{{ navigator_layer|tojson(indent=2)[:2000] }}</pre>
+</div>
+{% endif %}
+
+{% else %}
+<div class="panel" style="text-align: center; padding: 3rem;">
+    <h2 style="border: none;">No ATT&CK Data Yet</h2>
+    <p style="color: #888;">Run log analysis to map findings to MITRE ATT&CK techniques.</p>
+</div>
+{% endif %}
+
+{% endblock %}

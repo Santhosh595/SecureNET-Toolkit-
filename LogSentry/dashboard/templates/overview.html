@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Overview — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">Dashboard Overview</h1>
+
+<!-- Upload Panel -->
+<div class="panel">
+    <h2>Upload Log Files</h2>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="upload-area">
+            <p style="margin-bottom: 1rem; color: #888;">Drop log files here or click to browse</p>
+            <input type="file" name="logfile" multiple accept=".log,.csv,.json,.txt,.evtx" 
+                   style="margin-bottom: 1rem;">
+            <br>
+            <div style="display: flex; gap: 1rem; justify-content: center; align-items: center;">
+                <select name="log_type">
+                    <option value="auto">Auto-detect type</option>
+                    <option value="auth">Linux Auth Log</option>
+                    <option value="apache_access">Apache/Nginx Access</option>
+                    <option value="apache_error">Apache/Nginx Error</option>
+                    <option value="windows">Windows Event Log</option>
+                    <option value="firewall">UFW/iptables</option>
+                    <option value="generic">Generic JSON/CSV</option>
+                </select>
+                <select name="mode">
+                    <option value="analyze">Historical Analysis</option>
+                    <option value="monitor">Real-time Monitor</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Analyze</button>
+            </div>
+        </div>
+    </form>
+
+    <form action="{{ url_for('analyze_path') }}" method="post" style="margin-top: 1rem;">
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <label style="color: #888;">Or analyze path:</label>
+            <input type="text" name="path" placeholder="/var/log/ or C:\Logs\" style="flex: 1;">
+            <select name="log_type">
+                <option value="auto">Auto-detect</option>
+                <option value="auth">Auth</option>
+                <option value="apache_access">Web Access</option>
+                <option value="windows">Windows</option>
+                <option value="firewall">Firewall</option>
+            </select>
+            <button type="submit" class="btn btn-secondary">Analyze Path</button>
+        </div>
+    </form>
+</div>
+
+{% if stats %}
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="value">{{ stats.session.get('total_events', 0) }}</div>
+        <div class="label">Events Parsed</div>
+    </div>
+    <div class="stat-card alert">
+        <div class="value">{{ stats.session.get('total_alerts', 0) }}</div>
+        <div class="label">Alerts Generated</div>
+    </div>
+    <div class="stat-card warning">
+        <div class="value">{{ top_attackers|length }}</div>
+        <div class="label">Unique Attacker IPs</div>
+    </div>
+    <div class="stat-card success">
+        <div class="value">{{ stats.events_by_type|length }}</div>
+        <div class="label">Log Sources</div>
+    </div>
+</div>
+
+<!-- Events by Type -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="panel">
+        <h2>Events by Type</h2>
+        {% if events_by_type %}
+        <table>
+            <tr><th>Type</th><th>Count</th></tr>
+            {% for item in events_by_type %}
+            <tr>
+                <td>{{ item.log_type }}</td>
+                <td>{{ item.count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p style="color: #666;">No data yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <h2>Alerts by Severity</h2>
+        {% if alerts_by_severity %}
+        <table>
+            <tr><th>Severity</th><th>Count</th></tr>
+            {% for item in alerts_by_severity %}
+            <tr>
+                <td><span class="badge badge-{{ item.severity|lower }}">{{ item.severity }}</span></td>
+                <td>{{ item.count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p style="color: #666;">No alerts yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Top Attackers -->
+<div class="panel">
+    <h2>Top 5 Attacker IPs</h2>
+    {% if top_attackers %}
+    <table>
+        <tr><th>IP</th><th>Alerts</th></tr>
+        {% for attacker in top_attackers %}
+        <tr>
+            <td><a href="{{ url_for('profiles') }}" style="color: #88ccff;">{{ attacker.src_ip }}</a></td>
+            <td>{{ attacker.count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p style="color: #666;">No attacker data yet.</p>
+    {% endif %}
+</div>
+
+<!-- Recent Alerts -->
+<div class="panel">
+    <h2>Recent Alerts (Last 10)</h2>
+    {% if recent_alerts %}
+    <table>
+        <tr><th>Time</th><th>Severity</th><th>IP</th><th>Rule</th><th>Details</th></tr>
+        {% for alert in recent_alerts %}
+        <tr>
+            <td><small>{{ alert.timestamp[:19] if alert.timestamp else '' }}</small></td>
+            <td><span class="badge badge-{{ alert.severity|lower }}">{{ alert.severity }}</span></td>
+            <td>{{ alert.src_ip }}</td>
+            <td>{{ alert.rule_name }}</td>
+            <td><small>{{ alert.details[:80] }}</small></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p style="color: #666;">No alerts yet. Upload logs to begin analysis.</p>
+    {% endif %}
+</div>
+
+{% else %}
+<div class="panel" style="text-align: center; padding: 3rem;">
+    <h2 style="border: none;">Welcome to LogSentry</h2>
+    <p style="color: #888; margin: 1rem 0;">Upload log files or specify a path to begin security analysis.</p>
+    <p style="color: #666; font-size: 0.85rem;">
+        Supported formats: Linux auth.log, Apache/Nginx access & error logs, Windows Event Logs, UFW/iptables, JSON/CSV
+    </p>
+</div>
+{% endif %}
+
+<!-- Threat Intel Stats -->
+<div class="panel">
+    <h2>Threat Intel Database</h2>
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div>
+            <strong style="color: #ff4444;">{{ threat_stats.total_ips|default(0) }}</strong>
+            <span style="color: #888;"> known malicious IPs loaded</span>
+        </div>
+        {% if threat_stats.sources %}
+        <div style="color: #888;">
+            Sources: {% for src, count in threat_stats.sources.items() %}{{ src }} ({{ count }}){% if not loop.last %}, {% endif %}{% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Reports — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">Incident Reports</h1>
+
+<div class="panel">
+    <h2>Generate Report</h2>
+    <p style="color: #888; margin-bottom: 1.5rem;">
+        Generate a comprehensive incident report from the analyzed data.
+        Includes executive summary, attack timeline, attacker profiles, MITRE ATT&CK mapping, and recommendations.
+    </p>
+
+    {% if session_id %}
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{{ url_for('export', format_type='json') }}" class="btn btn-primary">
+            Export JSON Report
+        </a>
+        <a href="{{ url_for('export', format_type='csv') }}" class="btn btn-secondary">
+            Export CSV Report
+        </a>
+        <a href="{{ url_for('export', format_type='attack') }}" class="btn btn-secondary">
+            Export ATT&CK Navigator Layer
+        </a>
+    </div>
+    {% else %}
+    <p style="color: #ffaa00;">No analysis session active. Upload and analyze logs first.</p>
+    {% endif %}
+</div>
+
+<div class="panel">
+    <h2>Report Contents</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">1. Executive Summary</h3>
+            <p style="color: #888; font-size: 0.85rem;">Plain-English overview of findings</p>
+        </div>
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">2. Attack Timeline</h3>
+            <p style="color: #888; font-size: 0.85rem;">Chronological event listing</p>
+        </div>
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">3. Attacker Profiles</h3>
+            <p style="color: #888; font-size: 0.85rem;">Per-IP analysis and attribution</p>
+        </div>
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">4. MITRE ATT&CK</h3>
+            <p style="color: #888; font-size: 0.85rem;">Technique mapping and Navigator layer</p>
+        </div>
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">5. Recommendations</h3>
+            <p style="color: #888; font-size: 0.85rem;">Actionable remediation steps</p>
+        </div>
+        <div style="background: #0a0a20; padding: 1rem; border-radius: 4px;">
+            <h3 style="color: #88ccff; margin-bottom: 0.5rem;">6. Raw Data</h3>
+            <p style="color: #888; font-size: 0.85rem;">Complete alert appendix</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Session Info</h2>
+    {% if session_id %}
+    <p>Current Session ID: <code style="color: #88ccff;">{{ session_id }}</code></p>
+    {% else %}
+    <p style="color: #666;">No active session.</p>
+    {% endif %}
+</div>
+{% endblock %}

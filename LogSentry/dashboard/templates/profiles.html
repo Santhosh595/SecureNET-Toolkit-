@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Attacker Profiles — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">Attacker Profiles</h1>
+
+{% if profiles %}
+<div class="panel">
+    <table>
+        <thead>
+            <tr>
+                <th>IP</th>
+                <th>Priority</th>
+                <th>First Seen</th>
+                <th>Last Seen</th>
+                <th>Events</th>
+                <th>Rules Triggered</th>
+                <th>Sources</th>
+                <th>Kill Chain</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in profiles %}
+            <tr class="expandable" onclick="toggleDetail(this)">
+                <td><strong style="color: #88ccff;">{{ profile.ip }}</strong></td>
+                <td><span class="badge badge-{{ profile.priority|lower }}">{{ profile.priority }}</span></td>
+                <td><small>{{ profile.first_seen[:19] if profile.first_seen else '' }}</small></td>
+                <td><small>{{ profile.last_seen[:19] if profile.last_seen else '' }}</small></td>
+                <td>{{ profile.event_count }}</td>
+                <td><small>{{ profile.rules_triggered[:60] if profile.rules_triggered else '—' }}</small></td>
+                <td><small>{{ profile.sources_seen if profile.sources_seen else '—' }}</small></td>
+                <td><small style="color: #ff88cc;">{{ profile.kill_chain[:50] if profile.kill_chain else '—' }}</small></td>
+            </tr>
+            <tr class="content">
+                <td colspan="8">
+                    <div style="padding: 1rem; background: #0a0a20; border-radius: 4px; margin: 0.5rem 0;">
+                        <p><strong>IP:</strong> {{ profile.ip }}</p>
+                        <p><strong>Rules:</strong> {{ profile.rules_triggered }}</p>
+                        <p><strong>MITRE IDs:</strong> {{ profile.mitre_ids|default('—') }}</p>
+                        <p><strong>Alert Count:</strong> {{ profile.alert_count }}</p>
+                        <p><strong>Kill Chain:</strong> {{ profile.kill_chain|default('—') }}</p>
+                        {% if profile.is_threat_intel %}
+                        <p><span class="badge badge-critical">KNOWN THREAT ACTOR</span></p>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="panel" style="text-align: center; padding: 3rem;">
+    <h2 style="border: none;">No Profiles Yet</h2>
+    <p style="color: #888;">Run log analysis to build attacker profiles.</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleDetail(row) {
+    const next = row.nextElementSibling;
+    if (next.classList.contains('content')) {
+        next.classList.toggle('open');
+    }
+}
+</script>
+{% endblock %}

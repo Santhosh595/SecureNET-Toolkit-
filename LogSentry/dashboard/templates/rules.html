@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Rule Analysis — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">Detection Rule Analysis</h1>
+
+<div class="panel">
+    <h2>All 15 Detection Rules</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Rule Name</th>
+                <th>Severity</th>
+                <th>MITRE ID</th>
+                <th>Triggers</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in rules %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ rule.name }}</strong></td>
+                <td><span class="badge badge-{{ rule.severity|lower }}">{{ rule.severity }}</span></td>
+                <td><span style="color: #88ccff; font-family: monospace;">{{ rule.mitre_id }}</span></td>
+                <td>{{ rule.count }}</td>
+                <td><small>{{ rule.description }}</small></td>
+                <td>
+                    {% if rule.enabled %}
+                    <span class="badge badge-success">Active</span>
+                    {% else %}
+                    <span class="badge badge-info">Disabled</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>Rule Trigger Summary</h2>
+    {% set total_triggers = rules|sum(attribute='count') %}
+    <p style="color: #888;">Total detections: <strong style="color: #fff;">{{ total_triggers }}</strong></p>
+    
+    {% for rule in rules|sort(attribute='count', reverse=true) %}
+    {% if rule.count > 0 %}
+    <div style="margin: 0.8rem 0;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>{{ rule.name }}</span>
+            <span style="color: #888;">{{ rule.count }}</span>
+        </div>
+        <div style="background: #0a0a20; border-radius: 4px; height: 8px; overflow: hidden;">
+            <div style="background: {% if rule.severity == 'CRITICAL' %}#ff4444{% elif rule.severity == 'HIGH' %}#ff6633{% elif rule.severity == 'MEDIUM' %}#ffaa00{% else %}#4488ff{% endif %}; 
+                        height: 100%; width: {{ (rule.count / total_triggers * 100) if total_triggers > 0 else 0 }}%; 
+                        border-radius: 4px;">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Timeline — LogSentry{% endblock %}
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #fff;">Threat Timeline</h1>
+
+<div class="filters">
+    <input type="text" id="searchInput" placeholder="Search IP, username, path..." onkeyup="filterEvents()">
+    <select id="severityFilter" onchange="filterEvents()">
+        <option value="">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+    </select>
+    <select id="typeFilter" onchange="filterEvents()">
+        <option value="">All Types</option>
+        <option value="linux_auth">Linux Auth</option>
+        <option value="web_access">Web Access</option>
+        <option value="web_error">Web Error</option>
+        <option value="windows_event">Windows Event</option>
+        <option value="firewall">Firewall</option>
+        <option value="generic">Generic</option>
+    </select>
+</div>
+
+<div class="panel">
+    <h2>Event Timeline ({{ alerts|length }} alerts)</h2>
+    <div id="timeline">
+        {% if alerts %}
+            {% for alert in alerts %}
+            <div class="timeline-item {{ alert.severity|lower }}" 
+                 data-severity="{{ alert.severity }}"
+                 data-rule="{{ alert.rule_name }}"
+                 data-ip="{{ alert.src_ip }}"
+                 data-time="{{ alert.timestamp }}">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span class="badge badge-{{ alert.severity|lower }}">{{ alert.severity }}</span>
+                        <strong style="margin-left: 0.5rem;">{{ alert.rule_name }}</strong>
+                        {% if alert.src_ip %}
+                        <span style="color: #888; margin-left: 1rem;">from {{ alert.src_ip }}</span>
+                        {% endif %}
+                        {% if alert.username %}
+                        <span style="color: #888; margin-left: 0.5rem;">user: {{ alert.username }}</span>
+                        {% endif %}
+                    </div>
+                    <small style="color: #666;">{{ alert.timestamp[:19] if alert.timestamp else '' }}</small>
+                </div>
+                {% if alert.details %}
+                <p style="color: #aaa; margin-top: 0.5rem; font-size: 0.85rem;">{{ alert.details }}</p>
+                {% endif %}
+                {% if alert.mitre_id %}
+                <span class="badge badge-info" style="margin-top: 0.3rem;">{{ alert.mitre_id }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #666; text-align: center; padding: 2rem;">
+                No alerts to display. Upload and analyze logs first.
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterEvents() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const severity = document.getElementById('severityFilter').value;
+    const items = document.querySelectorAll('.timeline-item');
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const itemSeverity = item.dataset.severity;
+        
+        let show = true;
+        if (search && !text.includes(search)) show = false;
+        if (severity && itemSeverity !== severity) show = false;
+        
+        item.style.display = show ? 'block' : 'none';
+    });
+}
+</script>
+{% endblock %}
