@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides eight independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, and a JWT security analyzer.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides nine independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, and an SSL/TLS security scanner.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -74,6 +74,14 @@ Decode and actively test JWT tokens for 8 vulnerability classes: alg:none confus
 **Tech:** Python, Flask, PyJWT, Cryptography, Rich
 
 [View source](JWTInspect/) | [README](JWTInspect/README.md)
+
+### TLScan — SSL/TLS Security Scanner
+
+Comprehensive SSL/TLS audit: protocol testing (SSLv2-TLS1.3), 200+ cipher enumeration, full certificate chain analysis, 10 CVE vulnerability checks (Heartbleed, POODLE, BEAST, etc.), and A+ to F grading. Fully offline, no SSL Labs dependency.
+
+**Tech:** Python, Flask, SSL, Cryptography, Rich
+
+[View source](TLScan/) | [README](TLScan/README.md)
 
 ## Quick Start
 
@@ -198,6 +206,23 @@ python dashboard.py
 # Open http://127.0.0.1:5600
 ```
 
+### TLScan
+
+```bash
+cd TLScan
+pip install -r requirements.txt
+
+# Basic scan
+python main.py example.com
+
+# Custom port
+python main.py example.com --port 8443
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5700
+```
+
 ## Running Tests
 
 ```bash
@@ -294,6 +319,19 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── TLScan/
+│   ├── main.py              # CLI entry point (Rich panels)
+│   ├── connector.py         # SSL connection + certificate extraction
+│   ├── protocol_tester.py   # Protocol version testing
+│   ├── cipher_enumerator.py # Cipher suite enumeration
+│   ├── vuln_checks/
+│   │   └── __init__.py      # 10 vulnerability checks
+│   ├── grader.py            # SSL Labs-style grading
+│   ├── database.py          # SQLite operations
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -312,6 +350,7 @@ SecureNET-Toolkit--main/
 | ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes |
 | SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
 | JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — |
+| TLScan | Yes | Yes | — | — | — | — | — | Yes | — | — |
 
 ## Scoring Methodology (HeaderScan)
 
