@@ -1,4 +1,7 @@
-"""SecretSniff — JUnit XML output format."""
+"""SecretSniff - JUnit XML output format.
+
+Generates JUnit compatible XML for CI/CD pipeline integration.
+"""
 
 from __future__ import annotations
 import xml.etree.ElementTree as ET
@@ -18,8 +21,10 @@ def generate_junit(findings: list[dict], tool_name: str = "SecretSniff") -> str:
     testsuite = ET.Element("testsuite")
     testsuite.set("name", tool_name)
     testsuite.set("tests", str(len(findings)))
-    testsuite.set("failures", str(sum(1 for f in findings if f.get("severity") in ("CRITICAL", "HIGH"))))
+    failures = sum(1 for f in findings if f.get("severity") in ("CRITICAL", "HIGH"))
+    testsuite.set("failures", str(failures))
     testsuite.set("errors", "0")
+    testsuite.set("time", "0")
 
     for finding in findings:
         testcase = ET.SubElement(testsuite, "testcase")
@@ -29,12 +34,22 @@ def generate_junit(findings: list[dict], tool_name: str = "SecretSniff") -> str:
         if finding.get("severity") in ("CRITICAL", "HIGH"):
             failure = ET.SubElement(testcase, "failure")
             failure.set("message", f"Secret found: {finding.get('rule', '')}")
+            failure.set("type", finding.get("severity", ""))
             failure.text = (
-                f"File: {finding.get('file\', '')}\n"
-                f"Line: {finding.get('line\', 0)}\n"
-                f"Rule: {finding.get('rule\', '')}\n"
-                f"Severity: {finding.get('severity\', '')}\n"
-                f"Value (redacted): {finding.get('value_redacted\', '')}"
+                f"File: {finding.get('file', '')}\n"
+                f"Line: {finding.get('line', 0)}\n"
+                f"Rule: {finding.get('rule', '')}\n"
+                f"Severity: {finding.get('severity', '')}\n"
+                f"Confidence: {finding.get('confidence', '')}\n"
+                f"Value (redacted): {finding.get('value_redacted', '')}"
+            )
+        else:
+            # For MEDIUM/LOW, add a system-out with details
+            system_out = ET.SubElement(testcase, "system-out")
+            system_out.text = (
+                f"Rule: {finding.get('rule', '')}\n"
+                f"Severity: {finding.get('severity', '')}\n"
+                f"Value (redacted): {finding.get('value_redacted', '')}"
             )
 
     return ET.tostring(testsuite, encoding="unicode")

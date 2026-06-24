@@ -1,4 +1,7 @@
-"""SecretSniff — SARIF output format."""
+"""SecretSniff - SARIF output format.
+
+Generates SARIF 2.1.0 compatible reports for GitHub/GitLab CI integration.
+"""
 
 from __future__ import annotations
 import json
@@ -26,12 +29,18 @@ def generate_sarif(findings: list[dict], tool_name: str = "SecretSniff") -> dict
                 "id": rule_id,
                 "name": rule_id,
                 "shortDescription": {"text": f"Detected: {rule_id}"},
+                "fullDescription": {"text": finding.get("context", f"Secret pattern match: {rule_id}")},
                 "defaultConfiguration": {"level": _sarif_level(finding.get("severity", "MEDIUM"))},
+                "properties": {
+                    "category": "security",
+                    "tags": ["security", "secret", "api-key"],
+                },
             }
-        results.append({
+
+        result = {
             "ruleId": rule_id,
             "level": _sarif_level(finding.get("severity", "MEDIUM")),
-            "message": {"text": f"{finding.get('rule', 'Secret')} found in {finding.get('file', '')}"},
+            "message": {"text": f"{rule_id} found in {finding.get('file', '')}"},
             "locations": [{
                 "physicalLocation": {
                     "artifactLocation": {"uri": finding.get("file", "")},
@@ -40,12 +49,25 @@ def generate_sarif(findings: list[dict], tool_name: str = "SecretSniff") -> dict
                     }
                 }
             }],
-        })
+            "properties": {
+                "confidence": finding.get("confidence", "MEDIUM"),
+                "severity": finding.get("severity", "MEDIUM"),
+            },
+        }
+
+        if finding.get("commit_hash"):
+            result["properties"]["commit"] = finding["commit_hash"]
+        if finding.get("entropy"):
+            result["properties"]["entropy"] = finding["entropy"]
+
+        results.append(result)
 
     runs.append({
         "tool": {
             "driver": {
                 "name": tool_name,
+                "version": "1.0.0",
+                "informationUri": "https://github.com/Santhosh595/SecureNET-Toolkit-",
                 "rules": list(rules.values()),
             }
         },
