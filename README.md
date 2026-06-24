@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides nine independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, and an SSL/TLS security scanner.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides ten independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, and a hardcoded secret scanner.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -82,6 +82,14 @@ Comprehensive SSL/TLS audit: protocol testing (SSLv2-TLS1.3), 200+ cipher enumer
 **Tech:** Python, Flask, SSL, Cryptography, Rich
 
 [View source](TLScan/) | [README](TLScan/README.md)
+
+### SecretSniff — Secret & API Key Scanner
+
+Scan codebases, git history, and environment configs for 50+ types of hardcoded secrets. Integrates with pre-commit hooks and CI/CD pipelines via SARIF/JUnit output.
+
+**Tech:** Python, Flask, Git, Regex, Entropy Analysis
+
+[View source](SecretSniff/) | [README](SecretSniff/README.md)
 
 ## Quick Start
 
@@ -223,6 +231,25 @@ python dashboard.py
 # Open http://127.0.0.1:5700
 ```
 
+### SecretSniff
+
+```bash
+cd SecretSniff
+pip install -r requirements.txt
+
+# Scan a directory
+python main.py scan --path ./myproject
+
+# Scan git history
+python main.py scan --repo ./myrepo --history
+
+# Export SARIF for GitHub Code Scanning
+python main.py scan --path . --output results.sarif
+
+# Install pre-commit hook
+python main.py install-hook
+```
+
 ## Running Tests
 
 ```bash
@@ -332,6 +359,27 @@ SecureNET-Toolkit--main/
 │   ├── templates/
 │   │   └── index.html       # Dashboard UI
 │   └── README.md            # Tool documentation
+├── SecretSniff/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── scanner/
+│   │   ├── file_scanner.py  # File/directory scanning
+│   │   ├── git_scanner.py   # Git repo + history scanning
+│   │   ├── env_scanner.py   # Env file targeting
+│   │   └── entropy.py       # Shannon entropy calculator
+│   ├── patterns/
+│   │   └── rules.py         # 50+ regex patterns
+│   ├── allowlist.py         # Allowlist management
+│   ├── baseline.py          # Baseline comparison
+│   ├── output/
+│   │   ├── sarif.py         # SARIF format export
+│   │   ├── junit.py         # JUnit XML export
+│   │   └── reporter.py      # PDF report generation
+│   ├── database.py          # SQLite operations
+│   ├── dashboard/
+│   │   ├── app.py           # Flask web dashboard
+│   │   └── templates/
+│   │       └── index.html   # Dashboard UI
+│   └── README.md            # Tool documentation
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -351,6 +399,7 @@ SecureNET-Toolkit--main/
 | SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
 | JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — |
 | TLScan | Yes | Yes | — | — | — | — | — | Yes | — | — |
+| SecretSniff | Yes | — | — | — | — | — | — | Yes | — | — |
 
 ## Scoring Methodology (HeaderScan)
 
