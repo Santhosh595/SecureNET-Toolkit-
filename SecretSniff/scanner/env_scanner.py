@@ -5,6 +5,8 @@ Targets .env files, docker-compose, k8s configs, terraform, etc.
 
 from __future__ import annotations
 
+import os
+import re
 from pathlib import Path
 from typing import Generator
 
@@ -27,8 +29,6 @@ ENV_PATTERN = re.compile(
 # Directories that commonly contain env/secrets
 ENV_DIRS = ["kubernetes", "helm", "terraform", "ansible/vars", "ansible/group_vars"]
 
-import re
-
 
 def find_env_files(base_path: Path) -> Generator[Path, None, None]:
     """Find environment and configuration files.
@@ -46,6 +46,9 @@ def find_env_files(base_path: Path) -> Generator[Path, None, None]:
 
     for root, dirs, files in os.walk(base_path):
         root_path = Path(root)
+
+        # Skip common non-code dirs
+        dirs[:] = [d for d in dirs if d not in {".git", "node_modules", "__pycache__", "vendor", "dist", "build"}]
 
         for filename in files:
             file_path = root_path / filename
@@ -106,6 +109,3 @@ def scan_env_files(base_path: Path, include_tests: bool = False) -> list[dict]:
         findings.extend(file_findings)
 
     return findings
-
-
-import os
