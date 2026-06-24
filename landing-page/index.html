@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SecureNET Toolkit — Cybersecurity Tools for Developers</title>
-  <meta name="description" content="Open-source cybersecurity toolkit: AES-256 file encryption, network intrusion detection, and real-time monitoring dashboard.">
+  <meta name="description" content="Open-source cybersecurity toolkit with 9 tools: file encryption, network IDS, header analysis, port scanner, hash cracker, ARP detection, subdomain enumeration, JWT audit, and SSL/TLS scanner.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
           <span class="hero-title-accent">built for developers</span>
         </h1>
         <p class="hero-sub">
-          AES-256 file encryption with integrity verification. Real-time network intrusion detection with a live dashboard. All in Python, all open source.
+          Nine security tools in one toolkit: file encryption, network intrusion detection, HTTP header analysis, port scanning, hash cracking, ARP spoof detection, subdomain enumeration, JWT security auditing, and SSL/TLS scanning — all in Python, all open source.
         </p>
         <div class="hero-actions">
           <a href="#tools" class="btn btn-primary">Explore Tools</a>
@@ -49,7 +49,7 @@
         </div>
         <div class="hero-stats">
           <div class="hero-stat">
-            <span class="hero-stat-value">2</span>
+            <span class="hero-stat-value">9</span>
             <span class="hero-stat-label">Security Tools</span>
           </div>
           <div class="hero-stat">
@@ -125,8 +125,8 @@
     <div class="container">
       <div class="section-header">
         <div class="section-eyebrow">Toolkit</div>
-        <h2 class="section-title">Two tools, one mission</h2>
-        <p class="section-sub">Each tool addresses a different aspect of cybersecurity: data-at-rest protection and network-level threat detection.</p>
+        <h2 class="section-title">Nine tools, one mission</h2>
+        <p class="section-sub">Each tool addresses a different aspect of cybersecurity: from data-at-rest protection to network reconnaissance, web security auditing, and real-time threat detection.</p>
       </div>
 
       <div class="tool-cards">
@@ -383,6 +383,36 @@
           </ul>
           <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/TLScan" target="_blank" rel="noopener" class="tool-card-link">View source</a>
         </div>
+
+        <!-- LogSentry -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">LogSentry</h3>
+              <p class="tool-card-sub">Multi-Source Log Analyzer & Threat Detector</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Ingest auth logs, web server logs, Windows Event Logs, and firewall logs. Run 15 detection rules, correlate attacks across sources, map findings to MITRE ATT&CK, and generate incident reports — at SOC analyst level.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">SQLite</span>
+            <span class="tech-tag">MITRE ATT&amp;CK</span>
+            <span class="tech-tag">Rich</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>6 log formats: Linux auth, Apache/Nginx, Windows Events, UFW/iptables, JSON, CSV</li>
+            <li>15 detection rules with MITRE ATT&amp;CK mapping</li>
+            <li>Cross-source IP correlation and attacker profiling</li>
+            <li>Real-time monitoring + historical analysis modes</li>
+            <li>ATT&amp;CK Navigator JSON export</li>
+            <li>Incident report: JSON, CSV, PDF</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/LogSentry" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
       </div>
     </div>
   </section>
@@ -401,6 +431,8 @@
             <div class="arch-box-items">
               <span>Files to encrypt</span>
               <span>Network packets</span>
+              <span>Domains &amp; URLs</span>
+              <span>Logs &amp; tokens</span>
             </div>
           </div>
           <div class="arch-arrow">
@@ -411,6 +443,8 @@
             <div class="arch-box-items">
               <span>AES-256 / PBKDF2</span>
               <span>Scapy + Detection Rules</span>
+              <span>SSL/TLS + JWT Auditing</span>
+              <span>Log Correlation + MITRE</span>
             </div>
           </div>
           <div class="arch-arrow">
@@ -421,6 +455,8 @@
             <div class="arch-box-items">
               <span>Encrypted files + SHA-256</span>
               <span>Dashboard + Alerts</span>
+              <span>Security Grades A+ to F</span>
+              <span>Incident Reports</span>
             </div>
           </div>
         </div>
