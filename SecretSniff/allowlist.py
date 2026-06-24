@@ -1,12 +1,14 @@
-"""SecretSniff — Allowlist management.
+"""SecretSniff - Allowlist management.
 
 Supports ignoring findings by rule, path, pattern, or commit.
+Loads from .secretsniff-ignore file and global config.
 """
 
 from __future__ import annotations
 
 import json
 import time
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -45,6 +47,27 @@ class Allowlist:
                     else:
                         self.entries.append(AllowlistEntry(type="pattern", value=line))
         except (OSError, PermissionError):
+            pass
+
+    def load_global_config(self, config_path: Path) -> None:
+        """Load allowlist entries from global config YAML."""
+        try:
+            import yaml
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = yaml.safe_load(f)
+            if config and "allowlist" in config:
+                allowlist_config = config["allowlist"]
+                for rule in allowlist_config.get("rules", []):
+                    self.add_rule(str(rule))
+                for path_pattern in allowlist_config.get("paths", []):
+                    self.add_path(str(path_pattern))
+                for pattern in allowlist_config.get("patterns", []):
+                    self.add_pattern(str(pattern))
+                for commit in allowlist_config.get("commits", []):
+                    self.add_commit(str(commit))
+        except ImportError:
+            pass
+        except (OSError, KeyError, Exception):
             pass
 
     def add_rule(self, rule_name: str, reason: str = "") -> None:
@@ -106,3 +129,11 @@ class Allowlist:
                 if entry.reason:
                     f.write(f"# {entry.reason}\n")
                 f.write(f"{entry.type}:{entry.value}\n")
+
+    def remove(self, entry_type: str, value: str) -> bool:
+        """Remove an allowlist entry."""
+        for i, entry in enumerate(self.entries):
+            if entry.type == entry_type and entry.value == value:
+                self.entries.pop(i)
+                return True
+        return False

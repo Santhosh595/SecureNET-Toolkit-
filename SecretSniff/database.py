@@ -1,4 +1,7 @@
-"""SecretSniff — SQLite database operations."""
+"""SecretSniff - SQLite database operations.
+
+Stores scan history, findings, and allowlist in a local SQLite database.
+"""
 
 from __future__ import annotations
 
@@ -59,6 +62,8 @@ def init_db() -> None:
         CREATE INDEX IF NOT EXISTS idx_findings_scan ON findings(scan_id);
         CREATE INDEX IF NOT EXISTS idx_findings_severity ON findings(severity);
         CREATE INDEX IF NOT EXISTS idx_findings_rule ON findings(rule_name);
+        CREATE INDEX IF NOT EXISTS idx_findings_file ON findings(file_path);
+        CREATE INDEX IF NOT EXISTS idx_scans_timestamp ON scans(timestamp);
     """)
     conn.commit()
     conn.close()
@@ -111,6 +116,58 @@ def get_findings(scan_id: int) -> list[dict]:
     return rows
 
 
+def get_findings_by_severity(severity: str, limit: int = 100) -> list[dict]:
+    """Get findings by severity across all scans."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM findings WHERE severity = ? LIMIT ?", (severity, limit))
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
+def get_top_rules(limit: int = 10) -> list[dict]:
+    """Get most triggered rules."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT rule_name, COUNT(*) as count
+        FROM findings GROUP BY rule_name
+        ORDER BY count DESC LIMIT ?
+    """, (limit,))
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
+def get_top_files(limit: int = 10) -> list[dict]:
+    """Get most affected files."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT file_path, COUNT(*) as count
+        FROM findings GROUP BY file_path
+        ORDER BY count DESC LIMIT ?
+    """, (limit,))
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
+def get_authors_stats(limit: int = 10) -> list[dict]:
+    """Get author leaderboard (who introduced most secrets)."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT author, COUNT(*) as count
+        FROM findings WHERE author IS NOT NULL
+        GROUP BY author ORDER BY count DESC LIMIT ?
+    """, (limit,))
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
 def get_stats() -> dict[str, Any]:
     """Get overall statistics."""
     conn = get_connection()
@@ -123,10 +180,50 @@ def get_stats() -> dict[str, Any]:
     critical = cur.fetchone()["total"]
     cur.execute("SELECT COUNT(*) as total FROM findings WHERE severity = 'HIGH'")
     high = cur.fetchone()["total"]
+    cur.execute("SELECT COUNT(*) as total FROM findings WHERE severity = 'MEDIUM'")
+    medium = cur.fetchone()["total"]
+    cur.execute("SELECT COUNT(*) as total FROM findings WHERE severity = 'LOW'")
+    low = cur.fetchone()["total"]
     conn.close()
     return {
         "total_scans": total_scans,
         "total_findings": total_findings,
         "critical": critical,
         "high": high,
+        "medium": medium,
+        "low": low,
     }
+
+
+def save_allowlist(entry_type: str, value: str, reason: str = "", added_by: str = "") -> int:
+    """Save an allowlist entry. Returns entry ID."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO allowlist (type, value, reason, added_by, added_at) VALUES (?, ?, ?, ?, ?)",
+        (entry_type, value, reason, added_by, time.time()),
+    )
+    entry_id = cur.lastrowid
+    conn.commit()
+    conn.close()
+    return entry_id
+
+
+def get_allowlist_entries() -> list[dict]:
+    """Get all allowlist entries."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM allowlist ORDER BY id DESC")
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
+def delete_allowlist_entry(entry_id: int) -> bool:
+    """Delete an allowlist entry."""
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM allowlist WHERE id = ?", (entry_id,))
+    conn.commit()
+    conn.close()
+    return True

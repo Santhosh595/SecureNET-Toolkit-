@@ -1,6 +1,7 @@
-"""SecretSniff — Baseline management.
+"""SecretSniff - Baseline management.
 
 Save current findings as accepted baseline, compare future scans against it.
+Supports merging baselines and partial updates.
 """
 
 from __future__ import annotations
@@ -93,3 +94,44 @@ def compare_with_baseline(findings: list[dict], baseline_path: Path) -> tuple[li
             new_findings.append(finding)
 
     return new_findings, known_findings
+
+
+def merge_baseline(old_baseline_path: Path, new_findings: list[dict], output_path: Path) -> None:
+    """Merge new findings into existing baseline.
+
+    Useful when you want to accept new findings as part of the baseline.
+
+    Args:
+        old_baseline_path: Path to existing baseline.
+        new_findings: New findings to merge.
+        output_path: Path for merged baseline.
+    """
+    old = load_baseline(old_baseline_path)
+    if not old:
+        save_baseline(new_findings, output_path)
+        return
+
+    existing_hashes = {f["hash"] for f in old.get("findings", [])}
+    merged = old.get("findings", [])
+
+    for f in new_findings:
+        h = compute_finding_hash(f)
+        if h not in existing_hashes:
+            merged.append({
+                "hash": h,
+                "file": f.get("file", ""),
+                "line": f.get("line", 0),
+                "rule": f.get("rule", ""),
+                "severity": f.get("severity", ""),
+                "value_redacted": f.get("value_redacted", ""),
+            })
+            existing_hashes.add(h)
+
+    merged_baseline = {
+        "version": "1.0",
+        "total_findings": len(merged),
+        "findings": merged,
+    }
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(merged_baseline, f, indent=2, ensure_ascii=False)
