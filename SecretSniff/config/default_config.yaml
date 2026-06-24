@@ -1,0 +1,64 @@
+# SecretSniff Default Configuration
+# Override: ~/.secretsniff/config.yaml
+
+scanner:
+  # Maximum file size to scan (bytes, default 10MB)
+  max_file_size: 10485760
+  # Entropy threshold (0-8, higher = less sensitive)
+  entropy_threshold: 4.5
+  # Minimum string length for entropy check
+  min_string_length: 20
+  # Maximum string length for entropy check
+  max_string_length: 500
+  # Number of worker threads
+  thread_workers: 20
+  # Follow symlinks
+  follow_symlinks: false
+  # Skip binary files (auto-detected)
+  skip_binary: true
+
+patterns:
+  # Enable/disable specific rules
+  enabled: []  # empty = all enabled
+  disabled: []  # rule names to skip
+
+allowlist:
+  # Global allowlist entries
+  rules: []
+  paths: []
+  patterns: []
+  commits: []
+
+output:
+  # Default output format: table, json, sarif, junit, pdf
+  format: "table"
+  # Show findings grouped by file
+  group_by_file: false
+  # Color output
+  color: true
+
+# Inline ignore pattern
+inline_ignore: "secretsniff:ignore"
+
+# Test file patterns to skip
+test_patterns:
+  - ".*_test\."
+  - ".*test_.*"
+  - ".*\.test\."
+  - ".*spec_.*"
+  - ".*\.example$"
+  - ".*\.sample$"
+  - ".*\.fixture$"
+  - ".*/test/.*"
+  - ".*/tests/.*"
+  - ".*/fixtures/.*"
+  - ".*/docs/.*"
+  - ".*\.md$"
+  - ".*\.rst$"
+
+# Severity mapping
+severity:
+  CRITICAL: "error"
+  HIGH: "error"
+  MEDIUM: "warning"
+  LOW: "note"
