@@ -14,6 +14,7 @@ import argparse
 import os
 import sys
 import time
+from pathlib import Path
 
 from rich.console import Console
 from rich.table import Table
@@ -48,7 +49,6 @@ def display_findings(findings: list[dict], group_by_file: bool = False) -> None:
         return
 
     if group_by_file:
-        # Group by file
         by_file = {}
         for f in findings:
             by_file.setdefault(f["file"], []).append(f)
@@ -99,9 +99,14 @@ def cmd_scan(args) -> None:
 
     # Load allowlist
     allowlist = Allowlist()
-    if os.path.exists(".secretsniff-ignore"):
-        ignore_file = Path(".secretsniff-ignore")
+    ignore_file = Path(".secretsniff-ignore")
+    if ignore_file.exists():
         allowlist = Allowlist(ignore_file)
+
+    # Load global config
+    global_config = Path.home() / ".secretsniff" / "config.yaml"
+    if global_config.exists():
+        allowlist.load_global_config(global_config)
 
     patterns = get_patterns()
 
@@ -157,7 +162,6 @@ def cmd_scan(args) -> None:
 
     # Apply baseline
     if args.baseline:
-        from pathlib import Path
         new_findings, known_findings = compare_with_baseline(findings, Path(args.baseline))
         if not args.show_known:
             findings = new_findings
@@ -183,7 +187,7 @@ def cmd_scan(args) -> None:
     summary.append(f"High: {high} | ", style="orange")
     summary.append(f"Medium: {medium} | ", style="yellow")
     summary.append(f"Low: {low}", style="blue")
-    summary.append(f"Duration: {duration:.1f}s", style="dim")
+    summary.append(f"  Duration: {duration:.1f}s", style="dim")
     console.print(Panel(summary, title="[bold]Scan Summary[/]", border_style="cyan"))
     console.print()
 
@@ -245,6 +249,9 @@ def cmd_baseline(args) -> None:
 def cmd_install_hook(args) -> None:
     """Install pre-commit hook."""
     hook_path = Path(".git/hooks/pre-commit")
+    if not hook_path.parent.exists():
+        console.print("[red]Not in a git repository[/]")
+        sys.exit(1)
     hook_content = """#!/bin/bash
 # SecretSniff pre-commit hook
 # Scans staged files for secrets before commit
@@ -255,22 +262,27 @@ if [ -z "$STAGED_FILES" ]; then
     exit 0
 fi
 
-echo "🔍 SecretSniff: Scanning staged files..."
+echo "SecretSniff: Scanning staged files..."
 
-# Run secretsniff on staged files
-python -m main.py scan --path . --stdin <<EOF
-$(git diff --cached -- '*.py' '*.js' '*.ts' '*.yml' '*.yaml' '*.json' '*.env' '*.tf' '*.sh')
-EOF
+# Create temp file with staged content
+TEMPFILE=$(mktemp)
+for f in $STAGED_FILES; do
+    git show ":$f" >> "$TEMPFILE" 2>/dev/null
+done
 
+# Run secretsniff
+python -m main.py scan --stdin < "$TEMPFILE"
 EXIT_CODE=$?
 
+rm -f "$TEMPFILE"
+
 if [ $EXIT_CODE -ne 0 ]; then
-    echo "❌ SecretSniff: Secrets detected! Commit blocked."
+    echo "SecretSniff: Secrets detected! Commit blocked."
     echo "   To bypass (not recommended): git commit --no-verify"
     exit 1
 fi
 
-echo "✅ SecretSniff: No secrets detected."
+echo "SecretSniff: No secrets detected."
 exit 0
 """
     hook_path.write_text(hook_content)
@@ -308,6 +320,10 @@ def main() -> None:
     # Install hook command
     subparsers.add_parser("install-hook", help="Install git pre-commit hook")
 
+    # Dashboard command
+    dashboard_parser = subparsers.add_parser("dashboard", help="Launch web dashboard")
+    dashboard_parser.add_argument("--port", type=int, default=5800, help="Dashboard port")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -325,6 +341,9 @@ def main() -> None:
         cmd_baseline(args)
     elif args.command == "install-hook":
         cmd_install_hook(args)
+    elif args.command == "dashboard":
+        from dashboard.app import main as run_dashboard
+        run_dashboard()
 
 
 if __name__ == "__main__":
