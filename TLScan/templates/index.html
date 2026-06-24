@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TLScan - SSL/TLS Security Scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060a10; --surface: #0c1220; --surface-raised: #111827;
+      --border: #1a2538; --border-light: #243044;
+      --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+      --accent: #0ea5e9; --accent-dim: rgba(14,165,233,0.1);
+      --safe: #22c55e; --safe-dim: rgba(34,197,94,0.1);
+      --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
+      --crit: #ef4444; --crit-dim: rgba(239,68,68,0.1);
+      --high: #f97316; --high-dim: rgba(249,115,22,0.1);
+      --radius: 12px; --radius-sm: 8px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+    .nav-logo span:first-child { color: var(--accent); font-family: var(--mono); }
+    .nav-back { font-size: 13px; color: var(--muted); }
+    .nav-back:hover { color: var(--text); }
+    .hero { padding: 40px 0 24px; text-align: center; }
+    .hero h1 { font-size: clamp(24px, 3vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .hero p { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto 24px; }
+    .disclaimer-box { background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 14px 20px; max-width: 640px; margin: 0 auto 24px; font-size: 13px; color: var(--crit); text-align: left; }
+    .disclaimer-box strong { display: block; margin-bottom: 4px; }
+    .input-row { display: flex; gap: 12px; max-width: 600px; margin: 0 auto 24px; }
+    .input-row input { flex: 1; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--mono); outline: none; }
+    .input-row input:focus { border-color: var(--accent); }
+    .input-row input::placeholder { color: var(--dim); }
+    .btn { padding: 14px 28px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 200ms; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .progress-wrap { display: none; max-width: 600px; margin: 0 auto 24px; }
+    .progress-wrap.visible { display: block; }
+    .progress-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 300ms ease; width: 0%; }
+    .progress-text { font-size: 13px; color: var(--muted); text-align: center; }
+    .grade-display { text-align: center; margin-bottom: 32px; }
+    .grade-letter { font-size: 80px; font-weight: 900; line-height: 1; }
+    .grade-A { color: var(--safe); }
+    .grade-B { color: var(--accent); }
+    .grade-C { color: var(--warn); }
+    .grade-D { color: var(--high); }
+    .grade-F { color: var(--crit); }
+    .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .tab { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 8px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--surface-raised); }
+    td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    .sev-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .sev-CRITICAL { background: var(--crit-dim); color: var(--crit); }
+    .sev-HIGH { background: var(--high-dim); color: var(--high); }
+    .sev-MEDIUM { background: var(--warn-dim); color: var(--warn); }
+    .sev-LOW { background: var(--safe-dim); color: var(--safe); }
+    .sev-GOOD { background: var(--safe-dim); color: var(--safe); }
+    .sev-EXCELLENT { background: var(--safe-dim); color: var(--safe); }
+    .sev-INFO { background: var(--border); color: var(--muted); }
+    .error-box { display: none; background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; color: var(--crit); }
+    .error-box.visible { display: block; }
+    .disclaimer-footer { text-align: center; font-size: 12px; color: var(--dim); padding: 32px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+    @media (max-width: 768px) {
+      .input-row { flex-direction: column; }
+      .tabs { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-logo"><span>&gt;_</span> TLScan</div>
+      <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-back">SecureNET Toolkit</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="hero">
+      <h1>SSL/TLS Security Scanner</h1>
+      <p>Full TLS audit: protocols, ciphers, certificates, 10 CVE checks, and A+ to F grading.</p>
+      <div class="disclaimer-box">
+        <strong>Authorized Use Only</strong>
+        TLScan is for authorized security auditing only. Only scan domains you own or have permission to test.
+      </div>
+      <div class="input-row">
+        <input type="text" id="domainInput" placeholder="example.com" autocomplete="off" spellcheck="false">
+        <button class="btn btn-primary" id="scanBtn" onclick="startScan()">Scan</button>
+      </div>
+    </div>
+    <div class="error-box" id="errorBox"></div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">Initializing...</div>
+    </div>
+    <div id="resultsArea"></div>
+    <div class="disclaimer-footer">
+      TLScan v1.0 - Fully offline SSL/TLS security scanner.
+    </div>
+  </div>
+  <script>
+    let pollInterval = null;
+    document.getElementById("domainInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") startScan();
+    });
+    async function startScan() {
+      const domain = document.getElementById("domainInput").value.trim();
+      if (!domain) { showError("Please enter a domain."); return; }
+      document.getElementById("scanBtn").disabled = true;
+      document.getElementById("errorBox").classList.remove("visible");
+      document.getElementById("progressWrap").classList.add("visible");
+      document.getElementById("progressFill").style.width = "0%";
+      document.getElementById("resultsArea").innerHTML = "";
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(pollProgress, 1000);
+      try {
+        const res = await fetch("/scan", { method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ domain, port: 443 }) });
+        const data = await res.json();
+        clearInterval(pollInterval);
+        if (data.error) { showError(data.error); return; }
+        renderResults(data);
+      } catch (err) {
+        clearInterval(pollInterval);
+        showError("Request failed: " + err.message);
+      } finally {
+        document.getElementById("scanBtn").disabled = false;
+        document.getElementById("progressWrap").classList.remove("visible");
+      }
+    }
+    async function pollProgress() {
+      try {
+        const res = await fetch("/progress");
+        const data = await res.json();
+        if (data.running) {
+          const pct = Math.round((data.step / data.total) * 100);
+          document.getElementById("progressFill").style.width = pct + "%";
+          document.getElementById("progressText").textContent = data.current;
+        }
+      } catch(e) {}
+    }
+    function renderResults(data) {
+      const gradeClass = "grade-" + (data.grade || "F")[0];
+      const gradeColors = {"A": "var(--safe)", "B": "var(--accent)", "C": "var(--warn)", "D": "var(--high)", "F": "var(--crit)"};
+      let html = "";
+      // Grade
+      html += '<div class="grade-display">';
+      html += '<div class="grade-letter ' + gradeClass + '">' + (data.grade || "?") + "</div>";
+      html += '<div style="font-size:18px;font-weight:700;color:' + (gradeColors[(data.grade||"F")[0]]||"var(--text)") + '">' + (data.score||0) + '/100</div>';
+      if (data.cap_reason) html += '<div style="color:var(--warn);font-size:13px;margin-top:4px">' + data.cap_reason + "</div>";
+      html += "</div>";
+      // Tabs
+      html += '<div class="tabs">';
+      html += '<div class="tab active" onclick="showTab(\'overview\')">Overview</div>';
+      html += '<div class="tab" onclick="showTab(\'certs\')">Certificates</div>';
+      html += '<div class="tab" onclick="showTab(\'protocols\')">Protocols & Ciphers</div>';
+      html += '<div class="tab" onclick="showTab(\'vulns\')">Vulnerabilities</div>';
+      html += "</div>";
+      // Overview
+      html += '<div class="tab-content active" id="tab-overview">';
+      if (data.deductions && data.deductions.length > 0) {
+        html += '<table><thead><tr><th>Deduction</th></tr></thead><tbody>';
+        data.deductions.forEach(function(d) { html += "<tr><td>" + d + "</td></tr>"; });
+        html += "</tbody></table>";
+      } else {
+        html += '<p style="color:var(--safe)">No issues found. Configuration is secure.</p>';
+      }
+      html += "</div>";
+      // Certificates
+      html += '<div class="tab-content" id="tab-certs">';
+      if (data.certificates && data.certificates.length > 0) {
+        html += '<table><thead><tr><th>Position</th><th>Subject</th><th>Issuer</th><th>Expires</th><th>Key</th></tr></thead><tbody>';
+        data.certificates.forEach(function(c) {
+          const pos = c.position === 0 ? "Leaf" : "Intermediate " + c.position;
+          const expiry = c.days_until_expiry < 0 ? '<span style="color:var(--crit)">EXPIRED</span>' : c.days_until_expiry + " days";
+          html += "<tr><td>" + pos + "</td><td>" + c.subject_cn + "</td><td>" + c.issuer_cn + "</td><td>" + expiry + "</td><td>" + (c.key_type||"?") + "-" + (c.key_size||"?") + "</td></tr>";
+        });
+        html += "</tbody></table>";
+      } else {
+        html += '<p style="color:var(--muted)">No certificates retrieved.</p>';
+      }
+      html += "</div>";
+      // Protocols
+      html += '<div class="tab-content" id="tab-protocols">';
+      if (data.protocols && data.protocols.length > 0) {
+        html += '<table><thead><tr><th>Protocol</th><th>Supported</th><th>Risk</th></tr></thead><tbody>';
+        data.protocols.forEach(function(p) {
+          const sup = p.supported ? '<span style="color:var(--safe)">YES</span>' : '<span style="color:var(--muted)">NO</span>';
+          html += "<tr><td>" + p.protocol + "</td><td>" + sup + "</td><td>" + p.risk + "</td></tr>";
+        });
+        html += "</tbody></table>";
+      }
+      if (data.ciphers && data.ciphers.length > 0) {
+        html += '<h3 style="margin:20px 0 12px">Cipher Suites</h3>';
+        html += '<table><thead><tr><th>Cipher</th><th>Category</th><th>FS</th></tr></thead><tbody>';
+        data.ciphers.slice(0, 20).forEach(function(c) {
+          const fs = c.forward_secrecy ? "✓" : "✗";
+          html += "<tr><td>" + c.cipher + "</td><td>" + c.category + "</td><td>" + fs + "</td></tr>";
+        });
+        html += "</tbody></table>";
+      }
+      html += "</div>";
+      // Vulnerabilities
+      html += '<div class="tab-content" id="tab-vulns">';
+      if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+        html += '<table><thead><tr><th>Vulnerability</th><th>CVE</th><th>Status</th><th>Severity</th></tr></thead><tbody>';
+        data.vulnerabilities.forEach(function(v) {
+          const status = v.vulnerable ? '<span style="color:var(--crit)">VULNERABLE</span>' : '<span style="color:var(--safe)">PASS</span>';
+          html += "<tr><td>" + v.name + "</td><td>" + v.cve + "</td><td>" + status + "</td><td><span class='sev-badge sev-" + v.severity + "'>" + v.severity + "</span></td></tr>";
+        });
+        html += "</tbody></table>";
+      }
+      html += "</div>";
+      document.getElementById("resultsArea").innerHTML = html;
+    }
+    function showTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector('.tab[onclick="showTab(\'' + name + '\')"]').classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+    function showError(msg) {
+      document.getElementById("scanBtn").disabled = false;
+      document.getElementById("progressWrap").classList.remove("visible");
+      const el = document.getElementById("errorBox");
+      el.textContent = msg;
+      el.classList.add("visible");
+    }
+  </script>
+</body>
+</html>
