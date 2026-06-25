@@ -1,0 +1,77 @@
+{
+  "aws_s3": {
+    "pattern": "*.s3.amazonaws.com",
+    "fingerprint": "NoSuchBucket",
+    "service": "AWS S3"
+  },
+  "cloudfront": {
+    "pattern": "*.cloudfront.net",
+    "fingerprint": "Bad request",
+    "service": "AWS CloudFront"
+  },
+  "github": {
+    "pattern": "*.github.io",
+    "fingerprint": "404 There isn't a GitHub Pages site",
+    "service": "GitHub Pages"
+  },
+  "heroku": {
+    "pattern": "*.herokuapp.com",
+    "fingerprint": "No such app",
+    "service": "Heroku"
+  },
+  "netlify": {
+    "pattern": "*.netlify.app",
+    "fingerprint": "Not found - Request ID",
+    "service": "Netlify"
+  },
+  "vercel": {
+    "pattern": "*.vercel.app",
+    "fingerprint": "The deployment could not be found",
+    "service": "Vercel"
+  },
+  "azure": {
+    "pattern": "*.azurewebsites.net",
+    "fingerprint": "Error 404 - Web app not found",
+    "service": "Azure App Service"
+  },
+  "shopify": {
+    "pattern": "*.myshopify.com",
+    "fingerprint": "Sorry, this shop is currently unavailable",
+    "service": "Shopify"
+  },
+  "fastly": {
+    "pattern": "*.fastly.net",
+    "fingerprint": "Fastly error: unknown domain",
+    "service": "Fastly"
+  },
+  "pantheon": {
+    "pattern": "*.pantheonsite.io",
+    "fingerprint": "404 error",
+    "service": "Pantheon"
+  },
+  "ghost": {
+    "pattern": "*.ghost.io",
+    "fingerprint": "404 - Ghost",
+    "service": "Ghost"
+  },
+  "surge": {
+    "pattern": "*.surge.sh",
+    "fingerprint": "project not found",
+    "service": "Surge.sh"
+  },
+  "sendgrid": {
+    "pattern": "sendgrid.net",
+    "fingerprint": "unclaimed",
+    "service": "SendGrid"
+  },
+  "zendesk": {
+    "pattern": "*.zendesk.com",
+    "fingerprint": "account not found",
+    "service": "Zendesk"
+  },
+  "desk": {
+    "pattern": "*.desk.com",
+    "fingerprint": "not found",
+    "service": "Desk.com"
+  }
+}

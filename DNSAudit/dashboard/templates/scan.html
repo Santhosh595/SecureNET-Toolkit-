@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNSAudit - DNS Security Auditor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060a10; --surface: #0c1220; --surface-raised: #111827;
+      --border: #1a2538; --border-light: #243044;
+      --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+      --accent: #0ea5e9; --accent-dim: rgba(14,165,233,0.1);
+      --safe: #22c55e; --safe-dim: rgba(34,197,94,0.1);
+      --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
+      --crit: #ef4444; --crit-dim: rgba(239,68,68,0.1);
+      --high: #f97316; --high-dim: rgba(249,115,22,0.1);
+      --radius: 12px; --radius-sm: 8px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "JetBrains Mono", "SF Mono", monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+    .nav { border-bottom: 1px solid var(--border); padding: 18px 0; position: sticky; top: 0; background: rgba(6,10,16,0.85); backdrop-filter: blur(12px); z-index: 100; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; }
+    .nav-logo span:first-child { color: var(--accent); font-family: var(--mono); }
+    .nav-back { font-size: 13px; color: var(--muted); }
+    .nav-back:hover { color: var(--text); }
+    .hero { padding: 56px 0 36px; text-align: center; }
+    .hero h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 540px; margin: 0 auto 32px; }
+    .scan-card { max-width: 700px; margin: 0 auto 40px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+    .input-row { display: flex; gap: 12px; margin-bottom: 16px; }
+    .input-row input, .input-row select { flex: 1; padding: 14px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--mono); outline: none; }
+    .input-row input:focus, .input-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .btn { padding: 14px 28px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 200ms; font-family: var(--font); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .progress-container { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .progress-container.visible { display: block; }
+    .progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #38bdf8); width: 0%; border-radius: 2px; transition: width 400ms; }
+    .results { display: none; margin-top: 32px; }
+    .results.visible { display: block; }
+    .grade-card { text-align: center; padding: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 24px; }
+    .grade-letter { font-size: 72px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+    .grade-A { color: var(--safe); }
+    .grade-B { color: #38bdf8; }
+    .grade-C { color: var(--warn); }
+    .grade-D, .grade-F { color: var(--crit); }
+    .score-text { font-size: 14px; color: var(--muted); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+    .stat-value { font-size: 28px; font-weight: 800; }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+    .findings-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .findings-table th { text-align: left; padding: 10px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--surface-raised); border-bottom: 1px solid var(--border); }
+    .findings-table td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+    .findings-table tr:hover td { background: var(--surface-raised); }
+    .sev-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .sev-CRITICAL { background: var(--crit-dim); color: var(--crit); }
+    .sev-HIGH { background: var(--high-dim); color: var(--high); }
+    .sev-MEDIUM { background: var(--warn-dim); color: var(--warn); }
+    .sev-LOW { background: var(--safe-dim); color: var(--safe); }
+    .category-section { margin-bottom: 24px; }
+    .category-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .disclaimer-footer { text-align: center; font-size: 12px; color: var(--dim); padding: 40px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+    @media (max-width: 768px) { .input-row { flex-direction: column; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-logo"><span>&gt;_</span> DNSAudit</div>
+      <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-back">SecureNET Toolkit</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="hero">
+      <h1>DNS Security Auditor</h1>
+      <p>Audit any domain across 12 DNS security categories including SPF, DKIM, DMARC, DNSSEC, zone transfer, subdomain takeover, and DNS hijacking detection.</p>
+    </div>
+    <div class="scan-card">
+      <div class="input-row">
+        <input type="text" id="domainInput" placeholder="example.com" autocomplete="off" spellcheck="false">
+        <select id="resolverSelect" style="max-width:180px;">
+          <option value="">System Resolver</option>
+          <option value="8.8.8.8">Google (8.8.8.8)</option>
+          <option value="1.1.1.1">Cloudflare (1.1.1.1)</option>
+          <option value="9.9.9.9">Quad9 (9.9.9.9)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="scanBtn" onclick="startScan()">Start Audit</button>
+      <div class="progress-container" id="progressContainer">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
+          <span id="progressLabel">Scanning...</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+    <div class="results" id="results">
+      <div class="grade-card">
+        <div class="grade-letter" id="gradeLetter">-</div>
+        <div class="score-text" id="scoreText">Score: -/120</div>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div id="findingsContainer"></div>
+    </div>
+    <div class="disclaimer-footer">
+      DNSAudit v1.0 - All checks are read-only passive queries.<br>
+      DNSAudit is for auditing domains you own or have explicit authorization to test.
+    </div>
+  </div>
+  <script>
+    document.getElementById("domainInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") startScan();
+    });
+
+    async function startScan() {
+      const domain = document.getElementById("domainInput").value.trim();
+      if (!domain) { alert("Please enter a domain."); return; }
+      const resolver = document.getElementById("resolverSelect").value;
+      document.getElementById("scanBtn").disabled = true;
+      document.getElementById("progressContainer").classList.add("visible");
+      document.getElementById("results").classList.remove("visible");
+
+      // Animate progress
+      let pct = 0;
+      const progressInterval = setInterval(() => {
+        pct = Math.min(pct + Math.random() * 8, 90);
+        document.getElementById("progressFill").style.width = pct + "%";
+        document.getElementById("progressPct").textContent = Math.round(pct) + "%";
+      }, 500);
+
+      try {
+        const res = await fetch("/scan", {
+          method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ domain, resolver: resolver || null })
+        });
+        const data = await res.json();
+        clearInterval(progressInterval);
+        document.getElementById("progressFill").style.width = "100%";
+        document.getElementById("progressPct").textContent = "100%";
+
+        if (data.error) { alert("Error: " + data.error); return; }
+        renderResults(data);
+      } catch (err) {
+        clearInterval(progressInterval);
+        alert("Request failed: " + err.message);
+      }
+      document.getElementById("scanBtn").disabled = false;
+      setTimeout(() => document.getElementById("progressContainer").classList.remove("visible"), 1000);
+    }
+
+    function renderResults(data) {
+      const gradeEl = document.getElementById("gradeLetter");
+      gradeEl.textContent = data.grade || "-";
+      gradeEl.className = "grade-letter grade-" + (data.grade || "F")[0];
+      document.getElementById("scoreText").textContent = "Score: " + (data.score || 0) + "/120 | " + (data.duration || 0) + "s";
+
+      // Stats
+      const findings = data.findings || {};
+      let crit = 0, high = 0, med = 0;
+      Object.values(findings).forEach(arr => {
+        arr.forEach(f => {
+          if (f.severity === "CRITICAL") crit++;
+          else if (f.severity === "HIGH") high++;
+          else if (f.severity === "MEDIUM") med++;
+        });
+      });
+
+      let statsHtml = "";
+      statsHtml += '<div class="stat-card"><div class="stat-value" style="color:var(--crit)">' + crit + '</div><div class="stat-label">Critical</div></div>';
+      statsHtml += '<div class="stat-card"><div class="stat-value" style="color:var(--high)">' + high + '</div><div class="stat-label">High</div></div>';
+      statsHtml += '<div class="stat-card"><div class="stat-value" style="color:var(--warn)">' + med + '</div><div class="stat-label">Medium</div></div>';
+      document.getElementById("statsGrid").innerHTML = statsHtml;
+
+      // Findings by category
+      let findingsHtml = "";
+      for (const [category, items] of Object.entries(findings)) {
+        if (!items || items.length === 0) continue;
+        findingsHtml += '<div class="category-section"><div class="category-title">' + category + ' <span style="font-size:12px;color:var(--muted)">(' + items.length + ')</span></div>';
+        findingsHtml += '<table class="findings-table"><thead><tr><th>Severity</th><th>Check</th><th>Description</th></tr></thead><tbody>';
+        items.forEach(f => {
+          findingsHtml += '<tr><td><span class="sev-badge sev-' + f.severity + '">' + f.severity + '</span></td><td>' + (f.check || "") + '</td><td>' + (f.description || "") + '</td></tr>';
+        });
+        findingsHtml += '</tbody></table></div>';
+      }
+      document.getElementById("findingsContainer").innerHTML = findingsHtml || '<p style="text-align:center;color:var(--muted);padding:40px;">No issues found. Great DNS security!</p>';
+      document.getElementById("results").classList.add("visible");
+    }
+  </script>
+</body>
+</html>
