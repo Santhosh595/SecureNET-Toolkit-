@@ -1,0 +1,134 @@
+# SecureNET Control Panel - Master Configuration
+# Edit this file to enable/disable tools and configure ports
+
+settings:
+  hub_port: 5000
+  health_check_interval: 5
+  log_level: INFO
+  theme: dark
+  bind_address: 127.0.0.1
+  auto_restart_on_failure: true
+  restart_delay_seconds: 30
+  memory_limit_mb: 500
+  demo_mode: false
+
+tools:
+  fileguard:
+    enabled: true
+    port: 5001
+    path: ./FileGuard-AES-SHA256
+    entry: dashboard.py
+    name: FileGuard
+    description: AES-256 file encryption with SHA-256 integrity
+    color: "#10b981"
+    icon: lock
+
+  network_sniffer:
+    enabled: true
+    port: 5002
+    path: ./network-sniffer
+    entry: dashboard.py
+    name: Network Sniffer
+    description: Real-time packet capture and intrusion detection
+    color: "#3b82f6"
+    icon: wifi
+
+  headerscan:
+    enabled: true
+    port: 5003
+    path: ./HeaderScan
+    entry: dashboard.py
+    name: HeaderScan
+    description: HTTP security header analyzer with scoring
+    color: "#8b5cf6"
+    icon: shield
+
+  portmap:
+    enabled: true
+    port: 5004
+    path: ./PortMap
+    entry: dashboard.py
+    name: PortMap
+    description: Multi-threaded port scanner with service detection
+    color: "#f59e0b"
+    icon: search
+
+  hashdetect:
+    enabled: true
+    port: 5005
+    path: ./HashDetect
+    entry: dashboard.py
+    name: HashDetect
+    description: Hash identifier and wordlist cracker
+    color: "#ec4899"
+    icon: hash
+
+  arpwatch:
+    enabled: true
+    port: 5006
+    path: ./ARPWatch
+    entry: dashboard.py
+    name: ARPWatch
+    description: Real-time ARP spoofing detection
+    color: "#ef4444"
+    icon: eye
+
+  subprobe:
+    enabled: true
+    port: 5007
+    path: ./SubProbe
+    entry: dashboard.py
+    name: SubProbe
+    description: Subdomain enumerator with takeover detection
+    color: "#06b6d4"
+    icon: globe
+
+  jwtinspect:
+    enabled: true
+    port: 5008
+    path: ./JWTInspect
+    entry: dashboard.py
+    name: JWTInspect
+    description: JWT security analyzer with 8 vulnerability tests
+    color: "#84cc16"
+    icon: key
+
+  tlscan:
+    enabled: true
+    port: 5009
+    path: ./TLScan
+    entry: dashboard.py
+    name: TLScan
+    description: SSL/TLS security scanner with A-F grading
+    color: "#f97316"
+    icon: certificate
+
+  logsentry:
+    enabled: true
+    port: 5010
+    path: ./LogSentry
+    entry: dashboard.py
+    name: LogSentry
+    description: Multi-source log analyzer and threat detector
+    color: "#6366f1"
+    icon: document
+
+  secretsniff:
+    enabled: true
+    port: 5011
+    path: ./SecretSniff
+    entry: dashboard.py
+    name: SecretSniff
+    description: Hardcoded secret and API key scanner
+    color: "#14b8a6"
+    icon: bug
+
+  dnsaudit:
+    enabled: true
+    port: 5012
+    path: ./DNSAudit
+    entry: dashboard.py
+    name: DNSAudit
+    description: Comprehensive DNS security auditor
+    color: "#a855f7"
+    icon: dns
