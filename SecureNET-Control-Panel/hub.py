@@ -24,7 +24,9 @@ from database import get_recent_alerts, get_scan_history, get_stats, update_sett
 from process_manager import ProcessManager
 from health_monitor import HealthMonitor
 from alert_aggregator import AlertAggregator
-from quick_scan import QuickScanner
+from quick_scan import quick_scan_headerscan, quick_scan_portmap, quick_scan_hashdetect
+from quick_scan import quick_scan_tlscan, quick_scan_dnsaudit, quick_scan_subprobe
+from quick_scan import quick_scan_jwtinspect, quick_scan_secretsniff, get_result
 
 # Load config
 CONFIG_PATH = Path(__file__).parent / "securenet.yaml"
@@ -40,23 +42,24 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "securenet-hub-" + datetime.now().strftime("%Y%m%d")
 
 # Global managers
-process_manager = ProcessManager(tools_config)
-health_monitor = HealthMonitor(process_manager, tools_config)
-alert_aggregator = AlertAggregator(tools_config)
-quick_scanner = QuickScanner()
+process_manager = ProcessManager(str(Path(__file__).parent / "logs"))
+health_monitor = HealthMonitor(process_manager)
+alert_aggregator = AlertAggregator()
 
 # Track start time for uptime
 START_TIME = time.time()
 
 
-@app.before_first_request
+@app.before_request
 def startup():
-    """Initialize everything on first request."""
-    init_db()
-    save_tool_status("hub", "running", settings.get("hub_port", 5000))
-    health_monitor.start()
-    alert_aggregator.start()
-    print("[OK] Control panel subsystems initialized")
+    """Initialize subsystems on first request (idempotent)."""
+    if not hasattr(app, '_initialized'):
+        init_db()
+        save_tool_status("hub", "running", settings.get("hub_port", 5000))
+        health_monitor.start()
+        alert_aggregator.start()
+        app._initialized = True
+        print("[OK] Control panel subsystems initialized")
 
 
 @app.teardown_appcontext
@@ -265,7 +268,7 @@ def api_logs(tool):
 def quickscan_headerscan():
     data = request.get_json()
     url = data.get("url", "")
-    job_id = quick_scanner.scan_headerscan(url)
+    job_id = quick_scan_headerscan(url)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -273,7 +276,7 @@ def quickscan_headerscan():
 def quickscan_portmap():
     data = request.get_json()
     host = data.get("host", "")
-    job_id = quick_scanner.scan_portmap(host)
+    job_id = quick_scan_portmap(host)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -281,7 +284,7 @@ def quickscan_portmap():
 def quickscan_hashdetect():
     data = request.get_json()
     hash_str = data.get("hash", "")
-    job_id = quick_scanner.scan_hashdetect(hash_str)
+    job_id = quick_scan_hashdetect(hash_str)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -289,7 +292,7 @@ def quickscan_hashdetect():
 def quickscan_tlscan():
     data = request.get_json()
     domain = data.get("domain", "")
-    job_id = quick_scanner.scan_tlscan(domain)
+    job_id = quick_scan_tlscan(domain)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -297,7 +300,7 @@ def quickscan_tlscan():
 def quickscan_dnsaudit():
     data = request.get_json()
     domain = data.get("domain", "")
-    job_id = quick_scanner.scan_dnsaudit(domain)
+    job_id = quick_scan_dnsaudit(domain)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -305,7 +308,7 @@ def quickscan_dnsaudit():
 def quickscan_subprobe():
     data = request.get_json()
     domain = data.get("domain", "")
-    job_id = quick_scanner.scan_subprobe(domain)
+    job_id = quick_scan_subprobe(domain)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -313,7 +316,7 @@ def quickscan_subprobe():
 def quickscan_jwtinspect():
     data = request.get_json()
     token = data.get("token", "")
-    job_id = quick_scanner.scan_jwtinspect(token)
+    job_id = quick_scan_jwtinspect(token)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
@@ -321,13 +324,13 @@ def quickscan_jwtinspect():
 def quickscan_secretsniff():
     data = request.get_json()
     path = data.get("path", "")
-    job_id = quick_scanner.scan_secretsniff(path)
+    job_id = quick_scan_secretsniff(path)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
 @app.route("/api/quickscan/result/<job_id>")
 def quickscan_result(job_id):
-    result = quick_scanner.get_result(job_id)
+    result = get_result(job_id)
     return jsonify(result)
 
 
