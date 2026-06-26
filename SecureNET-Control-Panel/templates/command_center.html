@@ -1,0 +1,1061 @@
+{% extends "base.html" %}
+
+{% block title %}Command Center — SecureNET Control Panel{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ─── Command Center Layout ─── */
+  .command-center {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px;
+    grid-template-areas:
+      "status status"
+      "tools  activity"
+      "quick  quick";
+    min-height: calc(100vh - var(--topbar-height) - var(--ticker-height) - 32px);
+  }
+
+  /* ─── Section A: System Status Bar ─── */
+  .status-bar {
+    grid-area: status;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 20px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+  }
+
+  .status-bar__clock {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 1px;
+    min-width: 100px;
+  }
+
+  .status-bar__stats {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-item__value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .stat-item__label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .status-bar__sysinfo {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  }
+
+  .status-bar__sysinfo span {
+    white-space: nowrap;
+  }
+
+  /* ─── Section B: Tool Grid ─── */
+  .tools-section {
+    grid-area: tools;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .tool-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    position: relative;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+
+  .tool-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .tool-card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tool-card__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tool-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .tool-card__desc {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .tool-card__status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .tool-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-text-muted);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  }
+
+  .tool-card__metric {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .tool-card__actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .tool-card__actions .btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  /* Status dot overrides for tool cards */
+  .tool-card__status .status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* ─── Section C: Activity Feed ─── */
+  .activity-section {
+    grid-area: activity;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .activity-feed {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    max-height: 600px;
+  }
+
+  .activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .activity-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--color-border);
+    transition: background var(--transition-fast);
+  }
+
+  .activity-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .activity-item__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .activity-item__badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .activity-item__time {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    white-space: nowrap;
+  }
+
+  .activity-item__text {
+    font-size: 12px;
+    color: var(--color-text);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .activity-empty {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+  }
+
+  /* ─── Section D: Quick Launch Bar ─── */
+  .quick-launch {
+    grid-area: quick;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .quick-launch__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .quick-scan-item {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .quick-scan-item .input-field__input {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .quick-scan-item .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .quick-launch__results {
+    margin-top: 12px;
+    display: none;
+  }
+
+  .quick-launch__results.active {
+    display: block;
+  }
+
+  .quick-launch__results pre {
+    background: #0a0e14;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    color: var(--color-text);
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 1200px) {
+    .command-center {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "status"
+        "tools"
+        "activity"
+        "quick";
+    }
+    .activity-feed {
+      max-height: 300px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .tool-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+    .status-bar {
+      gap: 12px;
+    }
+    .quick-launch__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="command-center" data-page="dashboard">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Section A — System Status Bar
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="status-bar">
+    <div class="status-bar__clock" id="live-clock" title="Local system time">--:--:--</div>
+
+    <div class="status-bar__stats">
+      <div class="stat-item">
+        <span class="stat-item__value" id="stat-running">0 / 12</span>
+        <span class="stat-item__label">Running</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-item__value" id="stat-scans">0</span>
+        <span class="stat-item__label">Active Scans</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-item__value" id="stat-alerts">0</span>
+        <span class="stat-item__label">Alerts Today</span>
+      </div>
+    </div>
+
+    <div class="status-bar__sysinfo">
+      <span id="sys-hostname">host: --</span>
+      <span id="sys-os">os: --</span>
+      <span id="sys-uptime">up: --</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Section B — Tool Grid
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="tools-section">
+    <div class="section-header">
+      <h2>Security Tools</h2>
+    </div>
+
+    <div class="tool-grid" id="tool-grid">
+
+      <!-- FileGuard -->
+      <div class="tool-card" data-tool="fileguard" data-searchable data-tags="fileguard encryption aes sha256">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(16,185,129,0.15); color: #10b981;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot" title="Checking..."></span>
+        </div>
+        <h3 class="tool-card__title">FileGuard</h3>
+        <p class="tool-card__desc">AES-256 file encryption with SHA-256 integrity</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-fileguard"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-fileguard">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5001</span>
+          <span class="tool-card__metric" id="metric-fileguard">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5001" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="fileguard">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="fileguard" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- Network Sniffer -->
+      <div class="tool-card" data-tool="network_sniffer" data-searchable data-tags="network sniffer packet capture ids">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h2M6 12h2M10 12h2M14 12h2M18 12h2M22 12h2"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">Network Sniffer</h3>
+        <p class="tool-card__desc">Real-time packet capture and intrusion detection</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-network_sniffer"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-network_sniffer">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5002</span>
+          <span class="tool-card__metric" id="metric-network_sniffer">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5002" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="network_sniffer">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="network_sniffer" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- HeaderScan -->
+      <div class="tool-card" data-tool="headerscan" data-searchable data-tags="headerscan http header security">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(139,92,246,0.15); color: #8b5cf6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">HeaderScan</h3>
+        <p class="tool-card__desc">HTTP security header analyzer with scoring</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-headerscan"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-headerscan">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5003</span>
+          <span class="tool-card__metric" id="metric-headerscan">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5003" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="headerscan">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="headerscan" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- PortMap -->
+      <div class="tool-card" data-tool="portmap" data-searchable data-tags="portmap port scanner service detection">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">PortMap</h3>
+        <p class="tool-card__desc">Multi-threaded port scanner with service detection</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-portmap"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-portmap">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5004</span>
+          <span class="tool-card__metric" id="metric-portmap">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5004" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="portmap">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="portmap" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- HashDetect -->
+      <div class="tool-card" data-tool="hashdetect" data-searchable data-tags="hashdetect hash identifier cracker">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(236,72,153,0.15); color: #ec4899;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">HashDetect</h3>
+        <p class="tool-card__desc">Hash identifier and wordlist cracker</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-hashdetect"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-hashdetect">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5005</span>
+          <span class="tool-card__metric" id="metric-hashdetect">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5005" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="hashdetect">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="hashdetect" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- ARPWatch -->
+      <div class="tool-card" data-tool="arpwatch" data-searchable data-tags="arpwatch arp spoofing detection">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(239,68,68,0.15); color: #ef4444;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">ARPWatch</h3>
+        <p class="tool-card__desc">Real-time ARP spoofing detection</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-arpwatch"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-arpwatch">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5006</span>
+          <span class="tool-card__metric" id="metric-arpwatch">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5006" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="arpwatch">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="arpwatch" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- SubProbe -->
+      <div class="tool-card" data-tool="subprobe" data-searchable data-tags="subprobe subdomain enumeration takeover">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(6,182,212,0.15); color: #06b6d4;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">SubProbe</h3>
+        <p class="tool-card__desc">Subdomain enumerator with takeover detection</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-subprobe"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-subprobe">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5007</span>
+          <span class="tool-card__metric" id="metric-subprobe">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5007" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="subprobe">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="subprobe" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- JWTInspect -->
+      <div class="tool-card" data-tool="jwtinspect" data-searchable data-tags="jwtinspect jwt token security">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(132,204,22,0.15); color: #84cc16;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">JWTInspect</h3>
+        <p class="tool-card__desc">JWT security analyzer with 8 vulnerability tests</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-jwtinspect"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-jwtinspect">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5008</span>
+          <span class="tool-card__metric" id="metric-jwtinspect">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5008" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="jwtinspect">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="jwtinspect" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- TLScan -->
+      <div class="tool-card" data-tool="tlscan" data-searchable data-tags="tlscan ssl tls certificate grading">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(249,115,22,0.15); color: #f97316;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">TLScan</h3>
+        <p class="tool-card__desc">SSL/TLS security scanner with A-F grading</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-tlscan"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-tlscan">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5009</span>
+          <span class="tool-card__metric" id="metric-tlscan">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5009" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="tlscan">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="tlscan" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- LogSentry -->
+      <div class="tool-card" data-tool="logsentry" data-searchable data-tags="logsentry log analyzer threat detector">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(99,102,241,0.15); color: #6366f1;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">LogSentry</h3>
+        <p class="tool-card__desc">Multi-source log analyzer and threat detector</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-logsentry"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-logsentry">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5010</span>
+          <span class="tool-card__metric" id="metric-logsentry">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5010" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="logsentry">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="logsentry" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- SecretSniff -->
+      <div class="tool-card" data-tool="secretsniff" data-searchable data-tags="secretsniff secret api key scanner">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(20,184,166,0.15); color: #14b8a6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">SecretSniff</h3>
+        <p class="tool-card__desc">Hardcoded secret and API key scanner</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-secretsniff"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-secretsniff">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5011</span>
+          <span class="tool-card__metric" id="metric-secretsniff">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5011" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="secretsniff">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="secretsniff" disabled>Stop</button>
+        </div>
+      </div>
+
+      <!-- DNSAudit -->
+      <div class="tool-card" data-tool="dnsaudit" data-searchable data-tags="dnsaudit dns security auditor">
+        <div class="tool-card__header">
+          <div class="tool-card__icon" style="background: rgba(168,85,247,0.15); color: #a855f7;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          </div>
+          <span class="status-dot status-dot--stopped tool-card__status-dot"></span>
+        </div>
+        <h3 class="tool-card__title">DNSAudit</h3>
+        <p class="tool-card__desc">Comprehensive DNS security auditor</p>
+        <div class="tool-card__status">
+          <span class="status-dot status-dot--stopped" id="dot-dnsaudit"></span>
+          <span class="status-indicator status-indicator--stopped" id="label-dnsaudit">Stopped</span>
+        </div>
+        <div class="tool-card__meta">
+          <span>Port: 5012</span>
+          <span class="tool-card__metric" id="metric-dnsaudit">—</span>
+        </div>
+        <div class="tool-card__actions">
+          <a href="http://127.0.0.1:5012" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">Open Dashboard</a>
+          <button class="btn btn--primary btn--sm" data-action="start" data-tool-key="dnsaudit">Start</button>
+          <button class="btn btn--danger btn--sm" data-action="stop" data-tool-key="dnsaudit" disabled>Stop</button>
+        </div>
+      </div>
+
+    </div><!-- /tool-grid -->
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Section C — Recent Activity Feed
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="activity-section">
+    <div class="section-header">
+      <h2>Recent Activity</h2>
+      <button class="btn btn--ghost btn--sm" id="btn-refresh-activity" title="Refresh now">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div class="activity-feed">
+      <ul class="activity-list" id="activity-feed">
+        <li class="activity-empty">Loading activity...</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Section D — Quick Launch Bar
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="quick-launch">
+    <div class="section-header">
+      <h2>Quick Launch</h2>
+    </div>
+    <div class="quick-launch__grid">
+      <!-- HeaderScan -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-headerscan" placeholder="https://example.com" data-tool="headerscan" data-type="url">
+        <button class="btn btn--primary btn--sm" data-quickscan="headerscan">Scan</button>
+      </div>
+
+      <!-- PortMap -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-portmap" placeholder="192.168.1.1" data-tool="portmap" data-type="ip">
+        <button class="btn btn--primary btn--sm" data-quickscan="portmap">Scan</button>
+      </div>
+
+      <!-- HashDetect -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-hashdetect" placeholder="5f4dcc3b5aa765d61d8327deb882cf99" data-tool="hashdetect" data-type="hash">
+        <button class="btn btn--primary btn--sm" data-quickscan="hashdetect">Identify</button>
+      </div>
+
+      <!-- TLScan -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-tlscan" placeholder="example.com" data-tool="tlscan" data-type="domain">
+        <button class="btn btn--primary btn--sm" data-quickscan="tlscan">Check</button>
+      </div>
+
+      <!-- DNSAudit -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-dnsaudit" placeholder="example.com" data-tool="dnsaudit" data-type="domain">
+        <button class="btn btn--primary btn--sm" data-quickscan="dnsaudit">Audit</button>
+      </div>
+
+      <!-- SubProbe -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-subprobe" placeholder="example.com" data-tool="subprobe" data-type="domain">
+        <button class="btn btn--primary btn--sm" data-quickscan="subprobe">Find</button>
+      </div>
+
+      <!-- JWTInspect -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-jwtinspect" placeholder="eyJhbGciOi..." data-tool="jwtinspect" data-type="token">
+        <button class="btn btn--primary btn--sm" data-quickscan="jwtinspect">Inspect</button>
+      </div>
+
+      <!-- SecretSniff -->
+      <div class="quick-scan-item">
+        <input type="text" class="input-field__input quick-scan-input" id="qs-secretsniff" placeholder="/path/to/code" data-tool="secretsniff" data-type="path">
+        <button class="btn btn--primary btn--sm" data-quickscan="secretsniff">Scan</button>
+      </div>
+    </div>
+
+    <div class="quick-launch__results" id="quick-launch-results">
+      <pre id="quick-launch-output"></pre>
+    </div>
+  </div>
+
+</div><!-- /command-center -->
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function() {
+  'use strict';
+
+  // ─── Tool color map (matches server config) ───
+  const TOOL_COLORS = {
+    fileguard:        '#10b981',
+    network_sniffer:  '#3b82f6',
+    headerscan:       '#8b5cf6',
+    portmap:          '#f59e0b',
+    hashdetect:       '#ec4899',
+    arpwatch:         '#ef4444',
+    subprobe:         '#06b6d4',
+    jwtinspect:       '#84cc16',
+    tlscan:           '#f97316',
+    logsentry:        '#6366f1',
+    secretsniff:      '#14b8a6',
+    dnsaudit:         '#a855f7',
+  };
+
+  const TOOL_NAMES = {
+    fileguard: 'FileGuard', network_sniffer: 'Network Sniffer', headerscan: 'HeaderScan',
+    portmap: 'PortMap', hashdetect: 'HashDetect', arpwatch: 'ARPWatch',
+    subprobe: 'SubProbe', jwtinspect: 'JWTInspect', tlscan: 'TLScan',
+    logsentry: 'LogSentry', secretsniff: 'SecretSniff', dnsaudit: 'DNSAudit',
+  };
+
+  // ─── Status mapping from API response ───
+  function mapStatus(tool) {
+    if (!tool.enabled) return 'disabled';
+    if (tool.running && tool.healthy) return 'running';
+    if (tool.running && !tool.healthy) return 'starting';
+    return 'stopped';
+  }
+
+  // ─── Update tool cards from API data ───
+  function updateToolCards(tools) {
+    let runningCount = 0;
+    let totalCount = 0;
+
+    tools.forEach(function(tool) {
+      totalCount++;
+      var state = mapStatus(tool);
+      if (state === 'running') runningCount++;
+
+      var dot = document.getElementById('dot-' + tool.key);
+      var label = document.getElementById('label-' + tool.key);
+      var metric = document.getElementById('metric-' + tool.key);
+
+      if (dot) {
+        dot.className = 'status-dot status-dot--' + state;
+      }
+      if (label) {
+        label.className = 'status-indicator status-indicator--' + state;
+        label.textContent = state.charAt(0).toUpperCase() + state.slice(1);
+      }
+      if (metric && tool.port) {
+        metric.textContent = 'PID ' + (tool.pid || '—');
+      }
+
+      // Toggle start/stop buttons
+      var card = document.querySelector('[data-tool="' + tool.key + '"]');
+      if (card) {
+        var startBtn = card.querySelector('[data-action="start"]');
+        var stopBtn = card.querySelector('[data-action="stop"]');
+        if (startBtn) startBtn.disabled = (state === 'running' || state === 'starting');
+        if (stopBtn) stopBtn.disabled = (state === 'stopped' || state === 'disabled');
+      }
+    });
+
+    // Update status bar counters
+    var runningEl = document.getElementById('stat-running');
+    if (runningEl) runningEl.textContent = runningCount + ' / ' + totalCount;
+  }
+
+  // ─── Status polling (every 5s) ───
+  function fetchStatus() {
+    api('/status').then(function(data) {
+      if (data.tools) updateToolCards(data.tools);
+    }).catch(function() {});
+  }
+
+  // ─── Activity feed rendering ───
+  function renderActivityFeed() {
+    var container = document.getElementById('activity-feed');
+    if (!container) return;
+
+    if (!App.activityFeed || !App.activityFeed.length) {
+      container.innerHTML = '<li class="activity-empty">No recent activity</li>';
+      return;
+    }
+
+    container.innerHTML = App.activityFeed.map(function(entry) {
+      var toolName = entry.tool || entry.tool_key || 'system';
+      var color = TOOL_COLORS[toolName] || '#58a6ff';
+      var displayName = TOOL_NAMES[toolName] || toolName;
+      var ts = entry.timestamp ? timeAgo(new Date(entry.timestamp)) : '';
+      var msg = escapeHtml(entry.message || entry.text || entry.event || JSON.stringify(entry).slice(0, 120));
+
+      return '<li class="activity-item" style="border-left-color:' + color + '">' +
+        '<div class="activity-item__top">' +
+          '<span class="activity-item__badge" style="background:' + color + '22; color:' + color + '; border:1px solid ' + color + '44;">' + escapeHtml(displayName) + '</span>' +
+          '<span class="activity-item__time">' + ts + '</span>' +
+        '</div>' +
+        '<span class="activity-item__text">' + msg + '</span>' +
+      '</li>';
+    }).join('');
+  }
+
+  // ─── Relative time formatter ───
+  function timeAgo(date) {
+    var seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 60) return seconds + 's ago';
+    var minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + 'm ago';
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + 'h ago';
+    return Math.floor(hours / 24) + 'd ago';
+  }
+
+  // ─── HTML escape ───
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function(c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  // ─── Quick scan handler ───
+  function initQuickScan() {
+    document.querySelectorAll('[data-quickscan]').forEach(function(btn) {
+      btn.addEventListener('click', async function() {
+        var toolKey = this.dataset.quickscan;
+        var input = document.getElementById('qs-' + toolKey);
+        if (!input) return;
+        var value = input.value.trim();
+        if (!value) {
+          showToast('Enter a value for ' + (TOOL_NAMES[toolKey] || toolKey), 'warning');
+          return;
+        }
+
+        var endpoint = '/quickscan/' + toolKey;
+        var body = {};
+        var type = input.dataset.type;
+        if (type === 'url') body.url = value;
+        else if (type === 'ip') body.host = value;
+        else if (type === 'hash') body.hash = value;
+        else if (type === 'domain') body.domain = value;
+        else if (type === 'token') body.token = value;
+        else if (type === 'path') body.path = value;
+        else body.target = value;
+
+        btn.disabled = true;
+        btn.textContent = '...';
+
+        try {
+          var result = await api(endpoint, { method: 'POST', body: body });
+          showToast('Job queued: ' + (result.job_id || 'OK'), 'success');
+          input.value '';
+          // Show result
+          var resultsDiv = document.getElementById('quick-launch-results');
+          var output = document.getElementById('quick-launch-output');
+          if (resultsDiv && output) {
+            resultsDiv.classList.add('active');
+            output.textContent = JSON.stringify(result, null, 2);
+          }
+        } catch (err) {
+          showToast('Scan failed: ' + err.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.originalLabel || 'Scan';
+        }
+      });
+    });
+
+    // Enter key triggers scan
+    document.querySelectorAll('.quick-scan-input').forEach(function(input) {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          var toolKey = this.dataset.tool;
+          var btn = document.querySelector('[data-quickscan="' + toolKey + '"]');
+          if (btn) btn.click();
+        }
+      });
+    });
+  }
+
+  // ─── System info (from health endpoint) ───
+  function fetchSystemInfo() {
+    api('/health').then(function(data) {
+      var hostEl = document.getElementById('sys-hostname');
+      var osEl = document.getElementById('sys-os');
+      var upEl = document.getElementById('sys-uptime');
+      if (hostEl) hostEl.textContent = 'host: ' + (data.hostname || 'securenet');
+      if (osEl) osEl.textContent = 'os: ' + (data.platform || 'Windows');
+      if (upEl && data.uptime) upEl.textContent = 'up: ' + formatUptime(data.uptime);
+    }).catch(function() {});
+  }
+
+  function formatUptime(seconds) {
+    var d = Math.floor(seconds / 86400);
+    var h = Math.floor((seconds % 86400) / 3600);
+    var m = Math.floor((seconds % 3600) / 60);
+    if (d > 0) return d + 'd ' + h + 'h';
+    if (h > 0) return h + 'h ' + m + 'm';
+    return m + 'm';
+  }
+
+  // ─── Alerts count ───
+  function fetchAlertCount() {
+    api('/alerts?per_page=1').then(function(data) {
+      var el = document.getElementById('stat-alerts');
+      if (el && data.pagination) el.textContent = data.pagination.total || 0;
+    }).catch(function() {});
+  }
+
+  // ─── Refresh activity button ───
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('#btn-refresh-activity');
+    if (btn) {
+      refreshActivityFeed();
+      showToast('Activity feed refreshed', 'info');
+    }
+  });
+
+  // ─── Boot ───
+  document.addEventListener('DOMContentLoaded', function() {
+    // Start clock (also done by main.js, but ensure it runs here too)
+    startClock();
+    // Initial fetches
+    fetchStatus();
+    fetchSystemInfo();
+    fetchAlertCount();
+    // Polling intervals
+    setInterval(fetchStatus, 5000);
+    setInterval(fetchSystemInfo, 30000);
+    setInterval(fetchAlertCount, 30000);
+    // Quick scan
+    initQuickScan();
+    // Override activity renderer to use our colored version
+    window.renderActivityFeed = renderActivityFeed;
+    // Trigger initial render when data arrives
+    var origRefresh = window.refreshActivityFeed;
+    window.refreshActivityFeed = async function() {
+      try {
+        var data = await api('/activity?limit=20');
+        App.activityFeed = data.entries || data.data || data || [];
+        renderActivityFeed();
+      } catch (err) {
+        // silent
+      }
+    };
+    // Immediate first load
+    window.refreshActivityFeed();
+    // 10s auto-refresh
+    setInterval(window.refreshActivityFeed, 10000);
+  });
+
+})();
+</script>
+{% endblock %}

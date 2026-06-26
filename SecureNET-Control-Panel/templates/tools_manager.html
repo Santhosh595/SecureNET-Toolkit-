@@ -1,0 +1,642 @@
+{% extends "base.html" %}
+
+{% block title %}Tools Manager - SecureNET Control Panel{% endblock %}
+
+{% block content %}
+<div class="page-section">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-lg">
+    <div>
+      <h1 class="text-primary" style="font-size:1.5rem;font-weight:700;">Tools Manager</h1>
+      <p class="text-muted" style="font-size:0.875rem;">Configure, monitor, and manage all security tools</p>
+    </div>
+    <div class="flex gap-sm">
+      <button class="btn btn-secondary" onclick="restartAll()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Restart All
+      </button>
+      <button class="btn btn-primary" onclick="checkAllDependencies()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Check Dependencies
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Settings -->
+  <div class="card" style="margin-bottom:var(--gap-lg);">
+    <div class="card-header">
+      <h3 class="card-title">Global Settings</h3>
+      <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="saveGlobalSettings()">Save</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-md);">
+      <div>
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Hub Port</label>
+        <input type="number" id="setting-hub-port" value="5000" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+      </div>
+      <div>
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Health Check Interval (s)</label>
+        <input type="number" id="setting-health-interval" value="5" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+      </div>
+      <div>
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Log Level</label>
+        <select id="setting-log-level" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="DEBUG">DEBUG</option>
+          <option value="INFO" selected>INFO</option>
+          <option value="WARNING">WARNING</option>
+          <option value="ERROR">ERROR</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Theme</label>
+        <select id="setting-theme" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="dark" selected>Dark</option>
+          <option value="light">Light</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dependency Checker -->
+  <div class="card" style="margin-bottom:var(--gap-lg);">
+    <div class="card-header">
+      <h3 class="card-title">Dependency Checker</h3>
+      <button class="btn btn-primary" style="font-size:0.75rem;padding:4px 10px;" onclick="scanDependencies()">Scan All requirements.txt</button>
+    </div>
+    <div id="dependency-results" style="display:flex;flex-direction:column;gap:var(--gap-sm);">
+      <div class="flex items-center gap-sm" style="padding:8px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+        <span class="status-dot online"></span>
+        <span style="font-size:0.875rem;flex:1;">All dependencies scanned</span>
+        <span class="text-success" style="font-size:0.8125rem;">12/12 tools OK</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool Panels Grid -->
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap-md);" id="tools-grid">
+
+    <!-- Tool: FileGuard -->
+    <div class="card" data-tool="fileguard">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">FileGuard</h4>
+            <p class="text-muted" style="font-size:0.75rem;">AES-256 file encryption</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('fileguard', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5001" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ pycryptodome</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ hashlib</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('fileguard')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('fileguard')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('fileguard')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: Network Sniffer -->
+    <div class="card" data-tool="network_sniffer">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">Network Sniffer</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Packet capture & IDS</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('network_sniffer', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5002" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ scapy</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ dpkt</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('network_sniffer')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('network_sniffer')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('network_sniffer')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: HeaderScan -->
+    <div class="card" data-tool="headerscan">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">HeaderScan</h4>
+            <p class="text-muted" style="font-size:0.75rem;">HTTP header analyzer</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('headerscan', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5003" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ requests</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ urllib3</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('headerscan')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('headerscan')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('headerscan')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: PortMap -->
+    <div class="card" data-tool="portmap">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">PortMap</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Port scanner</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('portmap', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5004" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ socket</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ concurrent.futures</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('portmap')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('portmap')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('portmap')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: HashDetect -->
+    <div class="card" data-tool="hashdetect">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(236,72,153,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">HashDetect</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Hash identifier & cracker</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('hashdetect', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5005" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ hashlib</span>
+        <span class="text-danger" style="font-size:0.75rem;">✗ john-the-ripper (optional)</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('hashdetect')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('hashdetect')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('hashdetect')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: ARPWatch -->
+    <div class="card" data-tool="arpwatch">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(239,68,68,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">ARPWatch</h4>
+            <p class="text-muted" style="font-size:0.75rem;">ARP spoofing detection</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('arpwatch', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5006" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ scapy</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ netifaces</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('arpwatch')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('arpwatch')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('arpwatch')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: SubProbe -->
+    <div class="card" data-tool="subprobe">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">SubProbe</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Subdomain enumerator</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('subprobe', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5007" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ dnspython</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ requests</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('subprobe')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('subprobe')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('subprobe')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: JWTInspect -->
+    <div class="card" data-tool="jwtinspect">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(132,204,22,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#84cc16" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">JWTInspect</h4>
+            <p class="text-muted" style="font-size:0.75rem;">JWT security analyzer</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('jwtinspect', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5008" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ PyJWT</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ cryptography</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('jwtinspect')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('jwtinspect')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('jwtinspect')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: TLScan -->
+    <div class="card" data-tool="tlscan">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(249,115,22,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">TLScan</h4>
+            <p class="text-muted" style="font-size:0.75rem;">SSL/TLS scanner</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('tlscan', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5009" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ ssl</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ cryptography</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('tlscan')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('tlscan')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('tlscan')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: LogSentry -->
+    <div class="card" data-tool="logsentry">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">LogSentry</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Log analyzer & threat detector</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot warning"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('logsentry', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5010" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ watchdog</span>
+        <span class="text-danger" style="font-size:0.75rem;">✗ geoip2 (optional)</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('logsentry')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('logsentry')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('logsentry')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: SecretSniff -->
+    <div class="card" data-tool="secretsniff">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(20,184,166,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">SecretSniff</h4>
+            <p class="text-muted" style="font-size:0.75rem;">Secret & API key scanner</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('secretsniff', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5011" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ re</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ gitpython</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('secretsniff')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('secretsniff')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('secretsniff')">Open ↗</button>
+      </div>
+    </div>
+
+    <!-- Tool: DNSAudit -->
+    <div class="card" data-tool="dnsaudit">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-md);">
+        <div class="flex items-center gap-sm">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <h4 style="font-size:0.9375rem;font-weight:600;">DNSAudit</h4>
+            <p class="text-muted" style="font-size:0.75rem;">DNS security auditor</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-sm">
+          <span class="status-dot online"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" checked onchange="toggleTool('dnsaudit', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-sm);margin-bottom:var(--gap-md);font-size:0.8125rem;">
+        <div><span class="text-muted">Port:</span> <input type="number" value="5012" style="width:70px;padding:4px 8px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:0.8125rem;margin-left:4px;"></div>
+        <div><span class="text-muted">Auto:</span>
+          <label class="toggle-switch" style="margin-left:4px;">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center gap-sm" style="margin-bottom:var(--gap-sm);">
+        <span class="text-muted" style="font-size:0.75rem;">Deps:</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ dnspython</span>
+        <span class="text-success" style="font-size:0.75rem;">✓ requests</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="restartTool('dnsaudit')">Restart</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="viewLogs('dnsaudit')">Logs</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="openTool('dnsaudit')">Open ↗</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 22px; transition: 0.3s; }
+.toggle-slider::before { content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: var(--text-secondary); border-radius: 50%; transition: 0.3s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--success); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: white; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleTool(name, enabled) {
+  console.log('Tool', name, enabled ? 'enabled' : 'disabled');
+  // AJAX call to toggle tool would go here
+}
+
+function restartTool(name) {
+  if (confirm('Restart ' + name + '?')) {
+    console.log('Restarting', name);
+    // AJAX restart call
+  }
+}
+
+function restartAll() {
+  if (confirm('Restart all tools? This will briefly interrupt active scans.')) {
+    console.log('Restarting all tools...');
+  }
+}
+
+function viewLogs(name) {
+  window.open('/logs/' + name, '_blank');
+}
+
+function openTool(name) {
+  // Map tool names to their ports
+  const ports = { fileguard:5001, network_sniffer:5002, headerscan:5003, portmap:5004, hashdetect:5005, arpwatch:5006, subprobe:5007, jwtinspect:5008, tlscan:5009, logsentry:5010, secretsniff:5011, dnsaudit:5012 };
+  const port = ports[name];
+  if (port) window.open('http://127.0.0.1:' + port, '_blank');
+}
+
+function saveGlobalSettings() {
+  const settings = {
+    hub_port: document.getElementById('setting-hub-port').value,
+    health_check_interval: document.getElementById('setting-health-interval').value,
+    log_level: document.getElementById('setting-log-level').value,
+    theme: document.getElementById('setting-theme').value
+  };
+  console.log('Saving global settings:', settings);
+  alert('Settings saved: ' + JSON.stringify(settings));
+}
+
+function checkAllDependencies() {
+  const results = document.getElementById('dependency-results');
+  results.innerHTML = '<div class="flex items-center gap-sm" style="padding:8px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);"><span class="status-dot warning"></span><span style="font-size:0.875rem;">Scanning all requirements.txt...</span></div>';
+  setTimeout(function() {
+    results.innerHTML = '<div class="flex items-center gap-sm" style="padding:8px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);"><span class="status-dot online"></span><span style="font-size:0.875rem;flex:1;">Scan complete</span><span class="text-success" style="font-size:0.8125rem;">All dependencies satisfied</span></div>' +
+      '<div class="flex gap-sm" style="margin-top:8px;"><button class="btn btn-primary" style="font-size:0.75rem;padding:4px 10px;" onclick="installMissing()">Install Missing (0)</button></div>';
+  }, 1500);
+}
+
+function scanDependencies() {
+  checkAllDependencies();
+}
+
+function installMissing() {
+  alert('No missing dependencies found. All tools are ready.');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation - SecureNET Control Panel{% endblock %}
+
+{% block content %}
+<div class="page-section">
+  <div style="display:flex;gap:var(--gap-lg);">
+    <!-- Sidebar Navigation -->
+    <nav style="width:220px;flex-shrink:0;position:sticky;top:72px;align-self:flex-start;max-height:calc(100vh - 88px);overflow-y:auto;">
+      <div class="card" style="padding:var(--gap-md);">
+        <h4 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--gap-sm);">Tools</h4>
+        <a href="#doc-fileguard" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">FileGuard</a>
+        <a href="#doc-network_sniffer" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">Network Sniffer</a>
+        <a href="#doc-headerscan" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">HeaderScan</a>
+        <a href="#doc-portmap" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">PortMap</a>
+        <a href="#doc-hashdetect" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">HashDetect</a>
+        <a href="#doc-arpwatch" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">ARPWatch</a>
+        <a href="#doc-subprobe" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">SubProbe</a>
+        <a href="#doc-jwtinspect" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">JWTInspect</a>
+        <a href="#doc-tlscan" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">TLScan</a>
+        <a href="#doc-logsentry" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">LogSentry</a>
+        <a href="#doc-secretsniff" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">SecretSniff</a>
+        <a href="#doc-dnsaudit" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">DNSAudit</a>
+        <div style="border-top:1px solid var(--border);margin:var(--gap-sm) 0;"></div>
+        <a href="#doc-shortcuts" class="doc-nav-link" style="display:block;padding:4px 8px;border-radius:4px;font-size:0.8125rem;color:var(--text-secondary);text-decoration:none;margin-bottom:2px;" onmouseover="this.style.color='var(--primary)';this.style.background='rgba(0,212,255,0.05)'" onmouseout="this.style.color='var(--text-secondary)';this.style.background='transparent'">Keyboard Shortcuts</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div style="flex:1;min-width:0;">
+      <!-- Page Header -->
+      <div class="flex items-center justify-between mb-lg">
+        <div>
+          <h1 class="text-primary" style="font-size:1.5rem;font-weight:700;">Documentation</h1>
+          <p class="text-muted" style="font-size:0.875rem;">Tool guides, quick references, and usage tips</p>
+        </div>
+      </div>
+
+      <!-- Quick Reference Cards -->
+      <div style="margin-bottom:var(--gap-lg);">
+        <h2 style="font-size:1.125rem;font-weight:600;margin-bottom:var(--gap-md);">Quick Reference</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-md);">
+          <div class="card" style="border-left:3px solid #10b981;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">fileguard encrypt ./data.zip</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Encrypt a file with AES-256</p>
+          </div>
+          <div class="card" style="border-left:3px solid #3b82f6;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">netsniff -i eth0 -p 80</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Capture HTTP traffic on eth0</p>
+          </div>
+          <div class="card" style="border-left:3px solid #8b5cf6;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">headerscan https://site.com</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Analyze HTTP security headers</p>
+          </div>
+          <div class="card" style="border-left:3px solid #f59e0b;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">portmap 10.0.0.1-254 -t</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">SYN scan range with service detection</p>
+          </div>
+          <div class="card" style="border-left:3px solid #ef4444;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">arpwatch --interface eth0</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Monitor for ARP spoofing</p>
+          </div>
+          <div class="card" style="border-left:3px solid #06b6d4;">
+            <p class="font-mono" style="font-size:0.8125rem;color:var(--primary);">subprobe -d example.com</p>
+            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Enumerate subdomains</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool Documentation Sections -->
+      <div id="doc-fileguard" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">FileGuard</h2>
+            <p class="text-muted" style="font-size:0.875rem;">AES-256 file encryption with SHA-256 integrity verification</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Encrypts and decrypts files using AES-256-GCM with authenticated encryption. Supports integrity verification via SHA-256 checksums and secure key derivation.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Before storing sensitive files in cloud storage, sharing confidential documents, or creating encrypted backups.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> fileguard encrypt ./report.pdf --output ./report.pdf.enc
+<span class="output">[OK] Encrypted: report.pdf.enc (SHA-256 verified)</span>
+<span class="prompt">$</span> fileguard decrypt ./report.pdf.enc --output ./report.pdf
+<span class="output">[OK] Decrypted: report.pdf (integrity verified)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Upload files via the web interface, select encryption mode, and monitor progress in real-time. The dashboard shows encryption history and integrity status.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Common Use Cases</h4>
+            <ul class="text-secondary" style="font-size:0.875rem;padding-left:20px;">
+              <li>Encrypting database backups before offsite storage</li>
+              <li>Securing configuration files containing credentials</li>
+              <li>Creating encrypted archives for compliance</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Use the "Verify After Encrypt" option for critical files. Keep your key file separate from encrypted data.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-network_sniffer" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">Network Sniffer</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Real-time packet capture and intrusion detection system</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Captures network packets in real-time, analyzes protocols, detects anomalies, and alerts on suspicious activity like port scans, DoS attempts, and data exfiltration.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">During incident response, network troubleshooting, monitoring for unauthorized access, or investigating suspicious traffic patterns.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> netsniff -i eth0 --filter "port 80" -c 1000
+<span class="output">[CAPTURE] 1000 packets captured on eth0
+[ALERT] Port scan detected from 45.33.32.156</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">View live packet stream, protocol distribution charts, top talkers, and alert timeline. Filter by protocol, IP, or port.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Common Use Cases</h4>
+            <ul class="text-secondary" style="font-size:0.875rem;padding-left:20px;">
+              <li>Detecting port scanning and reconnaissance activity</li>
+              <li>Identifying unusual data transfer patterns</li>
+              <li>Monitoring for known attack signatures</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Run with elevated privileges for raw packet capture. Use BPF filters to reduce noise on busy networks.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-headerscan" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">HeaderScan</h2>
+            <p class="text-muted" style="font-size:0.875rem;">HTTP security header analyzer with scoring</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Analyzes HTTP response headers for security best practices, checks for 15+ security headers, and provides a graded score (A-F) with actionable recommendations.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">During web application security assessments, CI/CD pipeline checks, or when hardening web server configurations.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> headerscan https://example.com --format json
+<span class="output">{"url": "https://example.com", "grade": "B", "score": 78,
+ "missing": ["X-Frame-Options", "Content-Security-Policy"]}</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Enter a URL, view the header analysis report with severity indicators, see which headers are present/missing, and get remediation steps.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Schedule regular scans for production endpoints. Compare scores over time in the Analytics dashboard.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-portmap" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">PortMap</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Multi-threaded port scanner with service detection</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Scans TCP/UDP ports across IP ranges using multi-threaded SYN scans, identifies open ports, and detects running services via banner grabbing.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">During network reconnaissance, asset inventory, vulnerability assessments, or verifying firewall rules.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> portmap 10.0.0.1-100 --threads 50 -sV
+<span class="output">[SCAN] 10.0.0.22:22 (SSH), 80 (HTTP), 443 (HTTPS)
+[SCAN] 10.0.0.33:3306 (MySQL), 8080 (HTTP-Proxy)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Define target ranges, select scan type (SYN, UDP, Comprehensive), view results in a sortable table with service details.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Use lower thread counts on production networks. Always get authorization before scanning.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-arpwatch" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(239,68,68,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">ARPWatch</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Real-time ARP spoofing detection</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Monitors ARP traffic on the local network, maintains a baseline of IP-to-MAC mappings, and alerts immediately when spoofing is detected.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">On any network where man-in-the-middle attacks are a concern — especially shared networks, guest Wi-Fi, or sensitive environments.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> arpwatch --interface eth0 --alert-email admin@company.com
+<span class="output">[MONITOR] Watching ARP on eth0...
+[ALERT] ARP Spoof: 192.168.1.1 MAC changed!</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">View live ARP table, see historical MAC changes, and get instant alerts with severity classification.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Whitelist known DHCP servers to reduce false positives. Run on each network segment separately.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-subprobe" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">SubProbe</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Subdomain enumerator with takeover detection</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Enumerates subdomains using DNS brute-force and certificate transparency logs, then checks each for potential subdomain takeover vulnerabilities.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">During bug bounty hunting, attack surface mapping, or periodic security assessments of your organization's external footprint.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> subprobe -d example.com --takeover --threads 20
+<span class="output">[FOUND] dev.example.com → CNAME → azurewebsites.net (TAKEOVER RISK)
+[FOUND] staging.example.com → A → 10.0.0.55 (alive)
+[FOUND] api.example.com → CNAME → elb.amazonaws.com</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Enter a domain, view discovered subdomains in a tree view, see takeover risks highlighted in red, and export results.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Use custom wordlists for better coverage. Check takeover findings manually before reporting.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-jwtinspect" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(132,204,22,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#84cc16" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">JWTInspect</h2>
+            <p class="text-muted" style="font-size:0.875rem;">JWT security analyzer with 8 vulnerability tests</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Decodes JWT tokens, validates signatures, and tests for 8 common vulnerabilities including weak secrets, algorithm confusion, and expired tokens.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">When reviewing authentication implementations, testing API security, or auditing third-party JWT usage.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> jwtinspect eyJhbGciOiJIUzI1NiJ9...
+<span class="output">[DECODED] alg: HS256, exp: 1700000000
+[VULN] Weak secret: "password123" (cracked in 0.3s)
+[VULN] Token expired: yes (3 days ago)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Paste a JWT token, see decoded header/payload, vulnerability report with severity ratings, and recommendations.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Always test with production-like tokens (same algorithm/secret strength). Never paste production secrets into dev tools.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-tlscan" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(249,115,22,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">TLScan</h2>
+            <p class="text-muted" style="font-size:0.875rem;">SSL/TLS security scanner with A-F grading</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Evaluates SSL/TLS configuration including certificate validity, cipher suites, protocol versions, and known vulnerabilities. Grades from A (best) to F (fail).</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">When deploying new TLS configurations, auditing existing setups, or verifying compliance with security standards.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> tlscan example.com --port 443
+<span class="output">[GRADE] B — TLS 1.3, Valid cert, Strong ciphers
+[WARN] TLS 1.0 still enabled (deprecated)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Enter hostname and port, view certificate chain, cipher suite details, and grade breakdown with improvement suggestions.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Scan both HTTP and HTTPS ports. Re-scan after configuration changes to verify fixes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-logsentry" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">LogSentry</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Multi-source log analyzer and threat detector</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Aggregates logs from multiple sources (syslog, auth logs, application logs), detects threat patterns using signature matching, and generates alerts.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">For centralized log monitoring, detecting brute-force attacks, identifying policy violations, and correlating events across systems.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> logsentry --watch /var/log/auth.log --rules brute-force,brute-force
+<span class="output">[ALERT] 14 failed SSH attempts from 203.0.113.42 in 5 minutes
+[INFO] Pattern matched: "brute-force" (confidence: 95%)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">View log stream in real-time, filter by source/severity, see pattern match alerts, and configure custom detection rules.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Add custom regex rules for your specific threat models. Use the timeline view to correlate events.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-secretsniff" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(20,184,166,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">SecretSniff</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Hardcoded secret and API key scanner</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Scans source code, configuration files, and directories for hardcoded secrets, API keys, tokens, and credentials using regex patterns and entropy analysis.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Before committing code, during code reviews, auditing third-party dependencies, or rotating credentials after a suspected leak.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> secretsniff ./src/ --exclude node_modules --format json
+<span class="output">[HIGH] config/production.yml:42 — AWS_ACCESS_KEY_ID=AKIA...
+[MED]  .env:7 — DATABASE_URL contains password</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Select scan target, configure exclusions, view findings with masked values, and generate remediation reports.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Run as a pre-commit hook. Add custom patterns for your organization's internal services.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="doc-dnsaudit" class="card mb-lg">
+        <div class="flex items-center gap-md" style="margin-bottom:var(--gap-md);">
+          <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:700;">DNSAudit</h2>
+            <p class="text-muted" style="font-size:0.875rem;">Comprehensive DNS security auditor</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">What It Does</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Audits DNS configurations including DNSSEC, SPF, DKIM, DMARC records, zone transfer security, and checks for DNS hijacking indicators.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">When to Use</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">During domain security assessments, after DNS changes, or as part of regular security audits.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">CLI Usage</h4>
+            <div class="terminal" style="margin-top:4px;"><span class="prompt">$</span> dnsaudit example.com --check dnssec,spf,dmarc
+<span class="output">[FAIL] DNSSEC: Not configured
+[PASS] SPF: v=spf1 include:_spf.google.com ~all
+[WARN] DMARC: p=none (relaxed policy)</span></div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Dashboard Walkthrough</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Enter domain, view DNS record analysis, see security recommendations, and compare against best practices.</p>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:4px;">Tips</h4>
+            <p class="text-secondary" style="font-size:0.875rem;">Audit all domains regularly. Pay special attention to expired or misconfigured DNSSEC keys.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard Shortcuts -->
+      <div id="doc-shortcuts" class="card mb-lg">
+        <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:var(--gap-md);">Keyboard Shortcuts</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);">
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:var(--gap-sm);">Navigation</h4>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to Dashboard</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">1</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to Analytics</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">2</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to Alerts</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">3</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to History</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">4</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to Tools</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">5</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Go to Docs</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">6</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:var(--gap-sm);">Actions</h4>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Quick scan</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">Ctrl+K</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Search</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">/</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Refresh data</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">R</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Toggle sidebar</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">B</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Close modal/panel</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">Esc</span>
+              </div>
+              <div class="flex items-center justify-between" style="padding:6px 12px;background:var(--surface-elevated);border-radius:var(--radius-sm);">
+                <span class="text-secondary" style="font-size:0.875rem;">Next page</span>
+                <span class="font-mono" style="font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Smooth scroll for doc nav links
+document.querySelectorAll('.doc-nav-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  const shortcuts = {
+    '1': '/dashboard', '2': '/analytics', '3': '/alerts',
+    '4': '/history', '5': '/tools', '6': '/docs'
+  };
+  if (shortcuts[e.key]) { window.location.href = shortcuts[e.key]; }
+  if (e.key === 'b' || e.key === 'B') { document.querySelector('.sidebar').classList.toggle('collapsed'); }
+  if (e.key === 'r' || e.key === 'R') { location.reload(); }
+  if (e.key === '/') { e.preventDefault(); document.getElementById('global-search')?.focus(); }
+});
+</script>
+{% endblock %}

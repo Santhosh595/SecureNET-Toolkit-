@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}Alerts - SecureNET Control Panel{% endblock %}
+
+{% block content %}
+<div class="page-section">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-lg">
+    <div>
+      <h1 class="text-primary" style="font-size:1.5rem;font-weight:700;">Alert Center</h1>
+      <p class="text-muted" style="font-size:0.875rem;">Monitor, triage, and manage security alerts</p>
+    </div>
+    <div class="flex gap-sm">
+      <button class="btn btn-secondary" onclick="dismissAllRead()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Dismiss Read
+      </button>
+      <button class="btn btn-primary" onclick="exportAlerts()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="card" style="margin-bottom:var(--gap-lg);">
+    <div class="flex items-center gap-md" style="flex-wrap:wrap;">
+      <div style="flex:1;min-width:180px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Search</label>
+        <input type="text" id="alert-search" placeholder="Search alerts..." oninput="filterAlerts()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div style="min-width:140px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Tool</label>
+        <select id="filter-tool" onchange="filterAlerts()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="">All Tools</option>
+          <option value="fileguard">FileGuard</option>
+          <option value="network_sniffer">Network Sniffer</option>
+          <option value="headerscan">HeaderScan</option>
+          <option value="portmap">PortMap</option>
+          <option value="arpwatch">ARPWatch</option>
+          <option value="subprobe">SubProbe</option>
+          <option value="jwtinspect">JWTInspect</option>
+          <option value="tlscan">TLScan</option>
+          <option value="secretsniff">SecretSniff</option>
+          <option value="dnsaudit">DNSAudit</option>
+        </select>
+      </div>
+      <div style="min-width:120px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Severity</label>
+        <select id="filter-severity" onchange="filterAlerts()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="">All Severities</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div style="min-width:150px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Date Range</label>
+        <input type="date" id="filter-date" onchange="filterAlerts()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn btn-secondary" onclick="resetFilters()" style="padding:8px 12px;">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Stats Row -->
+  <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:var(--gap-md);margin-bottom:var(--gap-lg);">
+    <!-- Donut: By Severity -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">By Severity</h3>
+      </div>
+      <div style="position:relative;height:200px;">
+        <canvas id="chart-alert-donut"></canvas>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--gap-sm);justify-content:center;">
+        <span class="badge badge-critical">Critical: 3</span>
+        <span class="badge badge-danger">High: 8</span>
+        <span class="badge badge-warning">Medium: 15</span>
+        <span class="badge badge-success">Low: 6</span>
+      </div>
+    </div>
+    <!-- Bar: By Tool -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">By Tool</h3>
+      </div>
+      <div style="position:relative;height:240px;">
+        <canvas id="chart-alert-bar"></canvas>
+      </div>
+    </div>
+    <!-- Timeline -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Timeline</h3>
+      </div>
+      <div style="position:relative;height:240px;">
+        <canvas id="chart-alert-timeline"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Cards -->
+  <div id="alerts-container" style="display:flex;flex-direction:column;gap:var(--gap-md);">
+    <!-- Alert Card: Critical -->
+    <div class="card" style="border-left:4px solid var(--critical);" data-severity="critical" data-tool="arpwatch">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-sm);">
+        <div class="flex items-center gap-sm">
+          <span class="badge badge-critical">Critical</span>
+          <span class="badge badge-info">ARPWatch</span>
+          <span style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">ARP Spoofing Detected</span>
+        </div>
+        <span class="text-muted" style="font-size:0.75rem;">2026-06-26 14:32:08</span>
+      </div>
+      <p class="text-secondary" style="font-size:0.875rem;margin-bottom:var(--gap-sm);">
+        <strong>Target:</strong> 192.168.1.1 — MAC address mismatch detected. Gateway MAC changed from <code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:4px;">aa:bb:cc:dd:ee:ff</code> to <code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:4px;">11:22:33:44:55:66</code>.
+      </p>
+      <p class="text-muted" style="font-size:0.8125rem;margin-bottom:var(--gap-md);">Possible man-in-the-middle attack on the local network segment. Immediate investigation recommended.</p>
+      <div class="flex gap-sm">
+        <button class="btn btn-primary" style="font-size:0.75rem;padding:6px 12px;" onclick="viewAlertDetail(this)">View Details</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="dismissAlert(this)">Dismiss</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="exportSingleAlert(this)">Export</button>
+      </div>
+    </div>
+
+    <!-- Alert Card: High -->
+    <div class="card" style="border-left:4px solid var(--danger);" data-severity="high" data-tool="network_sniffer">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-sm);">
+        <div class="flex items-center gap-sm">
+          <span class="badge badge-danger">High</span>
+          <span class="badge badge-info">Network Sniffer</span>
+          <span style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">Port Scan Activity Detected</span>
+        </div>
+        <span class="text-muted" style="font-size:0.75rem;">2026-06-26 13:15:42</span>
+      </div>
+      <p class="text-secondary" style="font-size:0.875rem;margin-bottom:var(--gap-sm);">
+        <strong>Target:</strong> 10.0.0.5 — Sequential port scan from external IP 45.33.32.156 detected across 1024 ports in 2.3 seconds.
+      </p>
+      <p class="text-muted" style="font-size:0.8125rem;margin-bottom:var(--gap-md);">Consistent with reconnaissance phase of an attack. Consider blocking source IP.</p>
+      <div class="flex gap-sm">
+        <button class="btn btn-primary" style="font-size:0.75rem;padding:6px 12px;" onclick="viewAlertDetail(this)">View Details</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="dismissAlert(this)">Dismiss</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="exportSingleAlert(this)">Export</button>
+      </div>
+    </div>
+
+    <!-- Alert Card: High -->
+    <div class="card" style="border-left:4px solid var(--danger);" data-severity="high" data-tool="secretsniff">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-sm);">
+        <div class="flex items-center gap-sm">
+          <span class="badge badge-danger">High</span>
+          <span class="badge badge-info">SecretSniff</span>
+          <span style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">AWS Key Exposed in Config</span>
+        </div>
+        <span class="text-muted" style="font-size:0.75rem;">2026-06-26 11:08:19</span>
+      </div>
+      <p class="text-secondary" style="font-size:0.875rem;margin-bottom:var(--gap-sm);">
+        <strong>Target:</strong> ./config/production.yml — AWS_ACCESS_KEY_ID found in plaintext at line 42.
+      </p>
+      <p class="text-muted" style="font-size:0.8125rem;margin-bottom:var(--gap-md);">Rotate the exposed key immediately. Check CloudTrail for unauthorized usage.</p>
+      <div class="flex gap-sm">
+        <button class="btn btn-primary" style="font-size:0.75rem;padding:6px 12px;" onclick="viewAlertDetail(this)">View Details</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="dismissAlert(this)">Dismiss</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="exportSingleAlert(this)">Export</button>
+      </div>
+    </div>
+
+    <!-- Alert Card: Medium -->
+    <div class="card" style="border-left:4px solid var(--warning);" data-severity="medium" data-tool="headerscan">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-sm);">
+        <div class="flex items-center gap-sm">
+          <span class="badge badge-warning">Medium</span>
+          <span class="badge badge-info">HeaderScan</span>
+          <span style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">Missing Security Headers</span>
+        </div>
+        <span class="text-muted" style="font-size:0.75rem;">2026-06-26 09:45:33</span>
+      </div>
+      <p class="text-secondary" style="font-size:0.875rem;margin-bottom:var(--gap-sm);">
+        <strong>Target:</strong> https://api.example.com — Missing: <code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:4px;">X-Frame-Options</code>, <code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:4px;">Content-Security-Policy</code>, <code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:4px;">Strict-Transport-Security</code>.
+      </p>
+      <p class="text-muted" style="font-size:0.8125rem;margin-bottom:var(--gap-md);">Clickjacking and MIME-sniffing attacks possible. Add headers to web server config.</p>
+      <div class="flex gap-sm">
+        <button class="btn btn-primary" style="font-size:0.75rem;padding:6px 12px;" onclick="viewAlertDetail(this)">View Details</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="dismissAlert(this)">Dismiss</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="exportSingleAlert(this)">Export</button>
+      </div>
+    </div>
+
+    <!-- Alert Card: Low -->
+    <div class="card" style="border-left:4px solid var(--success);" data-severity="low" data-tool="portmap">
+      <div class="flex items-center justify-between" style="margin-bottom:var(--gap-sm);">
+        <div class="flex items-center gap-sm">
+          <span class="badge badge-success">Low</span>
+          <span class="badge badge-info">PortMap</span>
+          <span style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">Uncommon Service on Port 8080</span>
+        </div>
+        <span class="text-muted" style="font-size:0.75rem;">2026-06-26 08:22:11</span>
+      </div>
+      <p class="text-secondary" style="font-size:0.875rem;margin-bottom:var(--gap-sm);">
+        <strong>Target:</strong> 10.0.0.12:8080 — Service identified as "Apache Tomcat 9.0" — not in baseline.
+      </p>
+      <p class="text-muted" style="font-size:0.8125rem;margin-bottom:var(--gap-md);">Verify if this service was intentionally deployed. Update asset inventory.</p>
+      <div class="flex gap-sm">
+        <button class="btn btn-primary" style="font-size:0.75rem;padding:6px 12px;" onclick="viewAlertDetail(this)">View Details</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="dismissAlert(this)">Dismiss</button>
+        <button class="btn btn-secondary" style="font-size:0.75rem;padding:6px 12px;" onclick="exportSingleAlert(this)">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load More -->
+  <div style="text-align:center;margin-top:var(--gap-lg);">
+    <button class="btn btn-secondary" onclick="loadMoreAlerts()">Load More Alerts</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Alert Donut by Severity
+(function(){
+  const ctx = document.getElementById('chart-alert-donut').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Critical', 'High', 'Medium', 'Low'],
+      datasets: [{
+        data: [3, 8, 15, 6],
+        backgroundColor: ['#dc2626', '#ef4444', '#f59e0b', '#10b981'],
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 10 } } },
+      cutout: '60%'
+    }
+  });
+})();
+
+// Alert Bar by Tool
+(function(){
+  const ctx = document.getElementById('chart-alert-bar').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['NetSniff', 'HeaderScan', 'ARPWatch', 'SecretSniff', 'PortMap', 'SubProbe', 'JWTInspect'],
+      datasets: [
+        { label: 'Critical', data: [0,0,2,0,0,0,0], backgroundColor: '#dc2626' },
+        { label: 'High', data: [3,1,0,2,0,1,1], backgroundColor: '#ef4444' },
+        { label: 'Medium', data: [2,5,1,0,2,1,1], backgroundColor: '#f59e0b' },
+        { label: 'Low', data: [1,0,0,0,3,1,1], backgroundColor: '#10b981' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+        y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+})();
+
+// Alert Timeline
+(function(){
+  const ctx = document.getElementById('chart-alert-timeline').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jun 20','Jun 21','Jun 22','Jun 23','Jun 24','Jun 25','Jun 26'],
+      datasets: [
+        { label: 'Critical', data: [1,0,2,1,0,3,1], borderColor: '#dc2626', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
+        { label: 'High', data: [4,2,5,3,6,4,3], borderColor: '#ef4444', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
+        { label: 'Medium', data: [8,12,6,10,9,7,5], borderColor: '#f59e0b', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
+        { label: 'Total', data: [15,18,13,16,14,12,9], borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.1)', fill: true, tension: 0.4, pointRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8', boxWidth: 12 } } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+})();
+
+function filterAlerts() {
+  const search = document.getElementById('alert-search').value.toLowerCase();
+  const tool = document.getElementById('filter-tool').value;
+  const severity = document.getElementById('filter-severity').value;
+  const cards = document.querySelectorAll('#alerts-container .card');
+  cards.forEach(function(card) {
+    let show = true;
+    if (search && !card.textContent.toLowerCase().includes(search)) show = false;
+    if (tool && card.dataset.tool !== tool) show = false;
+    if (severity && card.dataset.severity !== severity) show = false;
+    card.style.display = show ? 'block' : 'none';
+  });
+}
+
+function resetFilters() {
+  document.getElementById('alert-search').value = '';
+  document.getElementById('filter-tool').value = '';
+  document.getElementById('filter-severity').value = '';
+  document.getElementById('filter-date').value = '';
+  filterAlerts();
+}
+
+function viewAlertDetail(btn) {
+  const card = btn.closest('.card');
+  const title = card.querySelector('span[style*="font-weight:600"]').textContent;
+  alert('Alert detail view for: ' + title + '\n\n(Full detail modal would open here)');
+}
+
+function dismissAlert(btn) {
+  const card = btn.closest('.card');
+  card.style.transition = 'opacity 0.3s, transform 0.3s';
+  card.style.opacity = '0';
+  card.style.transform = 'translateX(20px)';
+  setTimeout(function() { card.remove(); }, 300);
+}
+
+function exportSingleAlert(btn) {
+  const card = btn.closest('.card');
+  const title = card.querySelector('span[style*="font-weight:600"]').textContent;
+  const data = { alert: title, exported: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'alert-' + Date.now() + '.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function dismissAllRead() {
+  alert('All read alerts dismissed.');
+}
+
+function exportAlerts() {
+  const data = { alerts: 'all', exported: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'securenet-alerts-' + Date.now() + '.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadMoreAlerts() {
+  alert('Loading more alerts...(pagination would fetch next page via AJAX)');
+}
+</script>
+{% endblock %}

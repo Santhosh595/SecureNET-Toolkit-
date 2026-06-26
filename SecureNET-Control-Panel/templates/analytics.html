@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - SecureNET Control Panel{% endblock %}
+
+{% block content %}
+<div class="page-section">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-lg">
+    <div>
+      <h1 class="text-primary" style="font-size:1.5rem;font-weight:700;">Analytics Dashboard</h1>
+      <p class="text-muted" style="font-size:0.875rem;">Security metrics, trends, and findings overview</p>
+    </div>
+    <div class="flex gap-sm">
+      <button class="btn btn-secondary" onclick="refreshAnalytics()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Refresh
+      </button>
+      <button class="btn btn-primary" onclick="exportReport()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards Row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-md);margin-bottom:var(--gap-lg);">
+    <div class="card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Total Scans</p>
+          <p style="font-size:1.75rem;font-weight:700;color:var(--text-primary);margin-top:4px;" id="stat-total-scans">--</p>
+          <p class="text-success" style="font-size:0.75rem;margin-top:4px;" id="stat-scans-trend">↑ --% vs last period</p>
+        </div>
+        <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(0,212,255,0.1);display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Active Alerts</p>
+          <p style="font-size:1.75rem;font-weight:700;color:var(--text-primary);margin-top:4px;" id="stat-active-alerts">--</p>
+          <p class="text-danger" style="font-size:0.75rem;margin-top:4px;" id="stat-alerts-trend">↑ --% vs last period</p>
+        </div>
+        <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Critical Today</p>
+          <p style="font-size:1.75rem;font-weight:700;color:var(--text-primary);margin-top:4px;" id="stat-critical-today">--</p>
+          <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">Requires immediate attention</p>
+        </div>
+        <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(220,38,38,0.1);display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--critical)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-muted" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;">Most Active Tool</p>
+          <p style="font-size:1.25rem;font-weight:700;color:var(--text-primary);margin-top:4px;" id="stat-most-active-tool">--</p>
+          <p class="text-muted" style="font-size:0.75rem;margin-top:4px;" id="stat-tool-scans">-- scans today</p>
+        </div>
+        <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(124,58,237,0.1);display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin-bottom:var(--gap-lg);">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Scans Per Tool</h3>
+        <span class="badge badge-info">Last 7 days</span>
+      </div>
+      <div style="position:relative;height:280px;">
+        <canvas id="chart-scans-per-tool"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Alerts by Severity Over Time</h3>
+        <span class="badge badge-warning">Last 30 days</span>
+      </div>
+      <div style="position:relative;height:280px;">
+        <canvas id="chart-alerts-severity"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-md);margin-bottom:var(--gap-lg);">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Tool Usage Distribution</h3>
+        <span class="badge badge-info">All time</span>
+      </div>
+      <div style="position:relative;height:280px;display:flex;justify-content:center;">
+        <canvas id="chart-tool-donut"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Hourly Activity Heatmap</h3>
+        <span class="badge badge-info">Scans per hour</span>
+      </div>
+      <div style="position:relative;height:280px;">
+        <canvas id="chart-heatmap"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Score + Findings -->
+  <div style="display:grid;grid-template-columns:380px 1fr;gap:var(--gap-md);margin-bottom:var(--gap-lg);">
+    <!-- Security Aggregate Score -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Security Score</h3>
+        <span class="badge badge-success">Aggregate</span>
+      </div>
+      <div style="text-align:center;padding:var(--gap-md) 0;">
+        <div style="position:relative;display:inline-block;width:160px;height:160px;">
+          <canvas id="chart-security-gauge"></canvas>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <span style="font-size:2.5rem;font-weight:800;color:var(--text-primary);" id="security-score-value">--</span>
+            <span class="text-muted" style="font-size:0.75rem;">out of 100</span>
+          </div>
+        </div>
+        <div style="margin-top:var(--gap-md);">
+          <p class="text-secondary" style="font-size:0.875rem;" id="security-score-label">--</p>
+          <p class="text-muted" style="font-size:0.75rem;margin-top:4px;" id="security-score-trend">Trend: --</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Findings Summary Table -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Findings Summary</h3>
+        <span class="text-muted" style="font-size:0.75rem;">Last 30 days</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="findings-table">
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Finding</th>
+              <th>Severity</th>
+              <th>Count</th>
+              <th>Last Seen</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="findings-tbody">
+            <tr>
+              <td>HeaderScan</td>
+              <td>Missing HSTS header</td>
+              <td><span class="badge badge-warning">Medium</span></td>
+              <td>12</td>
+              <td>2 hours ago</td>
+              <td><span class="badge badge-warning">Open</span></td>
+            </tr>
+            <tr>
+              <td>Network Sniffer</td>
+              <td>Suspicious port scanning detected</td>
+              <td><span class="badge badge-danger">High</span></td>
+              <td>3</td>
+              <td>5 hours ago</td>
+              <td><span class="badge badge-danger">Active</span></td>
+            </tr>
+            <tr>
+              <td>ARPWatch</td>
+              <td>ARP spoofing attempt</td>
+              <td><span class="badge badge-critical">Critical</span></td>
+              <td>1</td>
+              <td>1 day ago</td>
+              <td><span class="badge badge-success">Resolved</span></td>
+            </tr>
+            <tr>
+              <td>PortMap</td>
+              <td>Open port 22 (SSH) detected</td>
+              <td><span class="badge badge-info">Low</span></td>
+              <td>8</td>
+              <td>3 days ago</td>
+              <td><span class="badge badge-warning">Open</span></td>
+            </tr>
+            <tr>
+              <td>SecretSniff</td>
+              <td>API key in config file</td>
+              <td><span class="badge badge-danger">High</span></td>
+              <td>2</td>
+              <td>1 week ago</td>
+              <td><span class="badge badge-success">Resolved</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Scans Per Tool - Bar Chart
+(function(){
+  const ctx = document.getElementById('chart-scans-per-tool').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['FileGuard', 'NetSniff', 'HeaderScan', 'PortMap', 'HashDetect', 'ARPWatch', 'SubProbe', 'JWTInspect', 'TLScan', 'LogSentry', 'SecretSniff', 'DNSAudit'],
+      datasets: [{
+        label: 'Scans',
+        data: [142, 98, 87, 76, 54, 43, 38, 29, 24, 18, 12, 8],
+        backgroundColor: 'rgba(0, 212, 255, 0.6)',
+        borderColor: 'rgba(0, 212, 255, 1)',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8', maxRotation: 45 } }
+      }
+    }
+  });
+})();
+
+// Alerts by Severity Over Time - Line Chart
+(function(){
+  const ctx = document.getElementById('chart-alerts-severity').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jun 1','Jun 3','Jun 5','Jun 7','Jun 9','Jun 11','Jun 13','Jun 15','Jun 17','Jun 19','Jun 21','Jun 23','Jun 25'],
+      datasets: [
+        { label: 'Critical', data: [2,1,0,3,1,0,2,1,0,1,2,0,1], borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.1)', fill: true, tension: 0.4 },
+        { label: 'High', data: [5,3,7,4,6,2,8,5,3,4,6,3,5], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.05)', fill: true, tension: 0.4 },
+        { label: 'Medium', data: [12,8,15,10,14,9,11,13,8,12,10,7,9], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.05)', fill: true, tension: 0.4 },
+        { label: 'Low', data: [3,5,2,4,3,6,2,5,4,3,5,4,2], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.05)', fill: true, tension: 0.4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+      }
+    }
+  });
+})();
+
+// Tool Usage Donut
+(function(){
+  const ctx = document.getElementById('chart-tool-donut').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['FileGuard', 'NetSniff', 'HeaderScan', 'PortMap', 'Others'],
+      datasets: [{
+        data: [28, 22, 18, 15, 17],
+        backgroundColor: ['#00d4ff', '#3b82f6', '#8b5cf6', '#f59e0b', '#10b981'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12 } } },
+      cutout: '65%'
+    }
+  });
+})();
+
+// Hourly Activity Heatmap (Bar chart styled as heatmap)
+(function(){
+  const ctx = document.getElementById('chart-heatmap').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
+      datasets: [{
+        label: 'Activity',
+        data: [2,1,0,0,1,3,8,15,22,28,31,29,33,30,27,25,20,18,14,10,7,5,3,2],
+        backgroundColor: function(ctx) {
+          const v = ctx.dataset.data[ctx.dataIndex];
+          if (v === 0) return 'rgba(30,45,69,0.3)';
+          if (v < 10) return 'rgba(0,212,255,0.3)';
+          if (v < 20) return 'rgba(0,212,255,0.5)';
+          if (v < 30) return 'rgba(0,212,255,0.7)';
+          return 'rgba(0,212,255,0.9)';
+        },
+        borderRadius: 3,
+        barPercentage: 0.9
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+        x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+      }
+    }
+  });
+})();
+
+// Security Score Gauge
+(function(){
+  const ctx = document.getElementById('chart-security-gauge').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Score', 'Remaining'],
+      datasets: [{
+        data: [78, 22],
+        backgroundColor: ['#10b981', 'rgba(30,45,69,0.3)'],
+        borderWidth: 0,
+        circumference: 270,
+        rotation: 225
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      cutout: '78%'
+    }
+  });
+  document.getElementById('security-score-value').textContent = '78';
+  document.getElementById('security-score-label').textContent = 'Good — Room for improvement';
+  document.getElementById('security-score-trend').textContent = 'Trend: ↑ 3 points this week';
+})();
+
+function refreshAnalytics() {
+  // AJAX refresh placeholder
+  console.log('Refreshing analytics data...');
+}
+
+function exportReport() {
+  const data = { exported: new Date().toISOString(), type: 'analytics' };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'securenet-analytics-report.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+{% endblock %}

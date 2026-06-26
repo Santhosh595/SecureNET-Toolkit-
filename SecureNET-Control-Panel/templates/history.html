@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Scan History - SecureNET Control Panel{% endblock %}
+
+{% block content %}
+<div class="page-section">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-lg">
+    <div>
+      <h1 class="text-primary" style="font-size:1.5rem;font-weight:700;">Scan History</h1>
+      <p class="text-muted" style="font-size:0.875rem;">Unified log of all scan activity across tools</p>
+    </div>
+    <div class="flex gap-sm">
+      <button class="btn btn-secondary" onclick="exportCSV()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export CSV
+      </button>
+      <button class="btn btn-primary" onclick="exportJSON()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Export JSON
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card" style="margin-bottom:var(--gap-lg);">
+    <div class="flex items-center gap-md" style="flex-wrap:wrap;">
+      <div style="flex:1;min-width:180px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Search Target</label>
+        <input type="text" id="history-search" placeholder="e.g. 10.0.0.1, example.com..." oninput="filterHistory()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div style="min-width:140px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Tool</label>
+        <select id="history-tool" onchange="filterHistory()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="">All Tools</option>
+          <option value="FileGuard">FileGuard</option>
+          <option value="Network Sniffer">Network Sniffer</option>
+          <option value="HeaderScan">HeaderScan</option>
+          <option value="PortMap">PortMap</option>
+          <option value="HashDetect">HashDetect</option>
+          <option value="ARPWatch">ARPWatch</option>
+          <option value="SubProbe">SubProbe</option>
+          <option value="JWTInspect">JWTInspect</option>
+          <option value="TLScan">TLScan</option>
+          <option value="LogSentry">LogSentry</option>
+          <option value="SecretSniff">SecretSniff</option>
+          <option value="DNSAudit">DNSAudit</option>
+        </select>
+      </div>
+      <div style="min-width:120px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Severity</label>
+        <select id="history-severity" onchange="filterHistory()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+          <option value="">All</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+      <div style="min-width:150px;">
+        <label class="text-muted" style="font-size:0.75rem;display:block;margin-bottom:4px;">Date</label>
+        <input type="date" id="history-date" onchange="filterHistory()" style="width:100%;padding:8px 12px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.875rem;outline:none;">
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn btn-secondary" onclick="resetHistoryFilters()" style="padding:8px 12px;">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card" style="overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="history-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('tool')" style="cursor:pointer;user-select:none;">Tool <span class="text-muted" id="sort-icon-tool">↕</span></th>
+            <th onclick="sortTable('target')" style="cursor:pointer;user-select:none;">Target <span class="text-muted" id="sort-icon-target">↕</span></th>
+            <th onclick="sortTable('type')" style="cursor:pointer;user-select:none;">Scan Type <span class="text-muted" id="sort-icon-type">↕</span></th>
+            <th onclick="sortTable('result')" style="cursor:pointer;user-select:none;">Result <span class="text-muted" id="sort-icon-result">↕</span></th>
+            <th onclick="sortTable('severity')" style="cursor:pointer;user-select:none;">Severity <span class="text-muted" id="sort-icon-severity">↕</span></th>
+            <th onclick="sortTable('duration')" style="cursor:pointer;user-select:none;">Duration <span class="text-muted" id="sort-icon-duration">↕</span></th>
+            <th onclick="sortTable('timestamp')" style="cursor:pointer;user-select:none;">Timestamp <span class="text-muted" id="sort-icon-timestamp">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+          <!-- Row data populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-between" style="margin-top:var(--gap-md);">
+    <span class="text-muted" id="pagination-info" style="font-size:0.8125rem;">Showing 1-50 of 847 entries</span>
+    <div class="flex gap-sm">
+      <button class="btn btn-secondary" onclick="prevPage()" id="btn-prev" disabled>← Previous</button>
+      <div style="display:flex;gap:4px;" id="page-numbers"></div>
+      <button class="btn btn-secondary" onclick="nextPage()" id="btn-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Slide-in Detail Panel -->
+<div id="detail-panel" style="position:fixed;top:0;right:-480px;width:480px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:200;transition:right 0.3s ease;overflow-y:auto;padding:var(--gap-lg);box-shadow:-8px 0 32px rgba(0,0,0,0.4);">
+  <div class="flex items-center justify-between" style="margin-bottom:var(--gap-lg);">
+    <h3 style="font-size:1.125rem;font-weight:600;">Scan Details</h3>
+    <button onclick="closeDetailPanel()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.5rem;line-height:1;">×</button>
+  </div>
+  <div id="detail-content">
+    <p class="text-muted">Click a row to view details</p>
+  </div>
+</div>
+<div id="detail-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:199;display:none;" onclick="closeDetailPanel()"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Sample data for the history table
+const scanHistory = [
+  { tool: 'ARPWatch', target: '192.168.1.0/24', type: 'ARP Monitor', result: 'ARP SpoofDetected', severity: 'critical', duration: '0.3s', timestamp: '2026-06-26 14:32:08' },
+  { tool: 'Network Sniffer', target: 'eth0', type: 'Packet Capture', result: 'Port Scan Detected', severity: 'high', duration: '12.4s', timestamp: '2026-06-26 13:15:42' },
+  { tool: 'SecretSniff', target: './config/', type: 'Secret Scan', result: 'AWS Key Found', severity: 'high', duration: '2.1s', timestamp: '2026-06-26 11:08:19' },
+  { tool: 'HeaderScan', target: 'https://api.example.com', type: 'Header Analysis', result: '3 Missing Headers', severity: 'medium', duration: '1.8s', timestamp: '2026-06-26 09:45:33' },
+  { tool: 'PortMap', target: '10.0.0.1-254', type: 'SYN Scan', result: '47 Open Ports', severity: 'low', duration: '34.2s', timestamp: '2026-06-26 08:22:11' },
+  { tool: 'SubProbe', target: 'example.com', type: 'Subdomain Enum', result: '23 Subdomains Found', severity: 'info', duration: '18.7s', timestamp: '2026-06-26 07:55:00' },
+  { tool: 'FileGuard', target: './documents/report.pdf', type: 'Encrypt', result: 'AES-256 Encrypted', severity: 'info', duration: '3.2s', timestamp: '2026-06-25 22:14:55' },
+  { tool: 'HashDetect', target: 'a5f3c8e9...', type: 'Identify', result: 'SHA-256', severity: 'info', duration: '0.1s', timestamp: '2026-06-25 21:30:12' },
+  { tool: 'JWTInspect', target: 'eyJhbGciOiJIUzI1NiJ9...', type: 'JWT Analysis', result: 'Weak Secret Key', severity: 'high', duration: '0.4s', timestamp: '2026-06-25 20:45:33' },
+  { tool: 'TLScan', target: 'example.com', type: 'TLS handshake', result: 'Grade B', severity: 'low', duration: '2.8s', timestamp: '2026-06-25 19:12:07' },
+  { tool: 'DNSAudit', target: 'example.com', type: 'DNS Record Audit', result: 'DNSSEC Not Configured', severity: 'medium', duration: '1.5s', timestamp: '2026-06-25 18:00:44' },
+  { tool: 'LogSentry', target: '/var/log/auth.log', type: 'Log Analysis', result: '14 Failed SSH Attempts', severity: 'medium', duration: '5.6s', timestamp: '2026-06-25 16:33:21' },
+  { tool: 'ARPWatch', target: '192.168.1.0/24', type: 'ARP Monitor', result: 'Clean', severity: 'info', duration: '0.2s', timestamp: '2026-06-25 14:00:00' },
+  { tool: 'PortMap', target: '10.0.0.5', type: 'Service Scan', result: 'SSH, HTTP, HTTPS', severity: 'info', duration: '8.9s', timestamp: '2026-06-25 12:18:33' },
+  { tool: 'Network Sniffer', target: 'wlan0', type: 'Packet Capture', result: 'Suspicious DNS Tunnel', severity: 'high', duration: '45.1s', timestamp: '2026-06-25 10:42:15' },
+  { tool: 'HeaderScan', target: 'https://www.example.com', type: 'Header Analysis', result: 'All Headers Present', severity: 'info', duration: '1.2s', timestamp: '2026-06-25 09:30:00' },
+  { tool: 'FileGuard', target: './backup.tar.gz', type: 'Decrypt', result: 'Decrypted Successfully', severity: 'info', duration: '1.8s', timestamp: '2026-06-24 23:55:10' },
+  { tool: 'SubProbe', target: 'test-corp.net', type: 'Subdomain Enum', result: 'Potential Takeover: dev.test-corp.net', severity: 'critical', duration: '22.3s', timestamp: '2026-06-24 21:10:45' },
+  { tool: 'SecretSniff', target: './src/', type: 'Secret Scan', result: 'No Secrets Found', severity: 'info', duration: '3.4s', timestamp: '2026-06-24 18:44:22' },
+  { tool: 'HashDetect', target: '5f4dcc3b5aa765d61d8327deb882cf99', type: 'Crack', result: 'MD5 → "password"', severity: 'high', duration: '12.8s', timestamp: '2026-06-24 16:20:00' },
+];
+
+let currentPage = 1;
+const perPage = 50;
+let currentSort = { col: 'timestamp', dir: 'desc' };
+let currentData = [...scanHistory];
+
+function renderTable() {
+  const tbody = document.getElementById('history-tbody');
+  const start = (currentPage - 1) * perPage;
+  const end = start + perPage;
+  const pageData = currentData.slice(start, end);
+
+  tbody.innerHTML = pageData.map(function(row) {
+    const sevClass = row.severity === 'critical' ? 'badge-critical' :
+                     row.severity === 'high' ? 'badge-danger' :
+                     row.severity === 'medium' ? 'badge-warning' :
+                     row.severity === 'low' ? 'badge-success' : 'badge-info';
+    return '<tr onclick="openDetailPanel(this)" style="cursor:pointer;" data-tool="' + row.tool + '" data-target="' + row.target + '" data-type="' + row.type + '" data-result="' + row.result + '" data-severity="' + row.severity + '" data-duration="' + row.duration + '" data-timestamp="' + row.timestamp + '">' +
+      '<td>' + row.tool + '</td>' +
+      '<td><code class="font-mono" style="background:var(--surface-elevated);padding:2px 6px;border-radius:3px;font-size:0.8125rem;">' + row.target + '</code></td>' +
+      '<td>' + row.type + '</td>' +
+      '<td>' + row.result + '</td>' +
+      '<td><span class="badge ' + sevClass + '">' + row.severity.charAt(0).toUpperCase() + row.severity.slice(1) + '</span></td>' +
+      '<td><span class="font-mono" style="font-size:0.8125rem;">' + row.duration + '</span></td>' +
+      '<td><span class="font-mono" style="font-size:0.8125rem;color:var(--text-muted);">' + row.timestamp + '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  // Update pagination
+  const totalPages = Math.ceil(currentData.length / perPage) || 1;
+  document.getElementById('pagination-info').textContent = 'Showing ' + (start + 1) + '-' + Math.min(end, currentData.length) + ' of ' + currentData.length + ' entries';
+  document.getElementById('btn-prev').disabled = currentPage === 1;
+  document.getElementById('btn-next').disabled = currentPage === totalPages;
+
+  // Page numbers
+  const pageDiv = document.getElementById('page-numbers');
+  let pageHTML = '';
+  let s = Math.max(1, currentPage - 2);
+  let e = Math.min(totalPages, s + 4);
+  for (let i = s; i <= e; i++) {
+    pageHTML += '<button class="btn ' + (i === currentPage ? 'btn-primary' : 'btn-secondary') + '" style="padding:6px 10px;font-size:0.8125rem;" onclick="goToPage(' + i + ')">' + i + '</button>';
+  }
+  pageDiv.innerHTML = pageHTML;
+}
+
+function sortTable(col) {
+  if (currentSort.col === col) {
+    currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentSort.col = col;
+    currentSort.dir = 'asc';
+  }
+  currentData.sort(function(a, b) {
+    let va = a[col], vb = b[col];
+    if (currentSort.dir === 'asc') return va > vb ? 1 : -1;
+    return va < vb ? 1 : -1;
+  });
+  currentPage = 1;
+  renderTable();
+
+  // Update sort icons
+  document.querySelectorAll('[id^="sort-icon-"]').forEach(function(el) { el.textContent = '↕'; });
+  const icon = document.getElementById('sort-icon-' + col);
+  if (icon) icon.textContent = currentSort.dir === 'asc' ? '↑' : '↓';
+}
+
+function filterHistory() {
+  const search = document.getElementById('history-search').value.toLowerCase();
+  const tool = document.getElementById('history-tool').value;
+  const severity = document.getElementById('history-severity').value;
+  const date = document.getElementById('history-date').value;
+
+  currentData = scanHistory.filter(function(row) {
+    let match = true;
+    if (search && !row.target.toLowerCase().includes(search)) match = false;
+    if (tool && row.tool !== tool) match = false;
+    if (severity && row.severity !== severity) match = false;
+    if (date && !row.timestamp.startsWith(date)) match = false;
+    return match;
+  });
+  currentPage = 1;
+  renderTable();
+}
+
+function resetHistoryFilters() {
+  document.getElementById('history-search').value = '';
+  document.getElementById('history-tool').value = '';
+  document.getElementById('history-severity').value = '';
+  document.getElementById('history-date').value = '';
+  filterHistory();
+}
+
+function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
+function nextPage() { const total = Math.ceil(currentData.length / perPage); if (currentPage < total) { currentPage++; renderTable(); } }
+function goToPage(p) { currentPage = p; renderTable(); }
+
+function openDetailPanel(row) {
+  const d = row.dataset;
+  const sevClass = d.severity === 'critical' ? 'badge-critical' :
+                   d.severity === 'high' ? 'badge-danger' :
+                   d.severity === 'medium' ? 'badge-warning' :
+                   d.severity === 'low' ? 'badge-success' : 'badge-info';
+  document.getElementById('detail-content').innerHTML =
+    '<div style="display:flex;flex-direction:column;gap:var(--gap-md);">' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Tool</span><p style="font-weight:600;margin-top:4px;">' + d.tool + '</p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Target</span><p style="font-family:var(--font-mono);font-size:0.875rem;margin-top:4px;background:var(--surface-elevated);padding:8px;border-radius:var(--radius-sm);">' + d.target + '</p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Scan Type</span><p style="margin-top:4px;">' + d.type + '</p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Result</p><p style="margin-top:4px;font-weight:500;">' + d.result + '</p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Severity</span><p style="margin-top:4px;"><span class="badge ' + sevClass + '">' + d.severity.charAt(0).toUpperCase() + d.severity.slice(1) + '</span></p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Duration</span><p style="font-family:var(--font-mono);margin-top:4px;">' + d.duration + '</p></div>' +
+      '<div><span class="text-muted" style="font-size:0.75rem;">Timestamp</span><p style="font-family:var(--font-mono);margin-top:4px;">' + d.timestamp + '</p></div>' +
+      '<div style="margin-top:var(--gap-md);"><button class="btn btn-primary" style="width:100%;">Re-run Scan</button></div>' +
+      '<div><button class="btn btn-secondary" style="width:100%;">View Full Log</button></div>' +
+    '</div>';
+  document.getElementById('detail-panel').style.right = '0';
+  document.getElementById('detail-overlay').style.display = 'block';
+}
+
+function closeDetailPanel() {
+  document.getElementById('detail-panel').style.right = '-480px';
+  document.getElementById('detail-overlay').style.display = 'none';
+}
+
+function exportCSV() {
+  const headers = ['Tool','Target','Scan Type','Result','Severity','Duration','Timestamp'];
+  const rows = currentData.map(function(r) { return [r.tool, r.target, r.type, r.result, r.severity, r.duration, r.timestamp].join(','); });
+  const csv = headers.join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'securenet-history-' + Date.now() + '.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'securenet-history-' + Date.now() + '.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Init
+renderTable();
+</script>
+{% endblock %}
