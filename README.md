@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides eleven independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, and a DNS security auditor.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides thirteen independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, and a unified control panel dashboard.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -89,7 +89,13 @@ Scan codebases, git history, and environment configs for 50+ types of hardcoded 
 
 **Tech:** Python, Flask, Git, Regex, Entropy Analysis
 
-[View source](SecretSniff/) | [README](SecretSniff/README.md)
+[View source](DNSAudit/) | [README](DNSAudit/README.md)
+
+### SecureNET Control Panel
+
+Unified web dashboard that orchestrates all 12 security tools. Launch, monitor, and manage every tool from a single interface with real-time health checks, unified alerts, and quick-scan capabilities.
+
+- [View source](SecureNET-Control-Panel/) | [README](SecureNET-Control-Panel/README.md)
 
 ## Quick Start
 
@@ -380,6 +386,33 @@ SecureNET-Toolkit--main/
 │   │   └── templates/
 │   │       └── index.html   # Dashboard UI
 │   └── README.md            # Tool documentation
+├── SecureNET-Control-Panel/
+│   ├── hub.py                # Main Flask app (control panel)
+│   ├── start_all.py          # Master launcher script
+│   ├── stop_all.py           # Graceful shutdown script
+│   ├── process_manager.py    # Subprocess management
+│   ├── health_monitor.py     # Background health checker
+│   ├── alert_aggregator.py   # Pulls alerts from all tools
+│   ├── quick_scan.py         # Quick scan orchestration
+│   ├── proxy.py              # Tool dashboard proxy
+│   ├── database.py           # SQLite for hub data
+│   ├── securenet.yaml        # Master configuration
+│   ├── static/
+│   │   ├── css/
+│   │   │   ├── main.css      # Design system + layout
+│   │   │   └── components.css
+│   │   └── js/
+│   │       └── main.js       # Core app logic
+│   ├── templates/
+│   │   ├── base.html         # Base layout + nav
+│   │   ├── command_center.html
+│   │   ├── analytics.html
+│   │   ├── alerts.html
+│   │   ├── history.html
+│   │   ├── tools_manager.html
+│   │   └── docs.html
+│   ├── logs/
+│   └── requirements.txt
 └── landing-page/
     ├── index.html           # Static landing page
     ├── styles.css           # Stylesheet
@@ -399,7 +432,10 @@ SecureNET-Toolkit--main/
 | SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
 | JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — |
 | TLScan | Yes | Yes | — | — | — | — | — | Yes | — | — |
-| SecretSniff | Yes | — | — | — | — | — | — | Yes | — | — |
+| LogSentry | Yes | — | — | — | — | — | — | Yes | — | Yes |
+| SecretSniff | Yes | — | — | — | — | — | — | Yes | — | Yes |
+| DNSAudit | Yes | — | — | — | — | — | — | Yes | — | Yes |
+| Control Panel | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes |
 
 ## Scoring Methodology (HeaderScan)
 
