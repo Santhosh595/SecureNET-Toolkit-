@@ -53,12 +53,15 @@ START_TIME = time.time()
 @app.before_request
 def startup():
     """Initialize subsystems on first request (idempotent)."""
-    if not hasattr(app, '_initialized'):
-        init_db()
-        save_tool_status("hub", "running", settings.get("hub_port", 5000))
-        health_monitor.start()
-        alert_aggregator.start()
-        app._initialized = True
+    if not getattr(app, '_initialized', False):
+        try:
+            init_db()
+            save_tool_status("hub", "running", settings.get("hub_port", 5000))
+            health_monitor.start()
+            alert_aggregator.start()
+            app._initialized = True
+        except Exception as e:
+            print(f"[WARN] Startup init failed: {e}")
         print("[OK] Control panel subsystems initialized")
 
 
@@ -81,39 +84,53 @@ atexit.register(cleanup_all)
 
 # === Page Routes ===
 
+PAGE_TEMPLATES = {
+    "command": "command_center.html",
+    "analytics": "analytics.html",
+    "alerts": "alerts.html",
+    "history": "history.html",
+    "tools": "tools_manager.html",
+    "docs": "docs.html",
+}
+
+
+def render_page(template_name):
+    return render_template(template_name, settings=settings, tools=tools_config)
+
+
 @app.route("/")
 def index():
-    return render_template("command_center.html", settings=settings, tools=tools_config)
+    return render_page("command_center.html")
 
 
 @app.route("/command")
 def command_center():
-    return render_template("command_center.html", settings=settings, tools=tools_config)
+    return render_page("command_center.html")
 
 
 @app.route("/analytics")
 def analytics():
-    return render_template("analytics.html", settings=settings, tools=tools_config)
+    return render_page("analytics.html")
 
 
 @app.route("/alerts")
 def alerts():
-    return render_template("alerts.html", settings=settings, tools=tools_config)
+    return render_page("alerts.html")
 
 
 @app.route("/history")
 def history():
-    return render_template("history.html", settings=settings, tools=tools_config)
+    return render_page("history.html")
 
 
 @app.route("/tools")
 def tools_manager():
-    return render_template("tools_manager.html", settings=settings, tools=tools_config)
+    return render_page("tools_manager.html")
 
 
 @app.route("/docs")
 def docs():
-    return render_template("docs.html", settings=settings, tools=tools_config)
+    return render_page("docs.html")
 
 
 # === API Routes ===

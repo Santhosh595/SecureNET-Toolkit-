@@ -4,8 +4,8 @@ Stops all running tool subprocesses cleanly.
 Run: python stop_all.py
 """
 
-from __future__ import argparse
-import os
+from __future__ import annotations
+import argparse
 import signal
 import subprocess
 import sys

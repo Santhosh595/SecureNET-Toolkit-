@@ -1,0 +1,53 @@
+/* SecureNET Control Panel - Animations */
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Stagger delays */
+.delay-1 { animation-delay: 50ms; }
+.delay-2 { animation-delay: 100ms; }
+.delay-3 { animation-delay: 150ms; }
+.delay-4 { animation-delay: 200ms; }
