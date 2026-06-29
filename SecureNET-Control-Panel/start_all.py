@@ -117,7 +117,7 @@ def start_tool(tool_key, tool_config, demo_mode=False):
             env=env,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0,
+            start_new_session=True,  # Detach from terminal (Linux/macOS compatible)
         )
 
         # Wait briefly to check if process started
@@ -189,7 +189,7 @@ def main():
             cwd=str(REPO_ROOT),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0,
+            start_new_session=True,  # Detach from terminal (Linux/macOS compatible)
         )
         print(f"\n[OK] Control panel started (PID:{hub_process.pid})")
         print(f"\n  Dashboard: http://127.0.0.1:{hub_port}")
