@@ -276,25 +276,22 @@ def check_tool_functionality(tool_folder):
             return {"status": "FAIL", "detail": "DNS resolution failed"}
         elif tool_folder == "JWTInspect":
             import base64, json
-            test_jwt = "eyJhbG...sw5c"
+            test_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
             parts = test_jwt.split(".")
             if len(parts) == 3:
                 header = json.loads(base64.urlsafe_b64decode(parts[0] + "=="))
                 payload = json.loads(base64.urlsafe_b64decode(parts[1] + "=="))
-                if header.get("alg") == "HS256":
-                    def _test_tlscan(tool_path: Path) -> dict:
-                        """Test TLScan: SSL context creation and connector module load."""
-                        try:
-                            import ssl
-                            ctx = ssl.create_default_context()
-                            if ctx:
-                                return {"status": "PASS", "detail": "SSL context creation OK"}
-                            return {"status": "FAIL", "detail": "SSL context failed"}
-                        except Exception as e:
-                            return {"status": "FAIL", "error": str(e)}
-            if py_files:
-                return {"status": "PASS", "detail": f"{len(py_files)} Python files"}
-            return {"status": "SKIP"}
+                if header.get("alg"):
+                    return {"status": "PASS", "detail": f"JWT parse OK (alg={header['alg']})"}
+        elif tool_folder == "TLScan":
+            try:
+                import ssl
+                ctx = ssl.create_default_context()
+                if ctx:
+                    return {"status": "PASS", "detail": "SSL context creation OK"}
+                return {"status": "FAIL", "detail": "SSL context failed"}
+            except Exception as e:
+                return {"status": "FAIL", "error": str(e)}
         elif tool_folder == "SecretSniff":
             import tempfile, os
             fd, path = tempfile.mkstemp(suffix=".py", text=True)
