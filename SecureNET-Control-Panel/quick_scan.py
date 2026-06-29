@@ -7,6 +7,7 @@ in a background thread. Use get_result(job_id) to poll status/results.
 import json
 import os
 import subprocess
+import sys
 import threading
 import time
 import uuid
@@ -34,7 +35,7 @@ def _run_tool(job_id, tool_key, args):
     script = os.path.normpath(TOOL_MODULES[tool_key])
     workdir = os.path.dirname(script)
     # Use list form + cwd to avoid shell-escaping issues on Windows
-    cmd = ["python", script] + args
+    cmd = [sys.executable, script] + args
 
     with _jobs_lock:
         _jobs[job_id]["status"] = "running"

@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import threading
 import logging
 import os
@@ -34,7 +35,7 @@ class ProcessManager:
 
             try:
                 proc = subprocess.Popen(
-                    ["python", "dashboard.py"],
+                    [sys.executable, "dashboard.py"],
                     cwd=path,
                     env={**os.environ, "TOOL_PORT": str(port), "TOOL_NAME": name},
                     stdout=subprocess.DEVNULL,
