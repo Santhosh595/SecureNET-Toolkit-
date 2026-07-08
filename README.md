@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides thirteen independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, and a unified control panel dashboard.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **eighteen** independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), a web technology fingerprinter (WhatWeb/httpx-style), and a unified control panel dashboard.
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -90,6 +90,46 @@ Scan codebases, git history, and environment configs for 50+ types of hardcoded 
 **Tech:** Python, Flask, Git, Regex, Entropy Analysis
 
 [View source](DNSAudit/) | [README](DNSAudit/README.md)
+
+### VulnProbe — Template-Based Vulnerability Scanner (Nuclei-style)
+
+Send templated HTTP requests to a target and evaluate matchers (status / word / regex) to surface misconfigurations, exposed files, and version disclosure. Checks are read-only and safe; new checks are added by dropping a `.yaml` template — no code changes.
+
+**Tech:** Python, Flask, Requests, PyYAML, Rich
+
+[View source](VulnProbe/) | [README](VulnProbe/README.md)
+
+### PathProbe — Web Content / Path Discovery (feroxbuster-style)
+
+Discover hidden or forgotten web paths by brute-forcing a wordlist of common paths (admin panels, backups, configs, API roots). Multi-threaded, reports only "interesting" HTTP status codes. Read-only.
+
+**Tech:** Python, Flask, Requests, Rich
+
+[View source](PathProbe/) | [README](PathProbe/README.md)
+
+### CloudSentry — Multi-Cloud Security Posture (Prowler/ScoutSuite-style)
+
+Run read-only security posture checks across AWS, GCP, and Azure (S3 public access, IAM root MFA, root access keys, and more). Without credentials it reports INFO with guidance, so it never mutates cloud state.
+
+**Tech:** Python, Flask, Rich
+
+[View source](CloudSentry/) | [README](CloudSentry/README.md)
+
+### ImgScan — Container / Dependency CVE Scanner (Trivy-style)
+
+Find known vulnerabilities in `requirements.txt` (delegates to `pip-audit` when available, else a built-in offline rule set) and in image SBOMs (CycloneDX/SPDX JSON). Read-only and offline-first.
+
+**Tech:** Python, Flask, Rich
+
+[View source](ImgScan/) | [README](ImgScan/README.md)
+
+### TechFinger — Web Technology Fingerprinting (WhatWeb/httpx-style)
+
+Identify the technologies behind a web target by inspecting response headers, cookies, and body signatures. Detects servers, frameworks, CMS platforms, CDNs, analytics, JS libraries, and security headers. Fully read-only.
+
+**Tech:** Python, Flask, Requests, Rich
+
+[View source](TechFinger/) | [README](TechFinger/README.md)
 
 ### SecureNET Control Panel
 

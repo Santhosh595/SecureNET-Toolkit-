@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImgScan — SecureNET</title>
+  <style>
+    :root { --bg:#0d1117; --card:#161b22; --accent:#14b8a6; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
+    header { padding:24px; background:var(--card); border-bottom:1px solid #21262d; }
+    header h1 { margin:0; color:var(--accent); }
+    main { max-width:980px; margin:0 auto; padding:24px; }
+    .panel { background:var(--card); border:1px solid #21262d; border-radius:10px; padding:20px; }
+    input { width:100%; padding:12px; background:#0d1117; border:1px solid #30363d; color:var(--text); border-radius:8px; }
+    button { margin-top:12px; padding:10px 18px; background:var(--accent); color:#04201c; border:0; border-radius:8px; font-weight:600; cursor:pointer; }
+    .row { padding:10px 14px; margin:6px 0; background:#0d1117; border-radius:6px; border-left:4px solid var(--accent); }
+    .critical { border-color:#ff4d4f; } .high { border-color:#ff7a45; } .medium { border-color:#ffc53d; }
+  </style>
+</head>
+<body>
+  <header><h1>ImgScan</h1><p>Container / dependency CVE scanner (Trivy-style)</p></header>
+  <main>
+    <div class="panel">
+      <input id="req" placeholder="Path to requirements.txt (e.g. requirements.txt)" />
+      <button onclick="runScan()">Scan</button>
+    </div>
+    <div id="results" style="margin-top:20px;"></div>
+  </main>
+  <script>
+    async function runScan() {
+      const req = document.getElementById('req').value.trim();
+      const box = document.getElementById('results');
+      box.innerHTML = '<p style="color:#8b949e">Scanning…</p>';
+      try {
+        const r = await fetch('/scan', { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ requirements: req || 'requirements.txt' }) });
+        const data = await r.json();
+        if (!data.length) { box.innerHTML = '<p style="color:#36cfc9">No CVEs matched the offline rule set.</p>'; return; }
+        box.innerHTML = data.map(f =>
+          `<div class="row ${f.severity}"><strong>${f.component} ${f.version}</strong>
+           <span> — ${f.cve} (${f.severity})</span><br><span style="color:#8b949e">${f.detail||''}</span></div>`
+        ).join('');
+      } catch(e) { box.innerHTML = '<p style="color:#ff7a45">Failed: '+e+'</p>'; }
+    }
+  </script>
+</body>
+</html>

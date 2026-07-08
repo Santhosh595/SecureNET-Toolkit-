@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VulnProbe — SecureNET</title>
+  <style>
+    :root { --bg:#0d1117; --card:#161b22; --accent:#06b6d4; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
+    header { padding:24px; background:var(--card); border-bottom:1px solid #21262d; }
+    header h1 { margin:0; color:var(--accent); }
+    main { max-width:980px; margin:0 auto; padding:24px; }
+    .panel { background:var(--card); border:1px solid #21262d; border-radius:10px; padding:20px; }
+    input { width:100%; padding:12px; background:#0d1117; border:1px solid #30363d; color:var(--text); border-radius:8px; font-size:15px; }
+    button { margin-top:12px; padding:10px 18px; background:var(--accent); color:#06222a; border:0; border-radius:8px; font-weight:600; cursor:pointer; }
+    .finding { border-left:4px solid var(--accent); padding:12px 16px; margin:10px 0; background:#0d1117; border-radius:6px; }
+    .sev-critical { border-color:#ff4d4f; } .sev-high { border-color:#ff7a45; }
+    .sev-medium { border-color:#ffc53d; } .sev-low { border-color:#36cfc9; } .sev-info { border-color:#8b949e; }
+    .meta { color:var(--muted); font-size:13px; }
+  </style>
+</head>
+<body>
+  <header><h1>VulnProbe</h1><p>Template-based HTTP vulnerability scanner (Nuclei-style)</p></header>
+  <main>
+    <div class="panel">
+      <input id="target" placeholder="https://example.com" />
+      <button onclick="runScan()">Run Scan</button>
+    </div>
+    <div id="results" style="margin-top:20px;"></div>
+  </main>
+  <script>
+    async function runScan() {
+      const target = document.getElementById('target').value.trim();
+      const box = document.getElementById('results');
+      if (!target) { box.innerHTML = '<p style="color:#ff7a45">Enter a target URL.</p>'; return; }
+      box.innerHTML = '<p class="meta">Scanning…</p>';
+      try {
+        const r = await fetch('/scan', { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ target }) });
+        const data = await r.json();
+        if (data.error) { box.innerHTML = '<p style="color:#ff7a45">'+data.error+'</p>'; return; }
+        if (!data.findings.length) { box.innerHTML = '<p style="color:#36cfc9">No findings matched.</p>'; return; }
+        box.innerHTML = data.findings.map(f =>
+          `<div class="finding sev-${f.severity}"><strong>${f.name}</strong>
+           <div class="meta">${f.severity.toUpperCase()} · ${f.method} ${f.path} · HTTP ${f.status_code} · ${f.template_file}</div></div>`
+        ).join('');
+      } catch(e) { box.innerHTML = '<p style="color:#ff7a45">Scan failed: '+e+'</p>'; }
+    }
+  </script>
+</body>
+</html>

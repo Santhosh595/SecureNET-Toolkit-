@@ -24,6 +24,11 @@ TOOL_MODULES = {
     "subprobe": os.path.join(TOOLKIT_ROOT, "SubProbe", "main.py"),
     "jwtinspect": os.path.join(TOOLKIT_ROOT, "JWTInspect", "main.py"),
     "secretsniff": os.path.join(TOOLKIT_ROOT, "SecretSniff", "main.py"),
+    "vulnprobe": os.path.join(TOOLKIT_ROOT, "VulnProbe", "main.py"),
+    "pathprobe": os.path.join(TOOLKIT_ROOT, "PathProbe", "main.py"),
+    "cloudsentry": os.path.join(TOOLKIT_ROOT, "CloudSentry", "main.py"),
+    "imgscan": os.path.join(TOOLKIT_ROOT, "ImgScan", "main.py"),
+    "techfinger": os.path.join(TOOLKIT_ROOT, "TechFinger", "main.py"),
 }
 
 _jobs = {}

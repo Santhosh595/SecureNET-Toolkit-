@@ -49,7 +49,7 @@
         </div>
         <div class="hero-stats">
           <div class="hero-stat">
-            <span class="hero-stat-value">13</span>
+            <span class="hero-stat-value">18</span>
             <span class="hero-stat-label">Security Tools</span>
           </div>
           <div class="hero-stat">
@@ -442,6 +442,141 @@
           <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/DNSAudit" target="_blank" rel="noopener" class="tool-card-link">View source</a>
         </div>
 
+        <!-- VulnProbe -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">VulnProbe</h3>
+              <p class="tool-card-sub">Template-Based Vulnerability Scanner</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Send templated HTTP requests to a target and evaluate matchers (status / word / regex) to surface misconfigurations, exposed files, and version disclosure. Add checks by dropping a YAML template — no code changes.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">PyYAML</span>
+            <span class="tech-tag">Rich</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>Nuclei-style YAML template engine</li>
+            <li>Matchers: status / word / regex (and/or)</li>
+            <li>Read-only, safe-by-design probes</li>
+            <li>CLI + Flask dashboard</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/VulnProbe" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
+        <!-- PathProbe -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">PathProbe</h3>
+              <p class="tool-card-sub">Web Content / Path Discovery</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Discover hidden or forgotten web paths by brute-forcing a wordlist of common paths (admin panels, backups, configs, API roots). Multi-threaded and read-only — reports only interesting status codes.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">Requests</span>
+            <span class="tech-tag">Threading</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>50+ built-in common web paths</li>
+            <li>Multi-threaded (configurable worker pool)</li>
+            <li>Filters noise, flags 2xx/3xx/401/403/5xx</li>
+            <li>CLI + Flask dashboard</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/PathProbe" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
+        <!-- CloudSentry -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">CloudSentry</h3>
+              <p class="tool-card-sub">Multi-Cloud Security Posture</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Run read-only security posture checks across AWS, GCP, and Azure (S3 public access, IAM root MFA, root access keys, and more). Without credentials it reports INFO with guidance — it never mutates cloud state.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">boto3</span>
+            <span class="tech-tag">Rich</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>AWS / GCP / Azure read-only checks</li>
+            <li>Extensible check registry</li>
+            <li>Safe by default — no creds = no API calls</li>
+            <li>CLI + Flask dashboard</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/CloudSentry" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
+        <!-- ImgScan -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">ImgScan</h3>
+              <p class="tool-card-sub">Container / Dependency CVE Scanner</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Find known vulnerabilities in requirements.txt (delegates to pip-audit when available, else a built-in offline rule set) and in image SBOMs (CycloneDX/SPDX JSON). Read-only and offline-first.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">pip-audit</span>
+            <span class="tech-tag">Rich</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>Dependency scan via pip-audit + offline rules</li>
+            <li>Image SBOM scan (CycloneDX/SPDX)</li>
+            <li>Version-range CVE matching</li>
+            <li>CLI + Flask dashboard</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/ImgScan" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
+        <!-- TechFinger -->
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h3 class="tool-card-title">TechFinger</h3>
+              <p class="tool-card-sub">Web Technology Fingerprinting</p>
+            </div>
+          </div>
+          <p class="tool-card-desc">Identify the technologies behind a web target by inspecting response headers, cookies, and body signatures. Detects servers, frameworks, CMS platforms, CDNs, analytics, JS libraries, and security headers. Fully read-only.</p>
+          <div class="tool-card-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">Requests</span>
+            <span class="tech-tag">Rich</span>
+          </div>
+          <ul class="tool-card-features">
+            <li>22 signature rules across 7 categories</li>
+            <li>Server / framework / CMS / CDN detection</li>
+            <li>HSTS + CSP security header checks</li>
+            <li>CLI + Flask dashboard</li>
+          </ul>
+          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/TechFinger" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+        </div>
+
         <!-- Control Panel -->
         <div class="tool-card tool-card-featured">
           <div class="tool-card-header">
@@ -453,7 +588,7 @@
               <p class="tool-card-sub">Unified Dashboard for All Tools</p>
             </div>
           </div>
-          <p class="tool-card-desc">Launch, monitor, and orchestrate all 12 SecureNET tools from a single unified dashboard. Real-time health monitoring, unified alerts, quick-scan for any tool, and analytics — all in one place.</p>
+          <p class="tool-card-desc">Launch, monitor, and orchestrate all 18 SecureNET tools from a single unified dashboard. Real-time health monitoring, unified alerts, quick-scan for any tool, and analytics — all in one place.</p>
           <div class="tool-card-tech">
             <span class="tech-tag">Flask</span>
             <span class="tech-tag">Python</span>
@@ -461,7 +596,7 @@
             <span class="tech-tag">Chart.js</span>
           </div>
           <ul class="tool-card-features">
-            <li>12 tools managed from one dashboard</li>
+            <li>18 tools managed from one dashboard</li>
             <li>Real-time health monitoring with auto-restart</li>
             <li>Unified alert center across all tools</li>
             <li>Quick scan from hub (no tab switching)</li>

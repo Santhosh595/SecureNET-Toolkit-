@@ -132,3 +132,53 @@ tools:
     description: Comprehensive DNS security auditor
     color: "#a855f7"
     icon: dns
+
+  vulnprobe:
+    enabled: true
+    port: 5013
+    path: ./VulnProbe
+    entry: dashboard.py
+    name: VulnProbe
+    description: Template-based HTTP vulnerability scanner (Nuclei-style)
+    color: "#06b6d4"
+    icon: shield
+
+  pathprobe:
+    enabled: true
+    port: 5014
+    path: ./PathProbe
+    entry: dashboard.py
+    name: PathProbe
+    description: Web content / path discovery (feroxbuster-style)
+    color: "#f97316"
+    icon: search
+
+  cloudsentry:
+    enabled: true
+    port: 5015
+    path: ./CloudSentry
+    entry: dashboard.py
+    name: CloudSentry
+    description: Multi-cloud security posture (Prowler/ScoutSuite-style)
+    color: "#a855f7"
+    icon: cloud
+
+  imgscan:
+    enabled: true
+    port: 5016
+    path: ./ImgScan
+    entry: dashboard.py
+    name: ImgScan
+    description: Container / dependency CVE scanner (Trivy-style)
+    color: "#14b8a6"
+    icon: box
+
+  techfinger:
+    enabled: true
+    port: 5017
+    path: ./TechFinger
+    entry: dashboard.py
+    name: TechFinger
+    description: Web technology fingerprinting (WhatWeb/httpx-style)
+    color: "#06b6d4"
+    icon: fingerprint

@@ -1,0 +1,25 @@
+id: exposed-admin-panels
+info:
+  name: Exposed Admin / Login Panels
+  author: SecureNET
+  severity: low
+  description: Detects commonly exposed admin, login, and dashboard paths.
+requests:
+  - method: GET
+    path: /admin
+    matchers:
+      - type: status
+        status: [200, 401, 403]
+    matchers-condition: or
+  - method: GET
+    path: /login
+    matchers:
+      - type: status
+        status: [200, 401, 403]
+    matchers-condition: or
+  - method: GET
+    path: /dashboard
+    matchers:
+      - type: status
+        status: [200, 401, 403]
+    matchers-condition: or
