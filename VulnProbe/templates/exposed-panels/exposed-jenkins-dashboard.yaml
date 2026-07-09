@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Jenkins Dashboard
+# id: exposed-jenkins-dashboard | severity: HIGH | category: exposed-panels
+id: exposed-jenkins-dashboard
+name: Exposed Jenkins Dashboard
+description: Detects publicly accessible Jenkins CI/CD dashboards.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- jenkins
+- ci
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /jenkins
+  - /
+  - /login
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Restrict Jenkins behind VPN/SSO. Disable anonymous read access in global security settings.

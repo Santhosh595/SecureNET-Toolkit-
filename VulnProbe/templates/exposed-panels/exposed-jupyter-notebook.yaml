@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Jupyter Notebook
+# id: exposed-jupyter-notebook | severity: HIGH | category: exposed-panels
+id: exposed-jupyter-notebook
+name: Exposed Jupyter Notebook
+description: Detects publicly accessible Jupyter Notebook servers.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- jupyter
+- notebook
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /tree
+  - /login
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Set a strong token/password. Bind to localhost and use SSH tunnel or authenticated proxy.

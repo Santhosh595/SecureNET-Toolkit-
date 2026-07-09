@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Elasticsearch API
+# id: exposed-elasticsearch | severity: HIGH | category: exposed-panels
+id: exposed-elasticsearch
+name: Exposed Elasticsearch API
+description: Detects unauthenticated Elasticsearch REST API access.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- elasticsearch
+- search
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /_cat/indices
+  - /_cluster/health
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Enable security/xpack auth. Bind to private network. Use firewall rules to block 9200.

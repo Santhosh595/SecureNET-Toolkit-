@@ -1,0 +1,39 @@
+# VulnProbe template — Exposed Redis Without Authentication
+# id: exposed-redis-no-auth | severity: CRITICAL | category: exposed-panels
+id: exposed-redis-no-auth
+name: Exposed Redis Without Authentication
+description: Detects Redis servers accepting unauthenticated commands.
+author: SecureNET
+severity: CRITICAL
+category: exposed-panels
+tags:
+- redis
+- cache
+- exposure
+- auth
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Set 'requirepass' in redis.conf. Bind to localhost. Never expose Redis to public internet.

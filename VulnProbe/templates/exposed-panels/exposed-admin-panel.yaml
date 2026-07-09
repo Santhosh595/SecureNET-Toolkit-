@@ -1,0 +1,44 @@
+# VulnProbe template — Exposed Admin Panel Detection
+# id: exposed-admin-panel | severity: HIGH | category: exposed-panels
+id: exposed-admin-panel
+name: Exposed Admin Panel Detection
+description: Detects publicly accessible admin panels that should be restricted to internal networks.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- admin
+- panel
+- exposure
+- authentication
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /admin
+  - /admin/login
+  - /administrator
+  - /wp-admin
+  - /phpmyadmin
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Restrict admin panel access to internal IPs using firewall rules or web server access control.
+  Implement strong authentication and consider non-standard ports.

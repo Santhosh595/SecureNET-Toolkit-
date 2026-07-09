@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Prometheus Metrics
+# id: exposed-prometheus-metrics | severity: MEDIUM | category: exposed-panels
+id: exposed-prometheus-metrics
+name: Exposed Prometheus Metrics
+description: Detects publicly accessible Prometheus metrics endpoint.
+author: SecureNET
+severity: MEDIUM
+category: exposed-panels
+tags:
+- prometheus
+- metrics
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /metrics
+  - /graph
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Restrict /metrics endpoint. Expose only via authenticated scrape or internal network.

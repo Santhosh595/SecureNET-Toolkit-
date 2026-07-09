@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Airflow Dashboard
+# id: exposed-airflow-dashboard | severity: MEDIUM | category: exposed-panels
+id: exposed-airflow-dashboard
+name: Exposed Airflow Dashboard
+description: Detects publicly accessible Apache Airflow UI.
+author: SecureNET
+severity: MEDIUM
+category: exposed-panels
+tags:
+- airflow
+- dag
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /admin
+  - /home
+  - /login
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Enable authentication (RBAC) in Airflow. Restrict via network controls.

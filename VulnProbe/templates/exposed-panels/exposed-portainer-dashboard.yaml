@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Portainer Dashboard
+# id: exposed-portainer-dashboard | severity: MEDIUM | category: exposed-panels
+id: exposed-portainer-dashboard
+name: Exposed Portainer Dashboard
+description: Detects publicly accessible Portainer container UI.
+author: SecureNET
+severity: MEDIUM
+category: exposed-panels
+tags:
+- portainer
+- docker
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /api/status
+  - /#!/
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Protect Portainer with strong auth and TLS. Bind to internal network only.

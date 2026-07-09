@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Kubernetes Dashboard
+# id: exposed-kubernetes-dashboard | severity: HIGH | category: exposed-panels
+id: exposed-kubernetes-dashboard
+name: Exposed Kubernetes Dashboard
+description: Detects publicly accessible Kubernetes Dashboard.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- kubernetes
+- k8s
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Never expose the K8s dashboard publicly. Use kubectl proxy or an authenticated ingress with
+  RBAC.

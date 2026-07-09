@@ -1,0 +1,39 @@
+# VulnProbe template — Exposed MongoDB Without Authentication
+# id: exposed-mongodb-no-auth | severity: CRITICAL | category: exposed-panels
+id: exposed-mongodb-no-auth
+name: Exposed MongoDB Without Authentication
+description: Detects MongoDB instances accessible without credentials.
+author: SecureNET
+severity: CRITICAL
+category: exposed-panels
+tags:
+- mongodb
+- database
+- exposure
+- auth
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Enable authentication and role-based access control. Bind to private interfaces only.

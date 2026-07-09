@@ -1,0 +1,41 @@
+# VulnProbe template — Exposed Grafana Dashboard
+# id: exposed-grafana-panel | severity: MEDIUM | category: exposed-panels
+id: exposed-grafana-panel
+name: Exposed Grafana Dashboard
+description: Detects publicly accessible Grafana monitoring dashboards.
+author: SecureNET
+severity: MEDIUM
+category: exposed-panels
+tags:
+- grafana
+- monitoring
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /login
+  - /dashboard
+  - /grafana
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Put Grafana behind auth proxy. Enable anonymous auth disabled by default and use OAuth.

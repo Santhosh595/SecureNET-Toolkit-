@@ -1,0 +1,42 @@
+# VulnProbe template — Exposed phpMyAdmin
+# id: exposed-phpmyadmin | severity: HIGH | category: exposed-panels
+id: exposed-phpmyadmin
+name: Exposed phpMyAdmin
+description: Detects publicly accessible phpMyAdmin database management interfaces.
+author: SecureNET
+severity: HIGH
+category: exposed-panels
+tags:
+- phpmyadmin
+- database
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /phpmyadmin
+  - /phpMyAdmin
+  - /pma
+  - /dbadmin
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - login
+      - dashboard
+      - admin
+      - panel
+      condition: OR
+remediation: Remove phpMyAdmin from production or restrict via firewall/allowlist. Never expose DB management
+  UIs publicly.
