@@ -9,6 +9,7 @@ build/
 eggs/
 .eggs/
 venv/
+.venv/
 env/
 .env
 
