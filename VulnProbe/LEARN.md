@@ -1,154 +1,47 @@
-# LEARN.md — VulnProbe for Beginners
+# VulnProbe — LEARN.md
 
-VulnProbe is a **template-based HTTP vulnerability scanner** in the style of
-[Nuclei](https://github.com/projectdiscovery/nuclei). This guide explains the
-core ideas so you can run it, read its output, and even write your own templates.
+## What problem does VulnProbe solve?
 
----
+Before you harden or attack a web app you need a fast, repeatable read-only
+inventory of what is *exposed*. Nuclei templates let you encode each check as a
+small YAML file: send a request, evaluate matchers, record a finding. VulnProbe
+shows the mechanism with 60 built-in templates across 8 categories and a CLI +
+dashboard, all sending only read-only HTTP requests.
 
-## 1. What problem does it solve?
+## Key concept — template + matcher evaluation
 
-When you test a web server, many weaknesses are *detectable with a single
-read-only HTTP request*:
+Each template pairs a set of request paths with **multi-condition matchers**.
+VulnProbe sends the request, then evaluates matchers in two layers:
 
-- Is there an admin panel at `/admin`?
-- Is `.git/config` accidentally served?
-- Does the `Server` header leak `Apache/2.4.51`?
-- Is `/metrics` (Prometheus) exposed to the world?
+- **within a block**: `operator: AND|OR` combines the `conditions`.
+- **across blocks**: `matchers_condition: AND|OR` combines blocks.
 
-VulnProbe encodes each check as a **template** (a YAML file). At scan time it
-sends the request and checks the response against **matchers**. No payloads are
-ever written or exploited — detection only.
+A template is triggered when *any* path matches. Six matcher types are
+supported: `status`, `word`, `regex`, `size`, `binary`, `header`. Extractors
+(`regex` / `kval`) pull values out of a match for the report.
 
----
+## Analogy
 
-## 2. The mental model
+Think of VulnProbe as **a bouncer checking a club's front door against a
+checklist**: each checklist item (template) looks for one tell — an exposed
+admin panel, a leaked `.git/config`, a version string in the Server header. The
+bouncer only *looks* (read-only GET); they never go inside or move anything.
 
-```
-template.yaml
-   ├── id / name / severity / category / tags
-   └── requests:
-         ├── path(s) to request
-         └── matchers:   ← "what makes this a finding?"
-               ├── type: status   (HTTP code)
-               ├── type: word     (text in body/header)
-               ├── type: regex    (pattern in body/header)
-               ├── type: size     (response byte size)
-               ├── type: binary   (magic bytes / hex)
-               └── type: header   (header name + value)
-```
+## Read-only by design
 
-If the matchers pass, VulnProbe records a **finding** with the severity, the
-matched path, the extracted values, and the remediation advice.
+VulnProbe only sends GET/HEAD/OPTIONS by default — it never probes, fuzzes, or
+writes. A non-GET request requires `safe: true` *and* a `safe_reason`. The
+`--dry-run` flag plans every request and sends nothing. Redirects to other
+hosts are never followed (open-redirect protection), and per-host rate limiting
+plus `429` backoff protect the target.
 
----
-
-## 3. Run your first scan
+## Try it
 
 ```bash
-# inside VulnProbe/
 source .venv/bin/activate
-python main.py https://your-test-site.example.com
+python main.py https://your-authorized-target.example.com --dry-run
+python main.py https://your-authorized-target.example.com --severity high,critical
 ```
 
-You'll see a disclaimer (you must confirm authorization), then a live progress
-bar, then findings stream in as they are found, and a summary table at the end.
-
-Try a **dry run** to see exactly what would be sent without sending anything:
-
-```bash
-python main.py https://your-test-site.example.com --dry-run
-```
-
----
-
-## 4. Reading a finding
-
-```
-[HIGH] exposed-admin-panel → https://x.com/admin
-```
-
-means: template `exposed-admin-panel` triggered on path `/admin`, severity HIGH.
-
-In the **dashboard → Findings** tab you can click a row to see:
-- the full request path and headers,
-- the response status / size / time,
-- which matcher condition fired,
-- the extracted values,
-- the remediation text.
-
----
-
-## 5. Controlling scan scope
-
-| Goal | Flag |
-|------|------|
-| Only HIGH/CRITICAL | `--severity high,critical` |
-| Only exposed panels | `--category exposed-panels` |
-| Only templates tagged `admin` | `--tags admin` |
-| Slower & gentler | `--rate-limit 60 --threads 10` |
-| Scan many URLs | put them in a file, pass `@file.txt` |
-| Scan a domain | just pass `example.com` (tries http + https) |
-
----
-
-## 6. Writing your first template
-
-Create `my-first.yaml`:
-
-```yaml
-id: my-login-page
-name: Detect Login Page
-description: Demo template that flags any page containing "login".
-author: You
-severity: INFO
-category: default-creds
-tags: [login, demo]
-requests:
-  - method: GET
-    path: [/login, /admin/login]
-    matchers:
-      operator: OR
-      conditions:
-        - type: status
-          values: [200, 401]
-        - type: word
-          part: body
-          words: [login, "sign in"]
-          condition: OR
-```
-
-Run it alongside the built-ins:
-
-```bash
-python main.py https://target.com --templates ./my-templates
-```
-
-Or validate it in the dashboard (**Template Library → Validate YAML**).
-
-> Templates *must* be read-only. If you ever need a non-GET method, you must set
-> `safe: true` and explain `safe_reason`. VulnProbe will refuse otherwise.
-
----
-
-## 7. Safety rules (important)
-
-- **Authorized testing only.** Only scan what you own or are allowed to test.
-- VulnProbe never sends destructive payloads.
-- `--dry-run` plans, never sends.
-- Redirects to other domains are never followed (open-redirect protection).
-- Per-host rate limiting + `429` backoff protect the target.
-
----
-
-## 8. Where things live
-
-| Want to… | Look at |
-|----------|---------|
-| Understand the engine | `engine/` (`loader.py`, `scanner.py`, `matchers.py`, `extractors.py`, `ratelimiter.py`) |
-| Change the DB schema | `database.py` |
-| Change reports | `reporter.py` |
-| Add templates | `templates/<category>/` |
-| Learn the full schema | `TEMPLATES.md` |
-
-Happy (authorized) hunting!
+See `TEMPLATES.md` for the full schema and how to write your own template, and
+`README.md` for the dashboard and API reference.
