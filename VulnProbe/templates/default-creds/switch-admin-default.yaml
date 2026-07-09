@@ -1,0 +1,41 @@
+# VulnProbe template — Network Switch Admin Default
+# id: switch-admin-default | severity: MEDIUM | category: default-creds
+id: switch-admin-default
+name: Network Switch Admin Default
+description: Detects managed switch admin pages.
+author: SecureNET
+severity: MEDIUM
+category: default-creds
+tags:
+- switch
+- admin
+- default
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /login
+  - /config
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 401
+      - 403
+    - type: word
+      part: body
+      words:
+      - login
+      - password
+      - sign in
+      - username
+      condition: OR
+remediation: Change default enable passwords. Restrict mgmt plane. Use centralized auth.

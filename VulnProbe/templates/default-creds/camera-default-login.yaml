@@ -1,0 +1,41 @@
+# VulnProbe template — IP Camera Default Login
+# id: camera-default-login | severity: MEDIUM | category: default-creds
+id: camera-default-login
+name: IP Camera Default Login
+description: Detects IP camera/webcam admin pages.
+author: SecureNET
+severity: MEDIUM
+category: default-creds
+tags:
+- camera
+- default
+- login
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /login
+  - /web/login
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 401
+      - 403
+    - type: word
+      part: body
+      words:
+      - login
+      - password
+      - sign in
+      - username
+      condition: OR
+remediation: Change default credentials. Segment cameras on isolated VLAN. Patch firmware.

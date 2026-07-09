@@ -1,0 +1,41 @@
+# VulnProbe template — Printer Admin Default
+# id: printer-admin-default | severity: LOW | category: default-creds
+id: printer-admin-default
+name: Printer Admin Default
+description: Detects printer web admin interfaces.
+author: SecureNET
+severity: LOW
+category: default-creds
+tags:
+- printer
+- admin
+- default
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /hp/device/this.LCDispatcher
+  - /set_config.html
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 401
+      - 403
+    - type: word
+      part: body
+      words:
+      - login
+      - password
+      - sign in
+      - username
+      condition: OR
+remediation: Set admin password. Disable unnecessary services. Update printer firmware.

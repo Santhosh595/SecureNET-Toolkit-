@@ -1,0 +1,41 @@
+# VulnProbe template — Default Login Page Detected
+# id: default-login-page-detected | severity: INFO | category: default-creds
+id: default-login-page-detected
+name: Default Login Page Detected
+description: Detects default device/application login pages.
+author: SecureNET
+severity: INFO
+category: default-creds
+tags:
+- default
+- login
+- page
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /login
+  - /admin/login
+  - /user/login
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 401
+      - 403
+    - type: word
+      part: body
+      words:
+      - login
+      - password
+      - sign in
+      - username
+      condition: OR
+remediation: Change default credentials immediately. Use unique strong passwords and MFA.
