@@ -1,0 +1,45 @@
+# VulnProbe template — Swagger UI Exposed
+# id: swagger-ui-exposed | severity: LOW | category: api-security
+id: swagger-ui-exposed
+name: Swagger UI Exposed
+description: Detects exposed Swagger/OpenAPI UI.
+author: SecureNET
+severity: LOW
+category: api-security
+tags:
+- swagger
+- api
+- exposure
+references:
+- https://owasp.org/www-project-api-security/
+requests:
+- method: GET
+  path:
+  - /swagger-ui.html
+  - /swagger
+  - /api-docs
+  - /v2/api-docs
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+    Accept: application/json
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - swagger
+      - openapi
+      - graphql
+      - actuator
+      - odata
+      - schema
+      - __typename
+      condition: OR
+remediation: Restrict API docs to internal environments. Require auth for schema endpoints.

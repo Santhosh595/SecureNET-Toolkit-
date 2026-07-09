@@ -1,0 +1,44 @@
+# VulnProbe template — GraphQL Introspection Enabled
+# id: graphql-introspection-enabled | severity: MEDIUM | category: api-security
+id: graphql-introspection-enabled
+name: GraphQL Introspection Enabled
+description: Detects GraphQL introspection query allowed (schema disclosure).
+author: SecureNET
+severity: MEDIUM
+category: api-security
+tags:
+- graphql
+- api
+- introspection
+references:
+- https://owasp.org/www-project-api-security/
+requests:
+- method: GET
+  path:
+  - /graphql
+  - /api/graphql
+  - /graphiql
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+    Accept: application/json
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - swagger
+      - openapi
+      - graphql
+      - actuator
+      - odata
+      - schema
+      - __typename
+      condition: OR
+remediation: Disable introspection in production. Use persisted queries. Authorize schema access.

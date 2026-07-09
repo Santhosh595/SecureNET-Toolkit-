@@ -1,0 +1,45 @@
+# VulnProbe template — API Docs Exposed
+# id: api-docs-exposed | severity: LOW | category: api-security
+id: api-docs-exposed
+name: API Docs Exposed
+description: Detects exposed API documentation (ReDoc/OpenAPI).
+author: SecureNET
+severity: LOW
+category: api-security
+tags:
+- api
+- docs
+- exposure
+references:
+- https://owasp.org/www-project-api-security/
+requests:
+- method: GET
+  path:
+  - /redoc
+  - /openapi.json
+  - /docs
+  - /api/schema
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+    Accept: application/json
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - swagger
+      - openapi
+      - graphql
+      - actuator
+      - odata
+      - schema
+      - __typename
+      condition: OR
+remediation: Gate documentation behind auth. Do not expose in production by default.

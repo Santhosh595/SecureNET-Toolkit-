@@ -1,0 +1,46 @@
+# VulnProbe template — Spring Actuator Exposed
+# id: actuator-endpoints-exposed | severity: MEDIUM | category: api-security
+id: actuator-endpoints-exposed
+name: Spring Actuator Exposed
+description: Detects exposed Spring Boot Actuator endpoints.
+author: SecureNET
+severity: MEDIUM
+category: api-security
+tags:
+- actuator
+- spring
+- api
+- exposure
+references:
+- https://owasp.org/www-project-api-security/
+requests:
+- method: GET
+  path:
+  - /actuator
+  - /actuator/env
+  - /actuator/health
+  - /actuator/beans
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+    Accept: application/json
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 302
+    - type: word
+      part: body
+      words:
+      - swagger
+      - openapi
+      - graphql
+      - actuator
+      - odata
+      - schema
+      - __typename
+      condition: OR
+remediation: Restrict actuator exposure to 'health'/'info'. Secure with auth. Bind internally.
