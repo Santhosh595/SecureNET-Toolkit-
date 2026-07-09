@@ -136,6 +136,17 @@ def quick_scan_secretsniff(path):
     return _start_job("secretsniff", ["scan", "--path", path])
 
 
+def quick_scan_vulnprobe(url, severity="HIGH,CRITICAL"):
+    """Start a VulnProbe template scan on a URL. Returns job_id.
+
+    Args:
+        url: target URL (or bare domain).
+        severity: comma-separated severities to include (default HIGH,CRITICAL).
+    """
+    args = [url, "--no-disclaimer", "--severity", severity]
+    return _start_job("vulnprobe", args)
+
+
 def get_result(job_id):
     """Get the status/results for a job.
 
