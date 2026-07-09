@@ -1,0 +1,36 @@
+# VulnProbe template — PHP Version Leak
+# id: php-version-leak | severity: LOW | category: version-leak
+id: php-version-leak
+name: PHP Version Leak
+description: X-Powered-By or body discloses PHP version.
+author: SecureNET
+severity: LOW
+category: version-leak
+tags:
+- php
+- version
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /index.php
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: header
+      header: X-Powered-By
+      values:
+      - PHP
+      condition: AND
+    - type: regex
+      part: body
+      pattern: PHP Version [0-9]
+      case_insensitive: true
+remediation: Disable 'expose_php = Off' in php.ini. Remove X-Powered-By header.

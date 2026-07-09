@@ -1,0 +1,44 @@
+# VulnProbe template — Apache Version Leak
+# id: apache-version-leak | severity: LOW | category: version-leak
+id: apache-version-leak
+name: Apache Version Leak
+description: Server header discloses Apache version.
+author: SecureNET
+severity: LOW
+category: version-leak
+tags:
+- apache
+- version
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 301
+      - 302
+      - 403
+      - 404
+    - type: header
+      header: Server
+      values:
+      - Apache
+      - nginx
+      - Microsoft-IIS
+      condition: OR
+    - type: regex
+      part: header
+      pattern: (Apache/[0-9]|nginx/[0-9]|Microsoft-IIS/[0-9])
+      case_insensitive: true
+remediation: Set 'ServerTokens Prod' and 'ServerSignature Off' to suppress version disclosure.

@@ -1,0 +1,39 @@
+# VulnProbe template — X-Powered-By Disclosure
+# id: x-powered-by-disclosure | severity: LOW | category: version-leak
+id: x-powered-by-disclosure
+name: X-Powered-By Disclosure
+description: X-Powered-By header reveals backend tech/version.
+author: SecureNET
+severity: LOW
+category: version-leak
+tags:
+- xpoweredby
+- disclosure
+- tech
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 301
+      - 302
+    - type: header
+      header: X-Powered-By
+      values:
+      - ASP.NET
+      - PHP
+      - Express
+      - Django
+      condition: OR
+remediation: Remove X-Powered-By via backend or reverse proxy header rewrite.

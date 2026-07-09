@@ -1,0 +1,39 @@
+# VulnProbe template — Framework Debug Mode Enabled
+# id: framework-debug-mode | severity: MEDIUM | category: version-leak
+id: framework-debug-mode
+name: Framework Debug Mode Enabled
+description: Detects debug/error verbose mode leaking stack traces.
+author: SecureNET
+severity: MEDIUM
+category: version-leak
+tags:
+- debug
+- framework
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /debug
+  - /?debug=1
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: word
+      part: body
+      words:
+      - DEBUG=True
+      - DEBUG = True
+      - Traceback (most recent call last)
+      - Django error
+      condition: OR
+    - type: status
+      values:
+      - 500
+remediation: Disable DEBUG mode in production. Return generic error pages to clients.

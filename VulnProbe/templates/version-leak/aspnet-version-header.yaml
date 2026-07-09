@@ -1,0 +1,39 @@
+# VulnProbe template — ASP.NET Version Header (X-AspNet-Version)
+# id: aspnet-version-header | severity: LOW | category: version-leak
+id: aspnet-version-header
+name: ASP.NET Version Header (X-AspNet-Version)
+description: X-AspNet-Version header discloses framework version.
+author: SecureNET
+severity: LOW
+category: version-leak
+tags:
+- aspnet
+- version
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 301
+      - 302
+    - type: header
+      header: X-AspNet-Version
+      values:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      condition: OR
+remediation: Set 'enableVersionHeader=false' in web.config; remove X-AspNet-Version.
