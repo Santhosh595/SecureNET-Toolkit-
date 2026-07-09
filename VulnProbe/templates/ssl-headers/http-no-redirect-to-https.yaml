@@ -1,0 +1,40 @@
+# VulnProbe template — No HTTPS Redirect
+# id: http-no-redirect-to-https | severity: LOW | category: ssl-headers
+id: http-no-redirect-to-https
+name: No HTTPS Redirect
+description: Detects HTTP not redirecting to HTTPS.
+author: SecureNET
+severity: LOW
+category: ssl-headers
+tags:
+- https
+- redirect
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 301
+      - 302
+      - 403
+      - 404
+    - type: status
+      values:
+      - 301
+      - 302
+      - 307
+      - 308
+      negate: true
+remediation: Redirect all HTTP traffic to HTTPS. Use HSTS to enforce transport security.

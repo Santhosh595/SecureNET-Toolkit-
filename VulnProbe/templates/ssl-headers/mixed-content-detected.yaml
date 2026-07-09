@@ -1,0 +1,33 @@
+# VulnProbe template — Mixed Content Detected
+# id: mixed-content-detected | severity: LOW | category: ssl-headers
+id: mixed-content-detected
+name: Mixed Content Detected
+description: Detects HTTP resources loaded on HTTPS page.
+author: SecureNET
+severity: LOW
+category: ssl-headers
+tags:
+- mixed-content
+- https
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: regex
+      part: body
+      pattern: (src|href)="http://
+      case_insensitive: true
+remediation: Serve all sub-resources over HTTPS. Use CSP upgrade-insecure-requests.

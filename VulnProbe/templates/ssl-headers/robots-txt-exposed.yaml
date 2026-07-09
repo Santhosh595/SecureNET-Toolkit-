@@ -1,0 +1,32 @@
+# VulnProbe template — robots.txt Discloses Sensitive Paths
+# id: robots-txt-exposed | severity: INFO | category: ssl-headers
+id: robots-txt-exposed
+name: robots.txt Discloses Sensitive Paths
+description: Detects robots.txt exposing sensitive directories.
+author: SecureNET
+severity: INFO
+category: ssl-headers
+tags:
+- robots
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /robots.txt
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: regex
+      part: body
+      pattern: (Disallow:.*(admin|api|private|secret|config|backup))
+      case_insensitive: true
+remediation: Avoid listing sensitive paths in robots.txt; use auth/access control instead.

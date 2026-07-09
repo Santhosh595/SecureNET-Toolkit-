@@ -1,0 +1,31 @@
+# VulnProbe template — security.txt Missing
+# id: security-txt-missing | severity: INFO | category: ssl-headers
+id: security-txt-missing
+name: security.txt Missing
+description: Detects missing /.well-known/security.txt.
+author: SecureNET
+severity: INFO
+category: ssl-headers
+tags:
+- security-txt
+- disclosure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /.well-known/security.txt
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 404
+      - 403
+      - 401
+      - 500
+remediation: Publish a security.txt with contact + disclosure policy per RFC 9116.
