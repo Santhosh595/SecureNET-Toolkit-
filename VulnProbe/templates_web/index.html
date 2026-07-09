@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VulnProbe — Template-Based HTTP Vulnerability Scanner</title>
+<style>
+  :root {
+    --bg: #0b1120; --panel: #111c30; --panel2: #16233b; --border: #1f2f4a;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #06b6d4; --accent2: #22d3ee;
+    --crit: #ef4444; --high: #f97316; --med: #eab308; --low: #38bdf8; --info: #94a3b8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+  header { padding: 14px 22px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); background: var(--panel); }
+  header .logo { font-weight: 800; color: var(--accent); letter-spacing: .5px; font-size: 18px; }
+  header .sub { color: var(--muted); font-size: 12px; }
+  .tabs { display: flex; gap: 4px; padding: 0 18px; background: var(--panel); border-bottom: 1px solid var(--border); }
+  .tab { padding: 11px 16px; cursor: pointer; color: var(--muted); font-size: 13px; border-bottom: 2px solid transparent; }
+  .tab.active { color: var(--accent2); border-bottom-color: var(--accent); font-weight: 600; }
+  .view { display: none; padding: 22px; max-width: 1200px; margin: 0 auto; }
+  .view.active { display: block; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 12px 0 5px; }
+  input, select, textarea { width: 100%; background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 9px 11px; border-radius: 7px; font-size: 13px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 180px; }
+  button { background: var(--accent); color: #021018; border: 0; padding: 10px 18px; border-radius: 7px; font-weight: 700; cursor: pointer; font-size: 13px; }
+  button.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .btnrow { margin-top: 16px; display: flex; gap: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  .pill { padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
+  .sev-critical { background: rgba(239,68,68,.16); color: var(--crit); }
+  .sev-high { background: rgba(249,115,22,.16); color: var(--high); }
+  .sev-medium { background: rgba(234,179,8,.16); color: var(--med); }
+  .sev-low { background: rgba(56,189,248,.16); color: var(--low); }
+  .sev-info { background: rgba(148,163,184,.16); color: var(--info); }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 9px; padding: 14px; margin-top: 14px; }
+  .small { font-size: 12px; color: var(--muted); }
+  .drawer { position: fixed; right: 0; top: 0; height: 100%; width: 460px; background: var(--panel); border-left: 1px solid var(--border); transform: translateX(100%); transition: .25s; overflow-y: auto; padding: 22px; z-index: 20; }
+  .drawer.open { transform: translateX(0); }
+  .drawer h3 { margin-top: 0; color: var(--accent2); }
+  .drawer pre { background: #050b16; padding: 12px; border-radius: 6px; overflow: auto; font-size: 12px; }
+  .closex { float: right; cursor: pointer; color: var(--muted); }
+  .statusbar { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .progress { height: 7px; background: var(--panel2); border-radius: 5px; overflow: hidden; margin-top: 8px; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: .2s; }
+  .muted { color: var(--muted); }
+  details summary { cursor: pointer; color: var(--accent2); font-size: 13px; }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">VulnProbe</div>
+    <div class="sub">Template-Based HTTP Vulnerability Scanner · Nuclei-style</div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="scan">Scan</div>
+  <div class="tab" data-tab="findings">Findings</div>
+  <div class="tab" data-tab="library">Template Library</div>
+  <div class="tab" data-tab="history">Scan History</div>
+  <div class="tab" data-tab="report">Report</div>
+</div>
+
+<!-- SCAN -->
+<div class="view active" id="scan">
+  <div class="card">
+    <label>Target URL, @file-of-URLs, or domain</label>
+    <input id="target" placeholder="https://example.com">
+    <div class="row">
+      <div><label>Severity filter (comma)</label><input id="sev" placeholder="critical,high,medium,low,info"></div>
+      <div><label>Category</label><input id="cat" placeholder="exposed-panels"></div>
+      <div><label>Tags (comma)</label><input id="tags" placeholder="admin,exposure"></div>
+    </div>
+    <div class="row">
+      <div><label>Rate limit (req/min/host)</label><input id="rate" type="number" value="150"></div>
+      <div><label>Threads</label><input id="threads" type="number" value="25"></div>
+      <div><label>Timeout (s)</label><input id="timeout" type="number" value="10"></div>
+    </div>
+    <div class="btnrow">
+      <button id="startBtn">Start Scan</button>
+      <button class="ghost" id="cancelBtn" disabled>Cancel</button>
+      <span class="statusbar" id="scanStatus">Idle.</span>
+    </div>
+    <div class="progress"><div id="prog"></div></div>
+    <div class="statusbar" id="liveFindings"></div>
+  </div>
+</div>
+
+<!-- FINDINGS -->
+<div class="view" id="findings">
+  <div class="card">
+    <div class="row">
+      <div><label>Filter severity</label>
+        <select id="fSev"><option value="">All</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></div>
+      <div><label>Filter category</label><input id="fCat" placeholder="exposed-panels"></div>
+      <div><label>Group by</label>
+        <select id="fGroup"><option value="">None</option><option value="severity">Severity</option><option value="template_id">Template</option><option value="url">URL</option></select></div>
+    </div>
+    <div class="btnrow"><button id="loadFindings">Load Findings</button></div>
+    <table id="findingsTable"><thead><tr><th>Severity</th><th>Template</th><th>URL</th><th>Path</th><th>HTTP</th><th>Matched</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="drawer" id="drawer">
+    <span class="closex" onclick="closeDrawer()">✕</span>
+    <div id="drawerBody"></div>
+  </div>
+</div>
+
+<!-- TEMPLATE LIBRARY -->
+<div class="view" id="library">
+  <div class="card">
+    <div class="row">
+      <div><label>Category</label><input id="lCat" placeholder="cve"></div>
+      <div><label>Severity</label><input id="lSev" placeholder="high"></div>
+      <div><label>Tags</label><input id="lTags" placeholder="exposure"></div>
+    </div>
+    <div class="btnrow">
+      <button id="loadLib">Load Library</button>
+      <button class="ghost" id="uploadBtn">Upload Template</button>
+      <input type="file" id="uploadFile" accept=".yaml,.yml" style="display:none">
+    </div>
+    <div class="btnrow">
+      <span>Validate YAML:</span>
+      <textarea id="validateYaml" rows="4" placeholder="Paste a template YAML here..."></textarea>
+    </div>
+    <div class="btnrow"><button class="ghost" id="validateBtn">Validate</button><span id="validateOut" class="small"></span></div>
+    <table id="libTable"><thead><tr><th>ID</th><th>Severity</th><th>Category</th><th>Tags</th></tr></thead><tbody></tbody></table>
+    <div class="drawer" id="libDrawer"><span class="closex" onclick="closeLib()">✕</span><div id="libBody"></div></div>
+  </div>
+</div>
+
+<!-- SCAN HISTORY -->
+<div class="view" id="history">
+  <div class="card">
+    <button id="loadHistory">Load History</button>
+    <table id="histTable"><thead><tr><th>ID</th><th>Target</th><th>Findings</th><th>Duration</th><th>When</th><th></th></tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div class="view" id="report">
+  <div class="card">
+    <label>Export Scan (optional: specific scan id)</label>
+    <input id="repScanId" placeholder="leave blank for latest">
+    <div class="btnrow">
+      <button class="ghost" id="expJson">Export JSON</button>
+      <button class="ghost" id="expCsv">Export CSV</button>
+      <button class="ghost" id="expPdf">Export PDF</button>
+    </div>
+    <hr>
+    <div class="small">PDF includes an executive summary and every finding with remediation steps. JSON/CSV contain the raw finding set.</div>
+  </div>
+</div>
+
+<script>
+const API = "";
+function tabClick(e){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector(`[data-tab="${e}"]`).classList.add('active');document.getElementById(e).classList.add('active');}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>tabClick(t.dataset.tab));
+function sevPill(s){return `<span class="pill sev-${s}">${s.toUpperCase()}</span>`;}
+const fmtDate = ts => new Date(ts*1000).toLocaleString();
+
+// SCAN
+let scanTimer=null, currentScanId=null;
+document.getElementById('startBtn').onclick=async()=>{
+  const body={target:document.getElementById('target').value.trim()};
+  if(!body.target){alert('Enter a target');return;}
+  body.severity=document.getElementById('sev').value;
+  body.category=document.getElementById('cat').value;
+  body.tags=document.getElementById('tags').value;
+  body.rate_limit=+document.getElementById('rate').value;
+  body.workers=+document.getElementById('threads').value;
+  body.timeout=+document.getElementById('timeout').value;
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('cancelBtn').disabled=false;
+  document.getElementById('scanStatus').textContent='Starting...';
+  const r=await fetch(API+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const j=await r.json();
+  if(j.error){document.getElementById('scanStatus').textContent='Error: '+j.error;document.getElementById('startBtn').disabled=false;return;}
+  currentScanId=j.scan_id;
+  pollScan();
+};
+function pollScan(){
+  scanTimer=setInterval(async()=>{
+    const st=await fetch(API+'/status').then(r=>r.json());
+    document.getElementById('scanStatus').textContent= st.active_scan ? 'Scanning…' : 'Finished.';
+    if(!st.active_scan){clearInterval(scanTimer);document.getElementById('startBtn').disabled=false;document.getElementById('cancelBtn').disabled=true;}
+  },1500);
+}
+document.getElementById('cancelBtn').onclick=()=>{clearInterval(scanTimer);document.getElementById('scanStatus').textContent='Cancelled.';document.getElementById('startBtn').disabled=false;document.getElementById('cancelBtn').disabled=true;};
+
+// FINDINGS
+document.getElementById('loadFindings').onclick=async()=>{
+  const p=new URLSearchParams();
+  const s=document.getElementById('fSev').value; const c=document.getElementById('fCat').value; const g=document.getElementById('fGroup').value;
+  if(s)p.set('severity',s); if(c)p.set('category',c);
+  const j=await fetch(API+'/api/findings?'+p).then(r=>r.json());
+  let rows=j.findings;
+  if(g){rows=[...rows].sort((a,b)=>String(a[g]).localeCompare(String(b[g])));}
+  const tb=document.querySelector('#findingsTable tbody'); tb.innerHTML='';
+  j.findings.forEach(f=>{
+    const tr=document.createElement('tr'); tr.style.cursor='pointer';
+    tr.innerHTML=`<td>${sevPill(f.severity)}</td><td>${f.template_id}</td><td>${f.url}</td><td>${f.matched_path}</td><td>${f.status_code||''}</td><td>${f.matched_condition}</td>`;
+    tr.onclick=()=>openDrawer(f); tb.appendChild(tr);
+  });
+};
+function openDrawer(f){
+  const ex=JSON.parse(f.extracted_values||'{}');
+  document.getElementById('drawerBody').innerHTML=`
+    <h3>${f.name}</h3>
+    ${sevPill(f.severity)} <span class="muted">${f.category}</span>
+    <hr>
+    <b>URL:</b> ${f.url}${f.matched_path}<br>
+    <b>Template:</b> ${f.template_id}<br>
+    <b>Matched on:</b> ${f.matched_condition}<br>
+    <b>HTTP:</b> ${f.status_code} · <b>Size:</b> ${f.response_size}B · <b>Time:</b> ${f.response_ms}ms · <b>Method:</b> ${f.method}<br><br>
+    <b>Extracted:</b><pre>${JSON.stringify(ex,null,2)}</pre>
+    <b>Remediation:</b><p class="small">${f.remediation||'—'}</p>`;
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');}
+
+// LIBRARY
+document.getElementById('loadLib').onclick=async()=>{
+  const p=new URLSearchParams();
+  if(document.getElementById('lCat').value)p.set('category',document.getElementById('lCat').value);
+  if(document.getElementById('lSev').value)p.set('severity',document.getElementById('lSev').value);
+  if(document.getElementById('lTags').value)p.set('tags',document.getElementById('lTags').value);
+  const j=await fetch(API+'/api/templates?'+p).then(r=>r.json());
+  const tb=document.querySelector('#libTable tbody'); tb.innerHTML='';
+  j.templates.forEach(t=>{
+    const tr=document.createElement('tr'); tr.style.cursor='pointer';
+    tr.innerHTML=`<td>${t.id}</td><td>${sevPill(t.severity)}</td><td>${t.category}</td><td>${(t.tags||[]).join(', ')}</td>`;
+    tr.onclick=()=>openLib(t.id); tb.appendChild(tr);
+  });
+};
+async function openLib(id){
+  const txt=await fetch(API+'/api/templates/'+id+'/yaml').then(r=>r.text());
+  document.getElementById('libBody').innerHTML='<h3>'+id+'</h3><pre>'+txt.replace(/</g,'&lt;')+'</pre>';
+  document.getElementById('libDrawer').classList.add('open');
+}
+function closeLib(){document.getElementById('libDrawer').classList.remove('open');}
+document.getElementById('uploadBtn').onclick=()=>document.getElementById('uploadFile').click();
+document.getElementById('uploadFile').onchange=async(e)=>{
+  const fd=new FormData(); fd.append('file',e.target.files[0]);
+  const j=await fetch(API+'/api/templates/upload',{method:'POST',body:fd}).then(r=>r.json());
+  alert(j.valid? 'Uploaded: '+j.saved : 'Invalid: '+(j.error||j.errors));
+};
+document.getElementById('validateBtn').onclick=async()=>{
+  const yaml=document.getElementById('validateYaml').value;
+  const j=await fetch(API+'/api/templates/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({yaml})}).then(r=>r.json());
+  document.getElementById('validateOut').textContent= j.valid ? 'VALID ('+j.id+')' : 'INVALID: '+(j.errors||[]).join(' | ');
+  document.getElementById('validateOut').style.color= j.valid? 'var(--accent)':'var(--crit)';
+};
+
+// HISTORY
+document.getElementById('loadHistory').onclick=async()=>{
+  const j=await fetch(API+'/api/scans').then(r=>r.json());
+  const tb=document.querySelector('#histTable tbody'); tb.innerHTML='';
+  j.scans.forEach(s=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${s.id}</td><td>${s.target}</td><td>${s.findings_count}</td><td>${s.duration.toFixed(1)}s</td><td class="muted">${fmtDate(s.timestamp)}</td><td><button class="ghost" onclick="rerun(${s.id})">Re-run</button></td>`;
+    tb.appendChild(tr);
+  });
+};
+async function rerun(id){const s=await fetch(API+'/api/scans').then(r=>r.json());const rec=s.scans.find(x=>x.id===id);if(!rec)return;document.getElementById('target').value=rec.target;tabClick('scan');document.getElementById('startBtn').click();}
+
+// REPORT
+function dl(url){window.open(API+url,'_blank');}
+document.getElementById('expJson').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=json'+(id?'&scan_id='+id:''));};
+document.getElementById('expCsv').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=csv'+(id?'&scan_id='+id:''));};
+document.getElementById('expPdf').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=pdf'+(id?'&scan_id='+id:''));};
+
+// init
+document.getElementById('loadLib').click();
+</script>
+</body>
+</html>
