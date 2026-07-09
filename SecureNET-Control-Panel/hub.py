@@ -24,9 +24,10 @@ from database import get_recent_alerts, get_scan_history, get_stats, update_sett
 from process_manager import ProcessManager
 from health_monitor import HealthMonitor
 from alert_aggregator import AlertAggregator
-from quick_scan import quick_scan_headerscan, quick_scan_portmap, quick_scan_hashdetect
-from quick_scan import quick_scan_tlscan, quick_scan_dnsaudit, quick_scan_subprobe
-from quick_scan import quick_scan_jwtinspect, quick_scan_secretsniff, get_result
+from quick_scan import (quick_scan_headerscan, quick_scan_portmap, quick_scan_hashdetect,
+                         quick_scan_tlscan, quick_scan_dnsaudit, quick_scan_subprobe,
+                         quick_scan_jwtinspect, quick_scan_secretsniff, quick_scan_vulnprobe,
+                         get_result)
 
 # Load config
 CONFIG_PATH = Path(__file__).parent / "securenet.yaml"
@@ -342,6 +343,15 @@ def quickscan_secretsniff():
     data = request.get_json()
     path = data.get("path", "")
     job_id = quick_scan_secretsniff(path)
+    return jsonify({"job_id": job_id, "status": "pending"})
+
+
+@app.route("/api/quickscan/vulnprobe", methods=["POST"])
+def quickscan_vulnprobe():
+    data = request.get_json()
+    url = data.get("url", "")
+    severity = data.get("severity", "HIGH,CRITICAL")
+    job_id = quick_scan_vulnprobe(url, severity)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
