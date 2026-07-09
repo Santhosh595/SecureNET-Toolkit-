@@ -2,3 +2,4 @@ requests>=2.31
 rich>=13.7
 flask>=3.0
 PyYAML>=6.0
+reportlab>=4.0
