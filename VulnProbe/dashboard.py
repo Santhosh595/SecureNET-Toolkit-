@@ -13,7 +13,7 @@ import threading
 import time
 
 from flask import (
-    Flask, request, jsonify, Response, render_template_string, send_file,
+    Flask, request, jsonify, Response, render_template, send_file,
 )
 
 from engine import load_templates, Scanner
@@ -30,25 +30,13 @@ app = Flask(__name__)
 # Active scan state (single-threaded access for the /status endpoint)
 _active_scan = {"running": False, "target": None, "started": 0.0, "progress": (0, 0)}
 
-INDEX_HTML = None  # loaded lazily from templates_web/index.html
-
-
-def _load_index():
-    global INDEX_HTML
-    if INDEX_HTML is None:
-        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates_web", "index.html")
-        with open(p, "r", encoding="utf-8") as fh:
-            INDEX_HTML = fh.read()
-    return INDEX_HTML
-
-
 # ---------------------------------------------------------------------------
 # Web UI
 # ---------------------------------------------------------------------------
 
 @app.route("/")
 def index():
-    return render_template_string(_load_index())
+    return render_template("index.html")
 
 
 # ---------------------------------------------------------------------------
