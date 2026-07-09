@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed docker-compose.yml
+# id: exposed-docker-compose | severity: MEDIUM | category: sensitive-files
+id: exposed-docker-compose
+name: Exposed docker-compose.yml
+description: Detects exposed Docker Compose files.
+author: SecureNET
+severity: MEDIUM
+category: sensitive-files
+tags:
+- docker
+- compose
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /docker-compose.yml
+  - /docker-compose.yaml
+  - /compose.yml
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Keep compose files out of web roots. Use secrets management instead of inline credentials.

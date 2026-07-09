@@ -1,0 +1,41 @@
+# VulnProbe template — Exposed Backup Files
+# id: exposed-backup-files | severity: MEDIUM | category: sensitive-files
+id: exposed-backup-files
+name: Exposed Backup Files
+description: Detects exposed backup/source copies (.bak/.old/.sql).
+author: SecureNET
+severity: MEDIUM
+category: sensitive-files
+tags:
+- backup
+- source
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /index.php.bak
+  - /index.bak
+  - /config.old
+  - /app.bak
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Block access to backup/source extensions via web server config. Store backups off-server.

@@ -1,0 +1,41 @@
+# VulnProbe template — Exposed Database Dump
+# id: exposed-database-dump | severity: HIGH | category: sensitive-files
+id: exposed-database-dump
+name: Exposed Database Dump
+description: Detects exposed database dump files (.sql/.db).
+author: SecureNET
+severity: HIGH
+category: sensitive-files
+tags:
+- database
+- dump
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /db.sql
+  - /backup.sql
+  - /data.db
+  - /dump.sql
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Never serve DB dumps. Store encrypted offsite. Rotate credentials if exposed.

@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed .env File
+# id: exposed-env-file | severity: CRITICAL | category: sensitive-files
+id: exposed-env-file
+name: Exposed .env File
+description: Detects exposed environment/config .env files.
+author: SecureNET
+severity: CRITICAL
+category: sensitive-files
+tags:
+- env
+- secrets
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /.env
+  - /.env.example
+  - /config/.env
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Never commit .env to VCS. Block web access to dotfiles. Rotate any leaked secrets.

@@ -1,0 +1,42 @@
+# VulnProbe template — Exposed Private Key
+# id: exposed-private-key | severity: CRITICAL | category: sensitive-files
+id: exposed-private-key
+name: Exposed Private Key
+description: Detects exposed private key files (id_rsa/.pem).
+author: SecureNET
+severity: CRITICAL
+category: sensitive-files
+tags:
+- privatekey
+- ssh
+- tls
+- exposure
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /id_rsa
+  - /.ssh/id_rsa
+  - /key.pem
+  - /private.pem
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Revoke and regenerate the key pair. Never place private keys in web roots.

@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed wp-config.php
+# id: exposed-wp-config | severity: HIGH | category: sensitive-files
+id: exposed-wp-config
+name: Exposed wp-config.php
+description: Detects exposed WordPress configuration files.
+author: SecureNET
+severity: HIGH
+category: sensitive-files
+tags:
+- wordpress
+- config
+- secrets
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /wp-config.php
+  - /wp-config.php.bak
+  - /wp-config.old
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: false
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: size
+      comparison: lt
+      size: 1048576
+  extractors:
+  - type: regex
+    name: snippet
+    part: body
+    pattern: (password|secret|key|token|DB_|aws_|private)
+    group: 0
+remediation: Move sensitive defines out of web root. Set strict file perms. Rotate DB credentials.
