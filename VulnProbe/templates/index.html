@@ -3,277 +3,386 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VulnProbe — SecureNET</title>
+<title>VulnProbe — Template-Based HTTP Vulnerability Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0d1117; --card:#161b22; --accent:#06b6d4; --text:#e6edf3; --muted:#8b949e; --border:#21262d; }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
-  header { padding:20px 24px; background:var(--card); border-bottom:1px solid var(--border); }
-  header h1 { margin:0; color:var(--accent); font-size:20px; }
-  header p { margin:4px 0 0; color:var(--muted); font-size:13px; }
-  .tabs { display:flex; gap:2px; padding:0 18px; background:var(--card); border-bottom:1px solid var(--border); }
-  .tab { padding:11px 16px; cursor:pointer; color:var(--muted); font-size:13px; border-bottom:2px solid transparent; }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
-  .view { display:none; max-width:1080px; margin:0 auto; padding:24px; }
-  .view.active { display:block; }
-  label { display:block; font-size:12px; color:var(--muted); margin:14px 0 5px; }
-  input, select, textarea { width:100%; padding:11px; background:var(--bg); border:1px solid #30363d; color:var(--text); border-radius:8px; font-size:13px; font-family:inherit; }
-  .row { display:flex; gap:14px; flex-wrap:wrap; }
-  .row > div { flex:1; min-width:170px; }
-  button { margin-top:14px; padding:10px 18px; background:var(--accent); color:#06222a; border:0; border-radius:8px; font-weight:600; cursor:pointer; font-size:13px; }
-  button.ghost { background:transparent; border:1px solid #30363d; color:var(--text); }
-  button:disabled { opacity:.5; cursor:not-allowed; }
-  .panel { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px; }
-  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:14px; }
-  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--border); }
-  th { color:var(--muted); font-weight:600; font-size:11px; text-transform:uppercase; }
-  .pill { padding:2px 9px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; }
-  .sev-critical { background:rgba(239,68,68,.16); color:#ff6b6b; }
-  .sev-high { background:rgba(249,115,22,.16); color:#ffa657; }
-  .sev-medium { background:rgba(234,179,8,.16); color:#e3b341; }
-  .sev-low { background:rgba(56,189,248,.16); color:#58a6ff; }
-  .sev-info { background:rgba(139,148,158,.16); color:var(--muted); }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; margin-top:14px; }
-  .small { font-size:12px; color:var(--muted); }
-  .drawer { position:fixed; right:0; top:0; height:100%; width:460px; background:var(--card); border-left:1px solid var(--border); transform:translateX(100%); transition:.25s; overflow-y:auto; padding:22px; z-index:20; }
-  .drawer.open { transform:translateX(0); }
-  .drawer h3 { margin-top:0; color:var(--accent); }
-  .drawer pre { background:var(--bg); padding:12px; border-radius:6px; overflow:auto; font-size:12px; border:1px solid var(--border); }
-  .closex { float:right; cursor:pointer; color:var(--muted); }
-  .status { font-size:12px; color:var(--muted); margin-top:10px; }
-  .progress { height:6px; background:var(--bg); border-radius:5px; overflow:hidden; margin-top:8px; border:1px solid var(--border); }
-  .progress > div { height:100%; background:var(--accent); width:0; transition:.2s; }
-  .res { margin-top:22px; }
-  details summary { cursor:pointer; color:var(--accent); font-size:13px; }
-  hr { border:0; border-top:1px solid var(--border); margin:14px 0; }
-  .rowitem { padding:10px 14px; margin:6px 0; background:var(--bg); border-radius:6px; border-left:4px solid var(--accent); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060a10; --surface: #0c1220; --surface-raised: #111827;
+    --border: #1a2538; --border-light: #243044;
+    --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+    --accent: #0ea5e9; --accent-dim: rgba(14,165,233,0.1);
+    --safe: #22c55e; --safe-dim: rgba(34,197,94,0.1);
+    --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
+    --crit: #ef4444; --crit-dim: rgba(239,68,68,0.1);
+    --high: #f97316; --high-dim: rgba(249,115,22,0.1);
+    --radius: 12px; --radius-sm: 8px;
+    --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+  .nav-logo span:first-child { color: var(--accent); font-family: var(--mono); }
+  .nav-back { font-size: 13px; color: var(--muted); }
+  .nav-back:hover { color: var(--text); }
+  .hero { padding: 40px 0 24px; text-align: center; }
+  .hero h1 { font-size: clamp(24px, 3vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 600px; margin: 0 auto 24px; }
+  .disclaimer-box { background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 14px 20px; max-width: 640px; margin: 0 auto 24px; font-size: 13px; color: var(--crit); text-align: left; }
+  .disclaimer-box strong { display: block; margin-bottom: 4px; }
+  .input-row { display: flex; gap: 12px; max-width: 720px; margin: 0 auto 16px; flex-wrap: wrap; }
+  .input-row input[type="text"], .input-row input[type="number"], .input-row select {
+    flex: 1; min-width: 150px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--mono); outline: none; transition: border-color 200ms;
+  }
+  .input-row input:focus, .input-row select:focus { border-color: var(--accent); }
+  .input-row input::placeholder { color: var(--dim); }
+  .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 720px; margin: 0 auto 16px; }
+  .filter-grid label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .btn { padding: 14px 28px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 200ms; white-space: nowrap; font-family: var(--font); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #0284c7; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary { background: var(--surface-raised); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--border); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+  .stat-card .value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+  .stat-card .value.crit { color: var(--crit); }
+  .stat-card .value.high { color: var(--high); }
+  .stat-card .value.total { color: var(--accent); }
+  .progress-wrap { display: none; max-width: 720px; margin: 0 auto 24px; }
+  .progress-wrap.visible { display: block; }
+  .progress-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 300ms ease; width: 0%; }
+  .progress-text { font-size: 13px; color: var(--muted); font-family: var(--mono); text-align: center; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 200ms; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:hover { color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .panel h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 8px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--surface-raised); position: sticky; top: 0; }
+  td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .sev-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .sev-CRITICAL { background: var(--crit-dim); color: var(--crit); }
+  .sev-HIGH { background: var(--high-dim); color: var(--high); }
+  .sev-MEDIUM { background: var(--warn-dim); color: var(--warn); }
+  .sev-LOW { background: var(--safe-dim); color: var(--safe); }
+  .sev-INFO { background: var(--border); color: var(--muted); }
+  .row-item { padding: 10px 14px; margin: 6px 0; background: var(--surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); font-family: var(--mono); font-size: 13px; }
+  .drawer { position: fixed; right: 0; top: 0; height: 100%; width: 460px; max-width: 92vw; background: var(--surface-raised); border-left: 1px solid var(--border); transform: translateX(100%); transition: .25s; overflow-y: auto; padding: 22px; z-index: 20; }
+  .drawer.open { transform: translateX(0); }
+  .drawer h3 { margin-top: 0; color: var(--accent); }
+  .drawer pre { background: var(--bg); padding: 12px; border-radius: 6px; overflow: auto; font-family: var(--mono); font-size: 12px; border: 1px solid var(--border); margin: 10px 0; }
+  .closex { float: right; cursor: pointer; color: var(--muted); font-size: 18px; }
+  .closex:hover { color: var(--text); }
+  .error-box { display: none; background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; color: var(--crit); }
+  .error-box.visible { display: block; }
+  .disclaimer-footer { text-align: center; font-size: 12px; color: var(--dim); padding: 32px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+  .small { font-size: 12px; color: var(--muted); }
+  textarea { width: 100%; min-height: 90px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: var(--mono); outline: none; resize: vertical; }
+  textarea:focus { border-color: var(--accent); }
+  details summary { cursor: pointer; color: var(--accent); font-size: 13px; margin-top: 10px; }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
+  .results-wrap { display: none; }
+  .results-wrap.visible { display: block; }
+  .live-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; font-family: var(--mono); font-size: 12px; max-height: 220px; overflow-y: auto; }
+  @media (max-width: 768px) {
+    .input-row { flex-direction: column; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .tabs { flex-wrap: wrap; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>VulnProbe</h1>
-  <p>Template-Based HTTP Vulnerability Scanner · Nuclei-style · read-only</p>
-</header>
-
-<div class="tabs">
-  <div class="tab active" data-tab="scan">Scan</div>
-  <div class="tab" data-tab="findings">Findings</div>
-  <div class="tab" data-tab="library">Template Library</div>
-  <div class="tab" data-tab="history">Scan History</div>
-  <div class="tab" data-tab="report">Report</div>
-</div>
-
-<!-- SCAN -->
-<div class="view active" id="scan">
-  <div class="panel">
-    <label>Target URL, @file-of-URLs, or domain</label>
-    <input id="target" placeholder="https://example.com">
-    <div class="row">
-      <div><label>Severity filter (comma)</label><input id="sev" placeholder="critical,high,medium,low,info"></div>
-      <div><label>Category</label><input id="cat" placeholder="exposed-panels"></div>
-      <div><label>Tags (comma)</label><input id="tags" placeholder="admin,exposure"></div>
-    </div>
-    <div class="row">
-      <div><label>Rate limit (req/min/host)</label><input id="rate" type="number" value="150"></div>
-      <div><label>Threads</label><input id="threads" type="number" value="25"></div>
-      <div><label>Timeout (s)</label><input id="timeout" type="number" value="10"></div>
-    </div>
-    <div>
-      <button id="startBtn">Start Scan</button>
-      <button class="ghost" id="cancelBtn" disabled>Cancel</button>
-      <span class="status" id="scanStatus">Idle.</span>
-    </div>
-    <div class="progress"><div id="prog"></div></div>
-    <div class="status" id="liveFindings"></div>
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="nav-logo"><span>&gt;_</span> VulnProbe</div>
+    <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-back">SecureNET Toolkit</a>
   </div>
-</div>
+</nav>
 
-<!-- FINDINGS -->
-<div class="view" id="findings">
-  <div class="panel">
-    <div class="row">
-      <div><label>Filter severity</label>
-        <select id="fSev"><option value="">All</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></div>
-      <div><label>Filter category</label><input id="fCat" placeholder="exposed-panels"></div>
-      <div><label>Group by</label>
-        <select id="fGroup"><option value="">None</option><option value="severity">Severity</option><option value="template_id">Template</option><option value="url">URL</option></select></div>
-    </div>
-    <div><button id="loadFindings">Load Findings</button></div>
-    <div class="res">
-      <table id="findingsTable"><thead><tr><th>Severity</th><th>Template</th><th>URL</th><th>Path</th><th>HTTP</th><th>Matched</th></tr></thead><tbody></tbody></table>
+<div class="container">
+  <div class="hero">
+    <h1>Template-Based HTTP Vulnerability Scanner</h1>
+    <p>Scan any web target with 60+ YAML probe templates detecting exposed panels, sensitive files, version leaks, and CVEs. Read-only by design.</p>
+    <div class="disclaimer-box">
+      <strong>⚠ Authorized Use Only</strong>
+      VulnProbe is for authorized security testing only. Scanning targets without explicit permission is illegal. Every request is read-only (GET).
     </div>
   </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" onclick="showTab('scan')">Scan</div>
+    <div class="tab" onclick="showTab('findings')">Findings</div>
+    <div class="tab" onclick="showTab('library')">Template Library</div>
+    <div class="tab" onclick="showTab('history')">Scan History</div>
+    <div class="tab" onclick="showTab('report')">Report</div>
+  </div>
+
+  <!-- SCAN -->
+  <div class="tab-content active" id="tab-scan">
+    <div class="panel">
+      <h2>New Scan</h2>
+      <div class="input-row">
+        <input type="text" id="target" placeholder="https://example.com  (or @file, or domain)">
+      </div>
+      <div class="filter-grid">
+        <div><label>Severity</label><input type="text" id="sev" placeholder="critical,high,medium"></div>
+        <div><label>Category</label><input type="text" id="cat" placeholder="exposed-panels"></div>
+        <div><label>Tags</label><input type="text" id="tags" placeholder="admin,exposure"></div>
+        <div><label>Rate /min</label><input type="number" id="rate" value="150"></div>
+        <div><label>Threads</label><input type="number" id="threads" value="25"></div>
+        <div><label>Timeout (s)</label><input type="number" id="timeout" value="10"></div>
+      </div>
+      <div class="input-row">
+        <button class="btn btn-primary" id="startBtn" onclick="startScan()">Start Scan</button>
+        <button class="btn btn-secondary" id="cancelBtn" onclick="cancelScan()" disabled>Cancel</button>
+        <span class="small" id="scanStatus" style="align-self:center;">Idle.</span>
+      </div>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Initializing...</div>
+      </div>
+      <div class="live-box" id="liveFindings" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- FINDINGS -->
+  <div class="tab-content" id="tab-findings">
+    <div class="panel">
+      <h2>Findings</h2>
+      <div class="filter-grid">
+        <div><label>Severity</label>
+          <select id="fSev"><option value="">All</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></div>
+        <div><label>Category</label><input type="text" id="fCat" placeholder="exposed-panels"></div>
+        <div><label>Group By</label>
+          <select id="fGroup"><option value="">None</option><option value="severity">Severity</option><option value="template_id">Template</option><option value="url">URL</option></select></div>
+      </div>
+      <button class="btn btn-primary" onclick="loadFindings()">Load Findings</button>
+      <div class="results-wrap" id="findingsWrap" style="margin-top:16px;">
+        <table><thead><tr><th>Severity</th><th>Template</th><th>URL</th><th>Path</th><th>HTTP</th><th>Matched</th></tr></thead><tbody id="findingsBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEMPLATE LIBRARY -->
+  <div class="tab-content" id="tab-library">
+    <div class="panel">
+      <h2>Template Library</h2>
+      <div class="filter-grid">
+        <div><label>Category</label><input type="text" id="lCat" placeholder="cve"></div>
+        <div><label>Severity</label><input type="text" id="lSev" placeholder="high"></div>
+        <div><label>Tags</label><input type="text" id="lTags" placeholder="exposure"></div>
+      </div>
+      <div class="input-row">
+        <button class="btn btn-primary" onclick="loadLib()">Load Library</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('uploadFile').click()">Upload Template</button>
+        <input type="file" id="uploadFile" accept=".yaml,.yml" style="display:none">
+      </div>
+      <div style="margin-top:16px;">
+        <label class="small">Validate YAML</label>
+        <textarea id="validateYaml" placeholder="Paste a template YAML here..."></textarea>
+        <div class="input-row" style="margin-top:10px;">
+          <button class="btn btn-secondary" onclick="validateYaml()">Validate</button>
+          <span id="validateOut" class="small"></span>
+        </div>
+      </div>
+      <div class="results-wrap" id="libWrap" style="margin-top:16px;">
+        <table><thead><tr><th>ID</th><th>Severity</th><th>Category</th><th>Tags</th></tr></thead><tbody id="libBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="tab-content" id="tab-history">
+    <div class="panel">
+      <h2>Scan History</h2>
+      <button class="btn btn-primary" onclick="loadHistory()">Load History</button>
+      <div class="results-wrap" id="histWrap" style="margin-top:16px;">
+        <table><thead><tr><th>ID</th><th>Target</th><th>Findings</th><th>Duration</th><th>When</th><th></th></tr></thead><tbody id="histBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="tab-content" id="tab-report">
+    <div class="panel">
+      <h2>Export Report</h2>
+      <div class="input-row">
+        <input type="text" id="repScanId" placeholder="Scan ID (leave blank for latest)">
+      </div>
+      <div class="input-row">
+        <button class="btn btn-secondary" onclick="dl('json')">Export JSON</button>
+        <button class="btn btn-secondary" onclick="dl('csv')">Export CSV</button>
+        <button class="btn btn-secondary" onclick="dl('pdf')">Export PDF</button>
+      </div>
+      <hr>
+      <p class="small">PDF includes an executive summary and every finding with remediation. JSON/CSV contain the raw finding set.</p>
+    </div>
+  </div>
+
   <div class="drawer" id="drawer"><span class="closex" onclick="closeDrawer()">✕</span><div id="drawerBody"></div></div>
-</div>
-
-<!-- TEMPLATE LIBRARY -->
-<div class="view" id="library">
-  <div class="panel">
-    <div class="row">
-      <div><label>Category</label><input id="lCat" placeholder="cve"></div>
-      <div><label>Severity</label><input id="lSev" placeholder="high"></div>
-      <div><label>Tags</label><input id="lTags" placeholder="exposure"></div>
-    </div>
-    <div>
-      <button id="loadLib">Load Library</button>
-      <button class="ghost" id="uploadBtn">Upload Template</button>
-      <input type="file" id="uploadFile" accept=".yaml,.yml" style="display:none">
-    </div>
-    <div class="res">
-      <label>Validate YAML</label>
-      <textarea id="validateYaml" rows="4" placeholder="Paste a template YAML here..."></textarea>
-      <button class="ghost" id="validateBtn">Validate</button>
-      <span id="validateOut" class="small"></span>
-    </div>
-    <div class="res">
-      <table id="libTable"><thead><tr><th>ID</th><th>Severity</th><th>Category</th><th>Tags</th></tr></thead><tbody></tbody></table>
-    </div>
-  </div>
-  <div class="drawer" id="libDrawer"><span class="closex" onclick="closeLib()">✕</span><div id="libBody"></div></div>
-</div>
-
-<!-- SCAN HISTORY -->
-<div class="view" id="history">
-  <div class="panel">
-    <button id="loadHistory">Load History</button>
-    <div class="res">
-      <table id="histTable"><thead><tr><th>ID</th><th>Target</th><th>Findings</th><th>Duration</th><th>When</th><th></th></tr></thead><tbody></tbody></table>
-    </div>
-  </div>
-</div>
-
-<!-- REPORT -->
-<div class="view" id="report">
-  <div class="panel">
-    <label>Export Scan (optional: specific scan id)</label>
-    <input id="repScanId" placeholder="leave blank for latest">
-    <div>
-      <button class="ghost" id="expJson">Export JSON</button>
-      <button class="ghost" id="expCsv">Export CSV</button>
-      <button class="ghost" id="expPdf">Export PDF</button>
-    </div>
-    <hr>
-    <div class="small">PDF includes an executive summary and every finding with remediation. JSON/CSV contain the raw finding set.</div>
-  </div>
+  <div class="disclaimer-footer">VulnProbe v1.0 — Read-only HTTP vulnerability scanner. No destructive payloads are ever sent.</div>
 </div>
 
 <script>
 const API = "";
-function tabClick(e){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector(`[data-tab="${e}"]`).classList.add('active');document.getElementById(e).classList.add('active');}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>tabClick(t.dataset.tab));
-function sevPill(s){return `<span class="pill sev-${s}">${s.toUpperCase()}</span>`;}
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.tab[onclick="showTab(\'' + name + '\')"]').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+function sevBadge(s){ return '<span class="sev-badge sev-' + s.toUpperCase() + '">' + s.toUpperCase() + '</span>'; }
 const fmtDate = ts => new Date(ts*1000).toLocaleString();
 
 // SCAN
-let scanTimer=null;
-document.getElementById('startBtn').onclick=async()=>{
-  const body={target:document.getElementById('target').value.trim()};
-  if(!body.target){alert('Enter a target');return;}
-  body.severity=document.getElementById('sev').value;
-  body.category=document.getElementById('cat').value;
-  body.tags=document.getElementById('tags').value;
-  body.rate_limit=+document.getElementById('rate').value;
-  body.workers=+document.getElementById('threads').value;
-  body.timeout=+document.getElementById('timeout').value;
-  document.getElementById('startBtn').disabled=true;
-  document.getElementById('cancelBtn').disabled=false;
-  document.getElementById('scanStatus').textContent='Starting...';
-  const r=await fetch(API+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const j=await r.json();
-  if(j.error){document.getElementById('scanStatus').textContent='Error: '+j.error;document.getElementById('startBtn').disabled=false;return;}
-  pollScan();
-};
-function pollScan(){
-  scanTimer=setInterval(async()=>{
-    const st=await fetch(API+'/status').then(r=>r.json());
-    document.getElementById('scanStatus').textContent= st.active_scan ? 'Scanning…' : 'Finished.';
-    if(!st.active_scan){clearInterval(scanTimer);document.getElementById('startBtn').disabled=false;document.getElementById('cancelBtn').disabled=true;}
-  },1500);
+let scanTimer = null;
+async function startScan() {
+  const target = document.getElementById('target').value.trim();
+  if (!target) { showError('Enter a target URL, @file, or domain.'); return; }
+  const body = {
+    target,
+    severity: document.getElementById('sev').value,
+    category: document.getElementById('cat').value,
+    tags: document.getElementById('tags').value,
+    rate_limit: +document.getElementById('rate').value,
+    workers: +document.getElementById('threads').value,
+    timeout: +document.getElementById('timeout').value,
+  };
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('cancelBtn').disabled = false;
+  document.getElementById('scanStatus').textContent = 'Starting...';
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('liveFindings').style.display = 'block';
+  document.getElementById('liveFindings').innerHTML = '';
+  try {
+    const r = await fetch(API + '/api/scan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const j = await r.json();
+    if (j.error) { showError(j.error); return; }
+    pollScan();
+  } catch(e) { showError('Request failed: ' + e.message); }
 }
-document.getElementById('cancelBtn').onclick=()=>{clearInterval(scanTimer);document.getElementById('scanStatus').textContent='Cancelled.';document.getElementById('startBtn').disabled=false;document.getElementById('cancelBtn').disabled=true;};
+function cancelScan() { if (scanTimer) clearInterval(scanTimer); document.getElementById('scanStatus').textContent = 'Cancelled.'; resetScanBtns(); }
+function pollScan() {
+  scanTimer = setInterval(async () => {
+    const st = await fetch(API + '/status').then(r => r.json());
+    document.getElementById('scanStatus').textContent = st.active_scan ? 'Scanning…' : 'Finished.';
+    if (!st.active_scan) { clearInterval(scanTimer); resetScanBtns();
+      document.getElementById('progressFill').style.width = '100%'; }
+  }, 1500);
+}
+function resetScanBtns() { document.getElementById('startBtn').disabled = false; document.getElementById('cancelBtn').disabled = true; }
 
 // FINDINGS
-document.getElementById('loadFindings').onclick=async()=>{
-  const p=new URLSearchParams();
-  const s=document.getElementById('fSev').value; const c=document.getElementById('fCat').value; const g=document.getElementById('fGroup').value;
-  if(s)p.set('severity',s); if(c)p.set('category',c);
-  const j=await fetch(API+'/api/findings?'+p).then(r=>r.json());
-  let rows=j.findings;
-  if(g){rows=[...rows].sort((a,b)=>String(a[g]).localeCompare(String(b[g])));}
-  const tb=document.querySelector('#findingsTable tbody'); tb.innerHTML='';
-  j.findings.forEach(f=>{
-    const tr=document.createElement('tr'); tr.style.cursor='pointer';
-    tr.innerHTML=`<td>${sevPill(f.severity)}</td><td>${f.template_id}</td><td>${f.url}</td><td>${f.matched_path}</td><td>${f.status_code||''}</td><td>${f.matched_condition}</td>`;
-    tr.onclick=()=>openDrawer(f); tb.appendChild(tr);
+async function loadFindings() {
+  const p = new URLSearchParams();
+  const s = document.getElementById('fSev').value, c = document.getElementById('fCat').value, g = document.getElementById('fGroup').value;
+  if (s) p.set('severity', s); if (c) p.set('category', c);
+  const j = await fetch(API + '/api/findings?' + p).then(r => r.json());
+  let rows = j.findings;
+  if (g) rows = [...rows].sort((a,b) => String(a[g]).localeCompare(String(b[g])));
+  const tb = document.getElementById('findingsBody'); tb.innerHTML = '';
+  j.findings.forEach(f => {
+    const tr = document.createElement('tr'); tr.style.cursor = 'pointer';
+    tr.innerHTML = `<td>${sevBadge(f.severity)}</td><td>${f.template_id}</td><td>${f.url}</td><td>${f.matched_path}</td><td>${f.status_code||''}</td><td>${f.matched_condition}</td>`;
+    tr.onclick = () => openDrawer(f); tb.appendChild(tr);
   });
-};
-function openDrawer(f){
-  const ex=JSON.parse(f.extracted_values||'{}');
-  document.getElementById('drawerBody').innerHTML=`
-    <h3>${f.name}</h3>${sevPill(f.severity)} <span class="small">${f.category}</span><hr>
-    <b>URL:</b> ${f.url}${f.matched_path}<br>
-    <b>Template:</b> ${f.template_id}<br>
-    <b>Matched on:</b> ${f.matched_condition}<br>
-    <b>HTTP:</b> ${f.status_code} · <b>Size:</b> ${f.response_size}B · <b>Time:</b> ${f.response_ms}ms · <b>Method:</b> ${f.method}<br><br>
-    <b>Extracted:</b><pre>${JSON.stringify(ex,null,2)}</pre>
-    <b>Remediation:</b><p class="small">${f.remediation||'—'}</p>`;
+  document.getElementById('findingsWrap').classList.add('visible');
+}
+function openDrawer(f) {
+  const ex = JSON.parse(f.extracted_values || '{}');
+  document.getElementById('drawerBody').innerHTML =
+    `<h3>${f.name}</h3>${sevBadge(f.severity)} <span class="small">${f.category}</span><hr>
+     <b>URL:</b> ${f.url}${f.matched_path}<br>
+     <b>Template:</b> ${f.template_id}<br>
+     <b>Matched on:</b> ${f.matched_condition}<br>
+     <b>HTTP:</b> ${f.status_code} · <b>Size:</b> ${f.response_size}B · <b>Time:</b> ${f.response_ms}ms · <b>Method:</b> ${f.method}<br>
+     <b>Extracted:</b><pre>${JSON.stringify(ex, null, 2)}</pre>
+     <b>Remediation:</b><p class="small">${f.remediation||'—'}</p>`;
   document.getElementById('drawer').classList.add('open');
 }
-function closeDrawer(){document.getElementById('drawer').classList.remove('open');}
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); }
 
 // LIBRARY
-document.getElementById('loadLib').onclick=async()=>{
-  const p=new URLSearchParams();
-  if(document.getElementById('lCat').value)p.set('category',document.getElementById('lCat').value);
-  if(document.getElementById('lSev').value)p.set('severity',document.getElementById('lSev').value);
-  if(document.getElementById('lTags').value)p.set('tags',document.getElementById('lTags').value);
-  const j=await fetch(API+'/api/templates?'+p).then(r=>r.json());
-  const tb=document.querySelector('#libTable tbody'); tb.innerHTML='';
-  j.templates.forEach(t=>{
-    const tr=document.createElement('tr'); tr.style.cursor='pointer';
-    tr.innerHTML=`<td>${t.id}</td><td>${sevPill(t.severity)}</td><td>${t.category}</td><td>${(t.tags||[]).join(', ')}</td>`;
-    tr.onclick=()=>openLib(t.id); tb.appendChild(tr);
+async function loadLib() {
+  const p = new URLSearchParams();
+  if (document.getElementById('lCat').value) p.set('category', document.getElementById('lCat').value);
+  if (document.getElementById('lSev').value) p.set('severity', document.getElementById('lSev').value);
+  if (document.getElementById('lTags').value) p.set('tags', document.getElementById('lTags').value);
+  const j = await fetch(API + '/api/templates?' + p).then(r => r.json());
+  const tb = document.getElementById('libBody'); tb.innerHTML = '';
+  j.templates.forEach(t => {
+    const tr = document.createElement('tr'); tr.style.cursor = 'pointer';
+    tr.innerHTML = `<td>${t.id}</td><td>${sevBadge(t.severity)}</td><td>${t.category}</td><td>${(t.tags||[]).join(', ')}</td>`;
+    tr.onclick = () => openLib(t.id); tb.appendChild(tr);
   });
-};
-async function openLib(id){
-  const txt=await fetch(API+'/api/templates/'+id+'/yaml').then(r=>r.text());
-  document.getElementById('libBody').innerHTML='<h3>'+id+'</h3><pre>'+txt.replace(/</g,'&lt;')+'</pre>';
-  document.getElementById('libDrawer').classList.add('open');
+  document.getElementById('libWrap').classList.add('visible');
 }
-function closeLib(){document.getElementById('libDrawer').classList.remove('open');}
-document.getElementById('uploadBtn').onclick=()=>document.getElementById('uploadFile').click();
-document.getElementById('uploadFile').onchange=async(e)=>{
-  const fd=new FormData(); fd.append('file',e.target.files[0]);
-  const j=await fetch(API+'/api/templates/upload',{method:'POST',body:fd}).then(r=>r.json());
-  alert(j.valid? 'Uploaded: '+j.saved : 'Invalid: '+(j.error||j.errors));
+async function openLib(id) {
+  const txt = await fetch(API + '/api/templates/' + id + '/yaml').then(r => r.text());
+  document.getElementById('drawerBody').innerHTML = '<h3>' + id + '</h3><pre>' + txt.replace(/</g,'&lt;') + '</pre>';
+  document.getElementById('drawer').classList.add('open');
+}
+document.getElementById('uploadFile').onchange = async (e) => {
+  const fd = new FormData(); fd.append('file', e.target.files[0]);
+  const j = await fetch(API + '/api/templates/upload', { method:'POST', body: fd }).then(r => r.json());
+  alert(j.valid ? 'Uploaded: ' + j.saved : 'Invalid: ' + (j.error || j.errors));
 };
-document.getElementById('validateBtn').onclick=async()=>{
-  const yaml=document.getElementById('validateYaml').value;
-  const j=await fetch(API+'/api/templates/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({yaml})}).then(r=>r.json());
-  document.getElementById('validateOut').textContent= j.valid ? 'VALID ('+j.id+')' : 'INVALID: '+(j.errors||[]).join(' | ');
-  document.getElementById('validateOut').style.color= j.valid? 'var(--accent)':'#ff6b6b';
-};
+async function validateYaml() {
+  const yaml = document.getElementById('validateYaml').value;
+  const j = await fetch(API + '/api/templates/validate', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ yaml }) }).then(r => r.json());
+  const out = document.getElementById('validateOut');
+  out.textContent = j.valid ? 'VALID (' + j.id + ')' : 'INVALID: ' + (j.errors||[]).join(' | ');
+  out.style.color = j.valid ? 'var(--safe)' : 'var(--crit)';
+}
 
 // HISTORY
-document.getElementById('loadHistory').onclick=async()=>{
-  const j=await fetch(API+'/api/scans').then(r=>r.json());
-  const tb=document.querySelector('#histTable tbody'); tb.innerHTML='';
-  j.scans.forEach(s=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${s.id}</td><td>${s.target}</td><td>${s.findings_count}</td><td>${s.duration.toFixed(1)}s</td><td class="small">${fmtDate(s.timestamp)}</td><td><button class="ghost" onclick="rerun(${s.id})">Re-run</button></td>`;
+async function loadHistory() {
+  const j = await fetch(API + '/api/scans').then(r => r.json());
+  const tb = document.getElementById('histBody'); tb.innerHTML = '';
+  j.scans.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${s.id}</td><td>${s.target}</td><td>${s.findings_count}</td><td>${s.duration.toFixed(1)}s</td><td class="small">${fmtDate(s.timestamp)}</td><td><button class="btn btn-secondary" style="padding:6px 12px;" onclick="rerun(${s.id})">Re-run</button></td>`;
     tb.appendChild(tr);
   });
-};
-async function rerun(id){const s=await fetch(API+'/api/scans').then(r=>r.json());const rec=s.scans.find(x=>x.id===id);if(!rec)return;document.getElementById('target').value=rec.target;tabClick('scan');document.getElementById('startBtn').click();}
+  document.getElementById('histWrap').classList.add('visible');
+}
+async function rerun(id) {
+  const s = await fetch(API + '/api/scans').then(r => r.json());
+  const rec = s.scans.find(x => x.id === id); if (!rec) return;
+  document.getElementById('target').value = rec.target; showTab('scan'); startScan();
+}
 
 // REPORT
-function dl(url){window.open(API+url,'_blank');}
-document.getElementById('expJson').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=json'+(id?'&scan_id='+id:''));};
-document.getElementById('expCsv').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=csv'+(id?'&scan_id='+id:''));};
-document.getElementById('expPdf').onclick=()=>{const id=document.getElementById('repScanId').value;dl('/api/report?format=pdf'+(id?'&scan_id='+id:''));};
+function dl(fmt) {
+  const id = document.getElementById('repScanId').value;
+  window.open(API + '/api/report?format=' + fmt + (id ? '&scan_id=' + id : ''), '_blank');
+}
 
-// init
-document.getElementById('loadLib').click();
+function showError(msg) {
+  resetScanBtns();
+  document.getElementById('progressWrap').classList.remove('visible');
+  let el = document.getElementById('errorBox');
+  if (!el) { el = document.createElement('div'); el.id = 'errorBox'; el.className = 'error-box visible'; document.querySelector('.container').prepend(el); }
+  el.textContent = msg; el.classList.add('visible');
+}
 </script>
 </body>
 </html>
