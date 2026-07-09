@@ -1,0 +1,31 @@
+# VulnProbe template — HTTP TRACE Enabled
+# id: http-methods-trace-enabled | severity: LOW | category: misconfiguration
+id: http-methods-trace-enabled
+name: HTTP TRACE Enabled
+description: Detects enabled TRACE method.
+author: SecureNET
+severity: LOW
+category: misconfiguration
+tags:
+- trace
+- method
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: OPTIONS
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: header
+      header: Allow
+      values:
+      - TRACE
+      condition: OR
+remediation: Disable TRACE method server-side to mitigate cross-site tracing.

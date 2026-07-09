@@ -1,0 +1,34 @@
+# VulnProbe template — CORS Wildcard Origin
+# id: cors-wildcard-origin | severity: MEDIUM | category: misconfiguration
+id: cors-wildcard-origin
+name: CORS Wildcard Origin
+description: 'Access-Control-Allow-Origin: * with credentials.'
+author: SecureNET
+severity: MEDIUM
+category: misconfiguration
+tags:
+- cors
+- misconfig
+- header
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+    Origin: https://evil.example.com
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: header
+      header: Access-Control-Allow-Origin
+      values:
+      - '*'
+      - https://evil.example.com
+      condition: OR
+remediation: 'Restrict ACAO to known origins. Never combine ''*'' with ''Access-Control-Allow-Credentials:
+  true''.'

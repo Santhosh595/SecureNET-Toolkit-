@@ -1,0 +1,33 @@
+# VulnProbe template — HTTP PUT Enabled
+# id: http-put-method-enabled | severity: MEDIUM | category: misconfiguration
+id: http-put-method-enabled
+name: HTTP PUT Enabled
+description: Detects enabled PUT/DELETE methods (potential file upload).
+author: SecureNET
+severity: MEDIUM
+category: misconfiguration
+tags:
+- put
+- method
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: OPTIONS
+  path:
+  - /put-test-vulnprobe.txt
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: header
+      header: Allow
+      values:
+      - PUT
+      - PUT,
+      - DELETE
+      condition: OR
+remediation: Disable PUT/DELETE unless required. Restrict WebDAV to trusted principals.

@@ -1,0 +1,35 @@
+# VulnProbe template — Directory Listing Enabled
+# id: directory-listing-enabled | severity: LOW | category: misconfiguration
+id: directory-listing-enabled
+name: Directory Listing Enabled
+description: Detects enabled directory listing.
+author: SecureNET
+severity: LOW
+category: misconfiguration
+tags:
+- directory
+- listing
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  - /static/
+  - /images/
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: regex
+      part: body
+      pattern: (Index of|Directory listing|Parent Directory)
+      case_insensitive: true
+remediation: Disable directory indexing (Options -Indexes in Apache, autoindex off in nginx).

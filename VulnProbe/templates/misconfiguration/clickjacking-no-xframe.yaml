@@ -1,0 +1,45 @@
+# VulnProbe template — Missing X-Frame-Options
+# id: clickjacking-no-xframe | severity: LOW | category: misconfiguration
+id: clickjacking-no-xframe
+name: Missing X-Frame-Options
+description: Detects missing clickjacking protection headers.
+author: SecureNET
+severity: LOW
+category: misconfiguration
+tags:
+- clickjacking
+- xfo
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: AND
+    conditions:
+    - type: status
+      values:
+      - 200
+      - 301
+      - 302
+      - 403
+      - 404
+    - type: header
+      header: X-Frame-Options
+      values:
+      - ''
+      condition: AND
+      negate: true
+    - type: header
+      header: Content-Security-Policy
+      values:
+      - ''
+      condition: AND
+      negate: true
+remediation: 'Set X-Frame-Options: DENY (or CSP frame-ancestors) on all responses.'

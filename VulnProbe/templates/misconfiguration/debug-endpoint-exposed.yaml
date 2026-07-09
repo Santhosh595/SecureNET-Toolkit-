@@ -1,0 +1,40 @@
+# VulnProbe template — Exposed Debug Endpoint
+# id: debug-endpoint-exposed | severity: MEDIUM | category: misconfiguration
+id: debug-endpoint-exposed
+name: Exposed Debug Endpoint
+description: Detects exposed debug/actuator/test endpoints.
+author: SecureNET
+severity: MEDIUM
+category: misconfiguration
+tags:
+- debug
+- endpoint
+- misconfig
+references:
+- https://owasp.org/www-project-top-ten/
+requests:
+- method: GET
+  path:
+  - /actuator
+  - /debug
+  - /__debug__
+  - /.well-known/debug
+  headers:
+    User-Agent: Mozilla/5.0 (compatible; SecureNET/1.0)
+  follow_redirects: true
+  timeout: 10
+  matchers:
+    operator: OR
+    conditions:
+    - type: status
+      values:
+      - 200
+    - type: word
+      part: body
+      words:
+      - actuator
+      - debug
+      - env
+      - beans
+      condition: OR
+remediation: Disable debug endpoints in production. Require auth and internal network.
