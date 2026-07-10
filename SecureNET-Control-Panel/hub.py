@@ -27,6 +27,7 @@ from alert_aggregator import AlertAggregator
 from quick_scan import (quick_scan_headerscan, quick_scan_portmap, quick_scan_hashdetect,
                          quick_scan_tlscan, quick_scan_dnsaudit, quick_scan_subprobe,
                          quick_scan_jwtinspect, quick_scan_secretsniff, quick_scan_vulnprobe,
+                         quick_scan_pathprobe,
                          get_result)
 
 # Load config
@@ -352,6 +353,15 @@ def quickscan_vulnprobe():
     url = data.get("url", "")
     severity = data.get("severity", "HIGH,CRITICAL")
     job_id = quick_scan_vulnprobe(url, severity)
+    return jsonify({"job_id": job_id, "status": "pending"})
+
+
+@app.route("/api/quickscan/pathprobe", methods=["POST"])
+def quickscan_pathprobe():
+    data = request.get_json()
+    url = data.get("url", "")
+    wordlist = data.get("wordlist", "common")
+    job_id = quick_scan_pathprobe(url, wordlist)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 

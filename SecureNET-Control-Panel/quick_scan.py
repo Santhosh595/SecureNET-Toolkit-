@@ -147,6 +147,18 @@ def quick_scan_vulnprobe(url, severity="HIGH,CRITICAL"):
     return _start_job("vulnprobe", args)
 
 
+def quick_scan_pathprobe(url, wordlist="common"):
+    """Start a PathProbe content-discovery scan on a URL. Returns job_id.
+
+    Args:
+        url: target URL (or bare domain).
+        wordlist: built-in name (common/api/files/large) or path to a file.
+    """
+    wl = wordlist or "common"
+    args = [url, "--wordlist", wl, "--no-disclaimer"]
+    return _start_job("pathprobe", args)
+
+
 def get_result(job_id):
     """Get the status/results for a job.
 
