@@ -1,48 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PathProbe — SecureNET</title>
-  <style>
-    :root { --bg:#0d1117; --card:#161b22; --accent:#f97316; --text:#e6edf3; --muted:#8b949e; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
-    header { padding:24px; background:var(--card); border-bottom:1px solid #21262d; }
-    header h1 { margin:0; color:var(--accent); }
-    main { max-width:980px; margin:0 auto; padding:24px; }
-    .panel { background:var(--card); border:1px solid #21262d; border-radius:10px; padding:20px; }
-    input { width:100%; padding:12px; background:#0d1117; border:1px solid #30363d; color:var(--text); border-radius:8px; font-size:15px; }
-    button { margin-top:12px; padding:10px 18px; background:var(--accent); color:#2a1500; border:0; border-radius:8px; font-weight:600; cursor:pointer; }
-    .row { padding:8px 14px; margin:6px 0; background:#0d1117; border-radius:6px; border-left:4px solid var(--accent); }
-    .code { color:var(--muted); font-size:13px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PathProbe — Multi-Threaded Web Content Discovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060a10; --surface: #0c1220; --surface-raised: #111827;
+    --border: #1a2538; --border-light: #243044;
+    --text: #e2e8f0; --muted: #64748b; --dim: #475569;
+    --accent: #0ea5e9; --accent-dim: rgba(14,165,233,0.1);
+    --safe: #22c55e; --safe-dim: rgba(34,197,94,0.1);
+    --warn: #f59e0b; --warn-dim: rgba(245,158,11,0.1);
+    --crit: #ef4444; --crit-dim: rgba(239,68,68,0.1);
+    --high: #f97316; --high-dim: rgba(249,115,22,0.1);
+    --radius: 12px; --radius-sm: 8px;
+    --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+  .nav-logo span:first-child { color: var(--accent); font-family: var(--mono); }
+  .nav-back { font-size: 13px; color: var(--muted); }
+  .nav-back:hover { color: var(--text); }
+  .hero { padding: 40px 0 24px; text-align: center; }
+  .hero h1 { font-size: clamp(24px, 3vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 640px; margin: 0 auto 24px; }
+  .disclaimer-box { background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 14px 20px; max-width: 640px; margin: 0 auto 24px; font-size: 13px; color: var(--crit); text-align: left; }
+  .disclaimer-box strong { display: block; margin-bottom: 4px; }
+  .input-row { display: flex; gap: 12px; max-width: 760px; margin: 0 auto 16px; flex-wrap: wrap; }
+  .input-row input[type="text"], .input-row input[type="number"], .input-row select {
+    flex: 1; min-width: 140px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: var(--mono); outline: none; transition: border-color 200ms;
+  }
+  .input-row input:focus, .input-row select:focus { border-color: var(--accent); }
+  .input-row input::placeholder { color: var(--dim); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 760px; margin: 0 auto 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 760px; margin: 0 auto 16px; }
+  .field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .btn { padding: 14px 28px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 200ms; white-space: nowrap; font-family: var(--font); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #0284c7; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary { background: var(--surface-raised); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--border); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+  .stat-card .value { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+  .progress-wrap { display: none; max-width: 760px; margin: 16px auto; }
+  .progress-wrap.visible { display: block; }
+  .progress-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 300ms ease; width: 0%; }
+  .progress-text { font-size: 13px; color: var(--muted); font-family: var(--mono); text-align: center; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab { padding: 10px 18px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 200ms; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:hover { color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .panel h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 8px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--surface-raised); }
+  td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .sev-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: var(--mono); }
+  .s200,.s201,.s204 { background: var(--safe-dim); color: var(--safe); }
+  .s301,.s302,.s303,.s307,.s308 { background: var(--warn-dim); color: var(--warn); }
+  .s401,.s403 { background: var(--crit-dim); color: var(--crit); }
+  .s405 { background: var(--accent-dim); color: var(--accent); }
+  .s500,.s502,.s503 { background: var(--crit-dim); color: var(--crit); }
+  .interesting { color: var(--warn); font-weight: 700; }
+  .error-box { display: none; background: var(--crit-dim); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; color: var(--crit); }
+  .error-box.visible { display: block; }
+  .disclaimer-footer { text-align: center; font-size: 12px; color: var(--dim); padding: 32px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+  .live-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; font-family: var(--mono); font-size: 12px; max-height: 320px; overflow-y: auto; }
+  .live-row { padding: 3px 0; border-bottom: 1px solid var(--border); }
+  .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .filter-bar input { padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: var(--mono); outline: none; }
+  .filter-bar input:focus { border-color: var(--accent); }
+  .drawer { position: fixed; right: 0; top: 0; height: 100%; width: 460px; max-width: 92vw; background: var(--surface-raised); border-left: 1px solid var(--border); transform: translateX(100%); transition: .25s; overflow-y: auto; padding: 22px; z-index: 20; }
+  .drawer.open { transform: translateX(0); }
+  .drawer h3 { margin-top: 0; color: var(--accent); font-family: var(--mono); font-size: 15px; word-break: break-all; }
+  .drawer pre { background: var(--bg); padding: 12px; border-radius: 6px; overflow: auto; font-family: var(--mono); font-size: 11px; border: 1px solid var(--border); margin: 10px 0; max-height: 320px; }
+  .closex { float: right; cursor: pointer; color: var(--muted); font-size: 18px; }
+  .closex:hover { color: var(--text); }
+  .small { font-size: 12px; color: var(--muted); }
+  .toggle-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; max-width: 760px; margin: 0 auto 16px; }
+  .toggle-row label { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); cursor: pointer; }
+  .toggle-row input[type="checkbox"] { accent-color: var(--accent); }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .input-row { flex-direction: column; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .tabs { flex-wrap: wrap; }
+  }
+</style>
 </head>
 <body>
-  <header><h1>PathProbe</h1><p>Web content / path discovery (feroxbuster-style)</p></header>
-  <main>
-    <div class="panel">
-      <input id="target" placeholder="https://example.com" />
-      <button onclick="runScan()">Discover</button>
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="nav-logo"><span>&gt;_</span> PathProbe</div>
+    <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank" rel="noopener" class="nav-back">SecureNET Toolkit</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <h1>Multi-Threaded Web Content Discovery</h1>
+    <p>Brute-force hidden files, directories, admin panels, and API endpoints with wordlists. Smart wildcard detection eliminates false positives. Recursive scanning maps the full directory structure.</p>
+    <div class="disclaimer-box">
+      <strong>⚠ Authorized Use Only</strong>
+      PathProbe is for authorized security testing only. Scanning targets without explicit permission is illegal. Every request is a read-only GET.
     </div>
-    <div id="results" style="margin-top:20px;"></div>
-  </main>
-  <script>
-    async function runScan() {
-      const target = document.getElementById('target').value.trim();
-      const box = document.getElementById('results');
-      if (!target) { box.innerHTML = '<p style="color:#ff7a45">Enter a target URL.</p>'; return; }
-      box.innerHTML = '<p class="code">Scanning…</p>';
-      try {
-        const r = await fetch('/scan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ target }) });
-        const data = await r.json();
-        if (data.error) { box.innerHTML = '<p style="color:#ff7a45">'+data.error+'</p>'; return; }
-        if (!data.results.length) { box.innerHTML = '<p style="color:#36cfc9">Nothing interesting found.</p>'; return; }
-        box.innerHTML = data.results.map(r =>
-          `<div class="row"><strong>${r.path}</strong> <span class="code">— HTTP ${r.status} · ${r.size}B</span>${r.redirect? ' → '+r.redirect : ''}</div>`
-        ).join('');
-      } catch(e) { box.innerHTML = '<p style="color:#ff7a45">Scan failed: '+e+'</p>'; }
-    }
-  </script>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" onclick="showTab('config')">Scan Config</div>
+    <div class="tab" onclick="showTab('live')">Live Results</div>
+    <div class="tab" onclick="showTab('results')">Results</div>
+    <div class="tab" onclick="showTab('tree')">Directory Tree</div>
+    <div class="tab" onclick="showTab('history')">History</div>
+    <div class="tab" onclick="showTab('export')">Export</div>
+  </div>
+
+  <!-- SECTION 1: CONFIG -->
+  <div class="tab-content active" id="tab-config">
+    <div class="panel">
+      <h2>Scan Configuration</h2>
+      <div class="input-row">
+        <input type="text" id="target" placeholder="https://example.com">
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Wordlist</label>
+          <select id="wordlist"></select></div>
+        <div class="field"><label>Custom wordlist (file)</label>
+          <input type="text" id="customWl" placeholder="wordlists/custom.txt"></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Extensions</label><input type="text" id="ext" placeholder="php,bak,zip,old"></div>
+        <div class="field"><label>Threads (max 200)</label><input type="number" id="threads" value="50" min="1" max="200"></div>
+        <div class="field"><label>Rate limit (req/s)</label><input type="number" id="rate" placeholder="unlimited"></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Prefix</label><input type="text" id="prefix" placeholder="/api/v1"></div>
+        <div class="field"><label>Timeout (s)</label><input type="number" id="timeout" value="10"></div>
+        <div class="field"><label>Show status</label><input type="text" id="showStatus" placeholder="200,301,403"></div>
+      </div>
+      <div class="toggle-row">
+        <label><input type="checkbox" id="recursive"> Recursive scan</label>
+        <label>Depth <input type="number" id="depth" value="2" min="1" max="5" style="width:60px;margin-left:6px;"></label>
+        <label><input type="checkbox" id="respectRobots"> Respect robots.txt</label>
+        <label><input type="checkbox" id="noWild" style="margin-left:6px;"> Disable wildcard detection</label>
+      </div>
+      <div class="input-row">
+        <button class="btn btn-primary" id="startBtn" onclick="startScan()">Start Scan</button>
+        <button class="btn btn-secondary" id="stopBtn" onclick="stopScan()" disabled>Stop</button>
+        <span class="small" id="cfgMsg"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: LIVE -->
+  <div class="tab-content" id="tab-live">
+    <div class="panel">
+      <h2>Live Results</h2>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Idle</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="value" id="lvDone">0</div><div class="label">Progress</div></div>
+        <div class="stat-card"><div class="value" id="lvFound" style="color:var(--accent)">0</div><div class="label">Found</div></div>
+        <div class="stat-card"><div class="value" id="lvRate">0</div><div class="label">Rate /s</div></div>
+        <div class="stat-card"><div class="value" id="lvEta">0:00</div><div class="label">Elapsed</div></div>
+      </div>
+      <div class="live-box" id="liveBox"><span class="small">No live results yet. Start a scan.</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: RESULTS -->
+  <div class="tab-content" id="tab-results">
+    <div class="panel">
+      <h2>Results</h2>
+      <div class="filter-bar">
+        <input type="text" id="rSearch" placeholder="search path..." oninput="renderResults()">
+        <select id="rStatus" onchange="renderResults()" style="padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);">
+          <option value="">All status</option>
+          <option value="2">2xx</option><option value="3">3xx</option>
+          <option value="4">4xx</option><option value="5">5xx</option>
+        </select>
+        <label class="small"><input type="checkbox" id="rInteresting" onchange="renderResults()"> Interesting only</label>
+        <select id="rSort" onchange="renderResults()" style="padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);">
+          <option value="status">Sort: Status</option>
+          <option value="size">Sort: Size</option>
+          <option value="time">Sort: Response time</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr><th>Status</th><th>URL</th><th>Size</th><th>Time</th><th>Redirect</th><th>★</th></tr></thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: TREE -->
+  <div class="tab-content" id="tab-tree">
+    <div class="panel">
+      <h2>Directory Tree</h2>
+      <div class="input-row">
+        <select id="treeScan" onchange="loadTree()" style="padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);"></select>
+      </div>
+      <pre class="live-box" id="treeBox"><span class="small">Select a scan to view its directory tree.</span></pre>
+    </div>
+  </div>
+
+  <!-- SECTION 5: HISTORY -->
+  <div class="tab-content" id="tab-history">
+    <div class="panel">
+      <h2>Scan History</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Target</th><th>Wordlist</th><th>Requests</th><th>Found</th><th>Duration</th><th></th></tr></thead>
+        <tbody id="histBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 6: EXPORT -->
+  <div class="tab-content" id="tab-export">
+    <div class="panel">
+      <h2>Export</h2>
+      <div class="grid-2">
+        <div class="field"><label>Scan</label><select id="expScan"></select></div>
+        <div class="field"><label>&nbsp;</label>
+          <label class="small"><input type="checkbox" id="expInteresting"> Interesting only</label>
+        </div>
+      </div>
+      <div class="input-row">
+        <button class="btn btn-secondary" onclick="dl('json')">JSON</button>
+        <button class="btn btn-secondary" onclick="dl('csv')">CSV</button>
+        <button class="btn btn-secondary" onclick="dl('txt')">URL list (.txt)</button>
+      </div>
+      <p class="small">Filtered export: tick "Interesting only" to export just the high-signal findings.</p>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer"><span class="closex" onclick="closeDrawer()">✕</span><div id="drawerBody"></div></div>
+  <div class="disclaimer-footer">PathProbe v1.0 — Read-only content discovery. No POST/PUT/DELETE requests are ever sent.</div>
+</div>
+
+<script>
+const API = "";
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.tab[onclick="showTab(\''+name+'\')"]').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='history') loadHistory();
+  if(name==='tree') loadTreeScans();
+  if(name==='export') loadTreeScans();
+}
+function statusBadge(s){
+  const c = (''+s).slice(0,3);
+  return '<span class="sev-badge s'+s+'">'+s+'</span>';
+}
+function showError(m){
+  let el=document.getElementById('errorBox');
+  if(!el){el=document.createElement('div');el.id='errorBox';el.className='error-box visible';document.querySelector('.container').prepend(el);}
+  el.textContent=m; el.classList.add('visible');
+}
+
+// SECTION 1
+async function loadWordlists(){
+  const j=await fetch(API+'/api/wordlists').then(r=>r.json());
+  const sel=document.getElementById('wordlist');
+  sel.innerHTML='';
+  j.wordlists.forEach(w=>{
+    const o=document.createElement('option');o.value=w.name;
+    o.textContent=w.name+' ('+w.entry_count+(w.built_in?' built-in':'')+')';
+    sel.appendChild(o);
+  });
+}
+async function startScan(){
+  const target=document.getElementById('target').value.trim();
+  if(!target){showError('Enter a target URL.');return;}
+  const wl=document.getElementById('customWl').value.trim()||document.getElementById('wordlist').value;
+  const body={
+    target, wordlist: wl,
+    extensions: document.getElementById('ext').value,
+    threads: +document.getElementById('threads').value,
+    timeout: +document.getElementById('timeout').value,
+    recursive: document.getElementById('recursive').checked,
+    depth: +document.getElementById('depth').value,
+    show_status: document.getElementById('showStatus').value,
+    respect_robots: document.getElementById('respectRobots').checked,
+    no_wildcard: document.getElementById('noWild').checked,
+  };
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('stopBtn').disabled=false;
+  document.getElementById('cfgMsg').textContent='Starting...';
+  try{
+    const r=await fetch(API+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json();
+    if(j.error){showError(j.error);return;}
+    document.getElementById('cfgMsg').textContent='Scan started — '+j.total+' paths';
+    showTab('live'); liveTimer=setInterval(pollLive,800);
+  }catch(e){showError('Request failed: '+e.message);}
+}
+async function stopScan(){
+  await fetch(API+'/api/scan/stop',{method:'POST'});
+  document.getElementById('stopBtn').disabled=true;
+  document.getElementById('cfgMsg').textContent='Stopped.';
+}
+
+// SECTION 2
+let liveTimer=null, liveStart=0;
+async function pollLive(){
+  const j=await fetch(API+'/api/results').then(r=>r.json());
+  const pct=j.total?Math.round(j.done/j.total*100):0;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressText').textContent=j.done+' / '+j.total+' ('+pct+'%)';
+  document.getElementById('lvDone').textContent=j.done;
+  document.getElementById('lvFound').textContent=j.found;
+  document.getElementById('lvRate').textContent=j.total?Math.round(j.done/Math.max(1,(Date.now()-liveStart)/1000)):0;
+  const box=document.getElementById('liveBox');
+  box.innerHTML='';
+  j.findings.slice(-40).reverse().forEach(f=>{
+    const div=document.createElement('div');div.className='live-row';
+    const star=f.interesting?' ★ INTERESTING':'';
+    const rd=f.redirect_to?' → '+f.redirect_to:'';
+    div.innerHTML=statusBadge(f.status)+' '+f.size+'B '+f.time_ms+'ms '+f.url+rd+(f.status===401||f.status===403?' ⚠':'')+star;
+    box.appendChild(div);
+  });
+  if(!j.findings.length) box.innerHTML='<span class="small">No results yet.</span>';
+  liveStart=liveStart||Date.now();
+}
+
+// SECTION 3
+let ALL_FINDINGS=[];
+async function loadResults(scanId){
+  const j=await fetch(API+'/api/findings/'+scanId).then(r=>r.json());
+  ALL_FINDINGS=j.findings.map(f=>({status:f.status_code,url:f.url,size:f.content_length,time:f.response_ms,redirect:f.redirect_to,interesting:!!f.interesting,headers:null}));
+  renderResults();
+}
+function renderResults(){
+  const q=document.getElementById('rSearch').value.toLowerCase();
+  const st=document.getElementById('rStatus').value;
+  const inter=document.getElementById('rInteresting').checked;
+  const sort=document.getElementById('rSort').value;
+  let rows=ALL_FINDINGS.filter(f=>{
+    if(q&&!f.url.toLowerCase().includes(q))return false;
+    if(st&&(''+f.status).charAt(0)!==st)return false;
+    if(inter&&!f.interesting)return false;
+    return true;
+  });
+  rows.sort((a,b)=>{
+    if(sort==='size')return b.size-a.size;
+    if(sort==='time')return b.time-a.time;
+    return a.status-b.status;
+  });
+  const tb=document.getElementById('resultsBody');tb.innerHTML='';
+  rows.slice(0,500).forEach(f=>{
+    const tr=document.createElement('tr');tr.style.cursor='pointer';
+    tr.innerHTML=`<td>${statusBadge(f.status)}</td><td>${f.url}</td><td>${f.size}B</td><td>${f.time}ms</td><td>${f.redirect||'—'}</td><td>${f.interesting?'★':''}</td>`;
+    tr.onclick=()=>openRow(f);tb.appendChild(tr);
+  });
+  if(!rows.length)tb.innerHTML='<tr><td colspan="6" class="small" style="text-align:center;padding:20px;">No results.</td></tr>';
+}
+function openRow(f){
+  document.getElementById('drawerBody').innerHTML='<h3>'+f.url+'</h3>'+statusBadge(f.status)+
+    '<p class="small">Size: '+f.size+'B · Time: '+f.time+'ms'+(f.redirect?' · Redirect: '+f.redirect:'')+(f.interesting?' · ★ INTERESTING':'')+'</p>';
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');}
+
+// SECTION 4
+async function loadTreeScans(){
+  const j=await fetch(API+'/api/scans').then(r=>r.json());
+  const opts=j.scans.map(s=>`<option value="${s.id}">#${s.id} ${s.target}</option>`).join('');
+  document.getElementById('treeScan').innerHTML=opts;
+  document.getElementById('expScan').innerHTML=opts;
+}
+async function loadTree(){
+  const id=document.getElementById('treeScan').value;
+  if(!id)return;
+  const j=await fetch(API+'/api/tree/'+id).then(r=>r.json());
+  document.getElementById('treeBox').textContent=(j.tree&&j.tree.length)?j.tree.join('\n'):'(no paths)';
+}
+
+// SECTION 5
+async function loadHistory(){
+  const j=await fetch(API+'/api/scans').then(r=>r.json());
+  const tb=document.getElementById('histBody');tb.innerHTML='';
+  j.scans.forEach(s=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${s.id}</td><td>${s.target}</td><td>${s.wordlist}</td><td>${s.total_requests}</td><td>${s.found_count}</td><td>${s.duration.toFixed(1)}s</td>`+
+      `<td><button class="btn btn-secondary" style="padding:6px 12px;" onclick="rerun(${s.id})">Re-run</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+async function rerun(id){
+  const j=await fetch(API+'/api/findings/'+id).then(r=>r.json());
+  loadResults(id); showTab('results');
+}
+
+// SECTION 6
+function dl(fmt){
+  const id=document.getElementById('expScan').value;
+  const inter=document.getElementById('expInteresting').checked?'&interesting=1':'';
+  window.open(API+'/api/export?format='+fmt+(id?'&scan_id='+id:'')+inter,'_blank');
+}
+
+// init
+loadWordlists();
+</script>
 </body>
 </html>
