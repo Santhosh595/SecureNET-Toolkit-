@@ -1,57 +1,104 @@
-# PathProbe — Web Content / Path Discovery (feroxbuster-style)
+# PathProbe — Multi-Threaded Web Content Discovery
 
-**Author:** Santhosh L
-**License:** MIT
-**Maps to trending tool:** [feroxbuster](https://github.com/epi052/feroxbuster) / [dirsearch](https://github.com/maurosoria/dirsearch)
+> feroxbuster / dirsearch-style content discovery for authorized penetration testing.
 
-## Overview
+PathProbe brute-forces URL paths from wordlists to find hidden files,
+directories, backup files, admin panels, and API endpoints — with smart
+false-positive filtering, extension fuzzing, recursive scanning, and a live
+Flask dashboard.
 
-PathProbe discovers hidden or forgotten web paths on a target host by brute-forcing a wordlist of
-common paths (admin panels, backups, config files, API roots). It is the Python-native,
-SecureNET-styled equivalent of **feroxbuster** / **dirsearch**, using a thread pool for speed and
-reporting only "interesting" HTTP status codes (2xx, 3xx redirects, 401/403, 5xx).
+## Features
 
-Multi-threaded and **read-only** — it never writes to or mutates the target.
+- **4 built-in wordlists** — `common` (500), `api` (300), `files` (200), `large` (5000)
+- **Extension fuzzing** — `--extensions php,html,bak,zip` tests `/admin`, `/admin.php`, `/admin.bak`…
+- **Wildcard detection** — 3 random probes detect "200 for everything" servers and switch to content-length filtering
+- **Recursive scanning** — `--recursive --depth N` maps the full directory tree
+- **Smart filtering** — status, size, size-range, and word filtering; auto-drop of 404 noise
+- **Read-only** — only `GET` requests; never POST/PUT/DELETE
+- **Live streaming** — Rich CLI progress + Flask dashboard with live table, stats, tree, history, export
+- **Rate limiting** — `--rate-limit`, `--delay`, auto-backoff on 429
+- **Proxy / custom UA / headers / cookies** support
 
-## CLI Usage
-
-```bash
-# Discover paths with the built-in wordlist
-python main.py https://example.com
-
-# Custom wordlist + more threads
-python main.py https://example.com --wordlist my-paths.txt --threads 50
-
-# Skip disclaimer
-python main.py https://example.com --no-disclaimer
-```
-
-## Web Dashboard
+## Quick Start
 
 ```bash
-python dashboard.py
-# Open http://127.0.0.1:5014
+# install
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+
+# CLI — scan with the common wordlist
+.venv/bin/python main.py https://example.com --wordlist common
+
+# with extension fuzzing + recursion
+.venv/bin/python main.py https://example.com \
+    --wordlist common,api --extensions php,bak,zip \
+    --recursive --depth 3 --threads 80
+
+# Flask dashboard (http://127.0.0.1:5014)
+.venv/bin/python dashboard.py
 ```
 
-## Project Structure
+## CLI Reference
 
-```
-PathProbe/
-├── main.py            # CLI entry point (Rich tables)
-├── engine.py          # Multi-threaded discovery engine
-├── database.py        # SQLite persistence
-├── dashboard.py       # Flask web dashboard
-├── wordlists/
-│   └── common.txt     # 50+ common web paths
-├── requirements.txt
-└── README.md
-```
+| Flag | Default | Description |
+|------|---------|-------------|
+| `target` | — | Base URL (https added if missing) |
+| `--wordlist` | `common` | Built-in name(s) or file(s), comma-separated |
+| `--extensions` | — | Append extensions: `php,html,bak,old,zip` |
+| `--no-extension-original` | off | Skip bare word (only extensions) |
+| `--prefix` | — | Path prefix for all words: `/api/v1` |
+| `--threads` | `50` | Concurrency (hard cap 200) |
+| `--timeout` | `10` | Per-request timeout (s) |
+| `--rate-limit` | — | Max requests per second |
+| `--delay` | `0` | Fixed delay between requests (ms) |
+| `--headers` | — | `X-Fwd-For: 1.1.1.1; Auth: Bearer x` |
+| `--cookies` | — | `session=abc; uid=1` |
+| `--user-agent` | rotate | Custom UA (default rotates 5 browser UAs) |
+| `--proxy` | — | `http://127.0.0.1:8080` |
+| `--recursive` | off | Recursively scan found directories |
+| `--depth` | `2` | Max recursion depth |
+| `--recursive-status` | `200,301,302` | Status codes that trigger recursion |
+| `--filter-status` | — | Only show these codes |
+| `--hide-status` | — | Hide these codes |
+| `--filter-size` | — | Hide exact response size |
+| `--filter-size-range` | — | Hide size range `100-200` |
+| `--filter-words` | — | Hide responses containing `not found,404` |
+| `--no-wildcard` | off | Disable wildcard detection |
+| `--respect-robots` | off | Skip `robots.txt` disallowed paths |
+| `--output` | — | Write found URLs (one per line) to file |
 
-## Legal Disclaimer
+## Dashboard (port 5014)
 
-**PathProbe is for authorized testing only.** Scan only hosts you own or have explicit written
-permission to test.
+Six sections: **Scan Config**, **Live Results** (streaming table + stats),
+**Results** (filter/sort, click row for header preview), **Directory Tree**
+(visual tree of discovered paths), **History** (past scans + re-run),
+**Export** (JSON / CSV / plain-text URL list, interesting-only filter).
 
-## License
+Endpoints: `/status`, `/stats`, `/recent`, `/api/wordlists`, `/api/scan`,
+`/api/scan/stop`, `/api/results`, `/api/findings/<id>`, `/api/tree/<id>`,
+`/api/scans`, `/api/export`.
 
-MIT License — free for personal, educational, and commercial use.
+## Built-in Wordlists
+
+| File | Entries | Contents |
+|------|---------|----------|
+| `wordlists/common.txt` | 500 | admin, login, api, dashboard, backup, config, uploads, wp-admin, .git, .env, robots.txt… |
+| `wordlists/api.txt` | 300 | /api/v1, /api/users, /graphql, /swagger, /health, /actuator, /api-docs… |
+| `wordlists/files.txt` | 200 | .htaccess, .htpasswd, web.config, .env, config.php, id_rsa, authorized_keys… |
+| `wordlists/large.txt` | 5000 | Combined deep-discovery list |
+
+## Safety Limits
+
+- Max threads **200** (prevents accidental DoS)
+- Max **50,000** requests per scan (warns if exceeded)
+- **GET only** — never mutates the target
+- Target unreachable after 3 attempts → aborts with a clear error
+- Deduplicates words across merged wordlists
+- Auto-detects `429` and reduces rate
+
+## Disclaimer
+
+> PathProbe is for authorized testing only. Scanning websites without permission is illegal.
+
+## Tech Stack
+
+Python 3.8+ · requests · rich · Flask · sqlite3 · concurrent.futures
