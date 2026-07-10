@@ -477,21 +477,24 @@
             </div>
             <div>
               <h3 class="tool-card-title">PathProbe</h3>
-              <p class="tool-card-sub">Web Content / Path Discovery</p>
+              <p class="tool-card-sub">Multi-Threaded Web Content Discovery</p>
             </div>
           </div>
-          <p class="tool-card-desc">Discover hidden or forgotten web paths by brute-forcing a wordlist of common paths (admin panels, backups, configs, API roots). Multi-threaded and read-only — reports only interesting status codes.</p>
+          <p class="tool-card-desc">Discover hidden files, directories, admin panels, and API endpoints through wordlist brute-forcing. Smart wildcard detection eliminates false positives. Recursive scanning maps the full directory structure.</p>
           <div class="tool-card-tech">
             <span class="tech-tag">Python</span>
             <span class="tech-tag">Flask</span>
             <span class="tech-tag">Requests</span>
             <span class="tech-tag">Threading</span>
+            <span class="tech-tag">Rich</span>
           </div>
           <ul class="tool-card-features">
-            <li>50+ built-in common web paths</li>
-            <li>Multi-threaded (configurable worker pool)</li>
-            <li>Filters noise, flags 2xx/3xx/401/403/5xx</li>
-            <li>CLI + Flask dashboard</li>
+            <li>4 built-in wordlists (500 to 5000 entries)</li>
+            <li>Extension fuzzing: php, html, bak, zip, sql</li>
+            <li>Wildcard false-positive detection + filtering</li>
+            <li>Recursive directory scanning with depth control</li>
+            <li>Real-time streaming output with live rate stats</li>
+            <li>Interesting content detection + JSON/CSV export</li>
           </ul>
           <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/PathProbe" target="_blank" rel="noopener" class="tool-card-link">View source</a>
         </div>
