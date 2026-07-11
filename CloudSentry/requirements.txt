@@ -1,2 +1,14 @@
-requests>=2.31
-rich>=13.7
+rich>=13.0.0
+flask>=2.3.0
+reportlab>=3.6.0
+# Optional cloud SDKs — CloudSentry degrades to INFO mode if absent:
+# boto3>=1.28.0
+# google-cloud-asset>=1.40.0
+# google-cloud-iam>=2.12.0
+# google-cloud-storage>=2.10.0
+# google-cloud-compute>=1.15.0
+# google-cloud-logging>=3.8.0
+# google-cloud-sql>=1.10.0
+# azure-identity>=1.15.0
+# azure-mgmt-resource>=23.0.0
+# azure-mgmt-storage>=21.0.0
