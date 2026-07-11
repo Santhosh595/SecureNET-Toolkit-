@@ -159,6 +159,20 @@ def quick_scan_pathprobe(url, wordlist="common"):
     return _start_job("pathprobe", args)
 
 
+def quick_scan_cloudsentry(provider="aws", profile=None):
+    """Start a CloudSentry multi-cloud posture audit. Returns job_id.
+
+    Args:
+        provider: aws | gcp | azure (or comma-separated for multi-cloud).
+        profile: optional AWS profile / GCP project / Azure subscription.
+    """
+    prov = provider or "aws"
+    args = ["--provider", prov.replace(",", " "), "--no-disclaimer"]
+    if profile:
+        args += ["--profile", profile]
+    return _start_job("cloudsentry", args)
+
+
 def get_result(job_id):
     """Get the status/results for a job.
 

@@ -28,6 +28,7 @@ from quick_scan import (quick_scan_headerscan, quick_scan_portmap, quick_scan_ha
                          quick_scan_tlscan, quick_scan_dnsaudit, quick_scan_subprobe,
                          quick_scan_jwtinspect, quick_scan_secretsniff, quick_scan_vulnprobe,
                          quick_scan_pathprobe,
+                         quick_scan_cloudsentry,
                          get_result)
 
 # Load config
@@ -362,6 +363,15 @@ def quickscan_pathprobe():
     url = data.get("url", "")
     wordlist = data.get("wordlist", "common")
     job_id = quick_scan_pathprobe(url, wordlist)
+    return jsonify({"job_id": job_id, "status": "pending"})
+
+
+@app.route("/api/quickscan/cloudsentry", methods=["POST"])
+def quickscan_cloudsentry():
+    data = request.get_json()
+    provider = data.get("provider", "aws")
+    profile = data.get("profile")
+    job_id = quick_scan_cloudsentry(provider, profile)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
