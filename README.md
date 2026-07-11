@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **eighteen** independent security tools: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), a web technology fingerprinter (WhatWeb/httpx-style), and a unified control panel dashboard.
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **seventeen** independent security tools and a unified control panel dashboard: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, a log anomaly monitor (LogSentry), a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), and a web technology fingerprinter (WhatWeb/httpx-style).
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -89,7 +89,7 @@ Scan codebases, git history, and environment configs for 50+ types of hardcoded 
 
 **Tech:** Python, Flask, Git, Regex, Entropy Analysis
 
-[View source](DNSAudit/) | [README](DNSAudit/README.md)
+[View source](SecretSniff/) | [README](SecretSniff/README.md)
 
 ### VulnProbe — Template-Based Vulnerability Scanner (Nuclei-style)
 
@@ -133,7 +133,7 @@ Identify the technologies behind a web target by inspecting response headers, co
 
 ### SecureNET Control Panel
 
-Unified web dashboard that orchestrates all 12 security tools. Launch, monitor, and manage every tool from a single interface with real-time health checks, unified alerts, and quick-scan capabilities.
+Unified web dashboard that orchestrates all 17 security tools. Launch, monitor, and manage every tool from a single interface with real-time health checks, unified alerts, and quick-scan capabilities.
 
 - [View source](SecureNET-Control-Panel/) | [README](SecureNET-Control-Panel/README.md)
 
@@ -288,12 +288,82 @@ python main.py scan --path ./myproject
 
 # Scan git history
 python main.py scan --repo ./myrepo --history
-
 # Export SARIF for GitHub Code Scanning
 python main.py scan --path . --output results.sarif
-
 # Install pre-commit hook
 python main.py install-hook
+```
+
+### VulnProbe
+
+```bash
+cd VulnProbe
+pip install -r requirements.txt
+
+# Scan a target (HIGH/CRITICAL only)
+python main.py https://example.com --severity high,critical
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5013
+```
+
+### PathProbe
+
+```bash
+cd PathProbe
+pip install -r requirements.txt
+
+# Discover paths with the built-in common wordlist
+python main.py https://example.com --wordlist common
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5014
+```
+
+### CloudSentry
+
+```bash
+cd CloudSentry
+pip install -r requirements.txt
+
+# INFO mode (no credentials required) — lists all 60 checks
+python main.py --info
+
+# Live audit of one provider (uses detected credentials)
+python main.py --provider aws --profile default
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5015
+```
+
+### ImgScan
+
+```bash
+cd ImgScan
+pip install -r requirements.txt
+
+# Scan a project's dependencies
+python main.py --requirements requirements.txt
+
+# Scan an image SBOM (CycloneDX/SPDX JSON)
+python main.py --sbom sbom.json
+```
+
+### TechFinger
+
+```bash
+cd TechFinger
+pip install -r requirements.txt
+
+# Fingerprint a target
+python main.py https://example.com
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5017
 ```
 
 ## Running Tests
@@ -461,21 +531,26 @@ SecureNET-Toolkit--main/
 
 ## Tech Stack Summary
 
-| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich | hashlib | SQLite |
-|------|--------|-------|----------|-------|---------|---------|--------------|------|---------|---------|
-| FileGuard | Yes | — | — | — | Yes | — | Yes | — | — | — |
-| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — | — | — |
-| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes | — | — |
-| PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — | — |
-| HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes | — |
-| ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes |
-| SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — |
-| JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — |
-| TLScan | Yes | Yes | — | — | — | — | — | Yes | — | — |
-| LogSentry | Yes | — | — | — | — | — | — | Yes | — | Yes |
-| SecretSniff | Yes | — | — | — | — | — | — | Yes | — | Yes |
-| DNSAudit | Yes | — | — | — | — | — | — | Yes | — | Yes |
-| Control Panel | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes |
+| Tool | Python | Flask | Requests | Scapy | Tkinter | Sockets | cryptography | Rich | hashlib | SQLite | Cloud SDK |
+|------|--------|-------|----------|-------|---------|---------|--------------|------|---------|---------|------------|
+| FileGuard | Yes | — | — | — | Yes | — | Yes | — | — | — | — |
+| Network Sniffer | Yes | Yes | — | Yes | — | — | — | — | — | — | — |
+| HeaderScan | Yes | Yes | Yes | — | — | — | — | Yes | — | — | — |
+| PortMap | Yes | Yes | — | — | — | Yes | — | Yes | — | — | — |
+| HashDetect | Yes | Yes | — | — | — | — | — | Yes | Yes | — | — |
+| ARPWatch | Yes | Yes | — | Yes | — | — | — | Yes | — | Yes | — |
+| SubProbe | Yes | Yes | — | — | — | — | — | Yes | — | — | — |
+| JWTInspect | Yes | Yes | — | — | — | — | — | Yes | — | — | — |
+| TLScan | Yes | Yes | — | — | — | — | — | Yes | — | — | — |
+| LogSentry | Yes | — | — | — | — | — | — | Yes | — | Yes | — |
+| SecretSniff | Yes | — | — | — | — | — | — | Yes | — | Yes | — |
+| DNSAudit | Yes | — | — | — | — | — | — | Yes | — | Yes | — |
+| VulnProbe | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes | — |
+| PathProbe | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes | — |
+| CloudSentry | Yes | Yes | — | — | — | — | — | Yes | — | Yes | boto3 / GCP / Azure |
+| ImgScan | Yes | Yes | — | — | — | — | — | Yes | — | Yes | — |
+| TechFinger | Yes | Yes | Yes | — | — | — | — | Yes | — | — | — |
+| Control Panel | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes | — |
 
 ## Scoring Methodology (HeaderScan)
 
