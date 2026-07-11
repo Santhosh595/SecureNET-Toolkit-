@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SecureNET Toolkit — Cybersecurity Tools for Developers</title>
-  <meta name="description" content="Open-source cybersecurity toolkit with 9 tools: file encryption, network IDS, header analysis, port scanner, hash cracker, ARP detection, subdomain enumeration, JWT audit, and SSL/TLS scanner.">
+  <meta name="description" content="Open-source cybersecurity toolkit with 17 tools: file encryption, network IDS, header analysis, port scanning, hash detection, ARP detection, subdomain enumeration, JWT audit, SSL/TLS scanning, secret scanning, DNS auditing, template-based vulnerability scanning, web path discovery, multi-cloud posture auditing, container CVE scanning, tech fingerprinting, and a unified control panel.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -442,33 +442,6 @@
           <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/DNSAudit" target="_blank" rel="noopener" class="tool-card-link">View source</a>
         </div>
 
-        <!-- VulnProbe -->
-        <div class="tool-card">
-          <div class="tool-card-header">
-            <div class="tool-card-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-            </div>
-            <div>
-              <h3 class="tool-card-title">VulnProbe</h3>
-              <p class="tool-card-sub">Template-Based Vulnerability Scanner</p>
-            </div>
-          </div>
-          <p class="tool-card-desc">Send templated HTTP requests to a target and evaluate matchers (status / word / regex) to surface misconfigurations, exposed files, and version disclosure. Add checks by dropping a YAML template — no code changes.</p>
-          <div class="tool-card-tech">
-            <span class="tech-tag">Python</span>
-            <span class="tech-tag">Flask</span>
-            <span class="tech-tag">PyYAML</span>
-            <span class="tech-tag">Rich</span>
-          </div>
-          <ul class="tool-card-features">
-            <li>Nuclei-style YAML template engine</li>
-            <li>Matchers: status / word / regex (and/or)</li>
-            <li>Read-only, safe-by-design probes</li>
-            <li>CLI + Flask dashboard</li>
-          </ul>
-          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/VulnProbe" target="_blank" rel="noopener" class="tool-card-link">View source</a>
-        </div>
-
         <!-- PathProbe -->
         <div class="tool-card">
           <div class="tool-card-header">
@@ -633,7 +606,7 @@
             <span class="tech-tag">Chart.js</span>
           </div>
           <ul class="tool-card-features">
-            <li>18 tools managed from one dashboard</li>
+            <li>17 security tools managed from one dashboard</li>
             <li>Real-time health monitoring with auto-restart</li>
             <li>Unified alert center across all tools</li>
             <li>Quick scan from hub (no tab switching)</li>
