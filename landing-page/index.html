@@ -507,21 +507,25 @@
             </div>
             <div>
               <h3 class="tool-card-title">CloudSentry</h3>
-              <p class="tool-card-sub">Multi-Cloud Security Posture</p>
+              <p class="tool-card-sub">Multi-Cloud Security Posture Auditor</p>
             </div>
           </div>
-          <p class="tool-card-desc">Run read-only security posture checks across AWS, GCP, and Azure (S3 public access, IAM root MFA, root access keys, and more). Without credentials it reports INFO with guidance — it never mutates cloud state.</p>
+          <p class="tool-card-desc">Audit AWS, GCP, and Azure configurations against 60+ read-only security checks covering IAM, storage exposure, network rules, logging gaps, and compliance. No credentials required for INFO mode — safe by design.</p>
           <div class="tool-card-tech">
             <span class="tech-tag">Python</span>
             <span class="tech-tag">Flask</span>
             <span class="tech-tag">boto3</span>
+            <span class="tech-tag">GCP</span>
+            <span class="tech-tag">Azure</span>
             <span class="tech-tag">Rich</span>
           </div>
           <ul class="tool-card-features">
-            <li>AWS / GCP / Azure read-only checks</li>
-            <li>Extensible check registry</li>
-            <li>Safe by default — no creds = no API calls</li>
-            <li>CLI + Flask dashboard</li>
+            <li>60+ checks: 25 AWS, 20 GCP, 15 Azure</li>
+            <li>INFO mode: works without credentials</li>
+            <li>CIS Benchmark + OWASP Cloud Top 10 mapping</li>
+            <li>Exact CLI remediation commands per finding</li>
+            <li>Multi-cloud combined audit + compliance scoring</li>
+            <li>CLI + dashboard + PDF remediation report</li>
           </ul>
           <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/CloudSentry" target="_blank" rel="noopener" class="tool-card-link">View source</a>
         </div>
