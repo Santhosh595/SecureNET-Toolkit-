@@ -1,48 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ImgScan — SecureNET</title>
-  <style>
-    :root { --bg:#0d1117; --card:#161b22; --accent:#14b8a6; --text:#e6edf3; --muted:#8b949e; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
-    header { padding:24px; background:var(--card); border-bottom:1px solid #21262d; }
-    header h1 { margin:0; color:var(--accent); }
-    main { max-width:980px; margin:0 auto; padding:24px; }
-    .panel { background:var(--card); border:1px solid #21262d; border-radius:10px; padding:20px; }
-    input { width:100%; padding:12px; background:#0d1117; border:1px solid #30363d; color:var(--text); border-radius:8px; }
-    button { margin-top:12px; padding:10px 18px; background:var(--accent); color:#04201c; border:0; border-radius:8px; font-weight:600; cursor:pointer; }
-    .row { padding:10px 14px; margin:6px 0; background:#0d1117; border-radius:6px; border-left:4px solid var(--accent); }
-    .critical { border-color:#ff4d4f; } .high { border-color:#ff7a45; } .medium { border-color:#ffc53d; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ImgScan — Dependency & Container CVE Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--surface:#0c1220;--surface-raised:#111827;--border:#1a2538;--border-light:#243044;--text:#e2e8f0;--muted:#64748b;--dim:#475569;--accent:#0ea5e9;--safe:#22c55e;--warn:#f59e0b;--crit:#ef4444;--high:#f97316;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;}
+.mono{font-family:'JetBrains Mono',monospace;}
+nav{position:sticky;top:0;z-index:10;background:rgba(6,10,16,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;}
+.nav-logo .badge{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;}
+.nav-links{margin-left:auto;display:flex;gap:6px;}
+.nav-links a{color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;}
+.nav-links a:hover{color:var(--text);background:var(--surface);}
+.hero{padding:54px 24px 30px;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(circle at 50% -20%,rgba(14,165,233,.12),transparent 60%);}
+.hero h1{font-size:38px;font-weight:800;letter-spacing:-.5px;}
+.hero .accent{color:var(--accent);}
+.hero p{color:var(--muted);max-width:640px;margin:14px auto 0;font-size:15px;}
+.disclaimer-box{max-width:760px;margin:22px auto 0;background:var(--surface);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);}
+.disclaimer-box b{color:var(--text);}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 24px 60px;}
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:22px;flex-wrap:wrap;}
+.tab{padding:10px 16px;cursor:pointer;border:none;background:none;color:var(--muted);font-size:14px;font-weight:600;border-bottom:2px solid transparent;font-family:inherit;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.panel{display:none;}
+.panel.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;}
+.card h3{font-size:15px;margin-bottom:12px;font-weight:700;}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+input[type=text],select,input[type=file]{width:100%;background:var(--surface-raised);border:1px solid var(--border-light);border-radius:8px;color:var(--text);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.row>*{flex:1;min-width:200px;}
+.btn{background:var(--accent);color:#04121c;border:none;border-radius:8px;padding:11px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+.btn:hover{filter:brightness(1.08);}
+.btn.ghost{background:var(--surface-raised);color:var(--text);border:1px solid var(--border-light);}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.stat-card .n{font-size:28px;font-weight:800;}
+.stat-card .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:10px;border-bottom:1px solid var(--border);font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
+td{padding:10px;border-bottom:1px solid var(--border);}
+tr:hover td{background:var(--surface);}
+.sev{font-family:'JetBrains Mono',monospace;font-weight:700;padding:2px 8px;border-radius:6px;font-size:11px;}
+.sev.CRITICAL{background:rgba(239,68,68,.15);color:var(--crit);}
+.sev.HIGH{background:rgba(249,115,22,.15);color:var(--high);}
+.sev.MEDIUM{background:rgba(245,158,11,.15);color:var(--warn);}
+.sev.LOW{background:rgba(34,197,94,.12);color:var(--safe);}
+.sev.INFO{background:rgba(71,85,105,.2);color:var(--dim);}
+.kev{color:var(--crit);font-weight:800;animation:pulse 1.3s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.45;}}
+.empty{color:var(--dim);text-align:center;padding:30px;font-size:14px;}
+.disclaimer-footer{text-align:center;color:var(--dim);font-size:12px;padding:24px;border-top:1px solid var(--border);}
+.tag{display:inline-block;background:var(--surface-raised);border:1px solid var(--border-light);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);margin:2px;}
+.drawer{position:fixed;top:0;right:0;width:420px;height:100%;background:var(--surface-raised);border-left:1px solid var(--border-light);padding:24px;transform:translateX(100%);transition:.25s;z-index:20;overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer .close{position:absolute;top:14px;right:18px;cursor:pointer;color:var(--muted);font-size:20px;}
+</style>
 </head>
 <body>
-  <header><h1>ImgScan</h1><p>Container / dependency CVE scanner (Trivy-style)</p></header>
-  <main>
-    <div class="panel">
-      <input id="req" placeholder="Path to requirements.txt (e.g. requirements.txt)" />
-      <button onclick="runScan()">Scan</button>
+<nav>
+  <div class="nav-logo"><span class="badge">🛡</span> SecureNET <span style="color:var(--muted);font-weight:500;">/ ImgScan</span></div>
+  <div class="nav-links">
+    <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>ImgScan — <span class="accent">Dependency & Container CVE Scanner</span></h1>
+  <p>Scan Python, Node.js, Java &amp; Ruby dependencies for known CVEs. Audit Dockerfiles for 30 security misconfigurations. Parse &amp; generate CycloneDX/SPDX SBOMs. Flags CISA Known Exploited Vulnerabilities.</p>
+  <div class="disclaimer-box">
+    <b>Disclaimer:</b> ImgScan scans dependency manifests read-only. Only scan projects you own or maintain. It never executes scanned code or modifies dependency files.
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" data-tab="scan">Scan</button>
+    <button class="tab" data-tab="vulns">Vulnerabilities</button>
+    <button class="tab" data-tab="docker">Dockerfile</button>
+    <button class="tab" data-tab="sbom">SBOM</button>
+    <button class="tab" data-tab="history">History</button>
+    <button class="tab" data-tab="export">Export</button>
+  </div>
+
+  <!-- SCAN -->
+  <div class="panel active" id="scan">
+    <div class="card">
+      <h3>Run a scan</h3>
+      <div class="row">
+        <div>
+          <label>Scan type</label>
+          <select id="scanMode">
+            <option value="directory">Directory (auto-detect)</option>
+            <option value="sbom">SBOM file</option>
+            <option value="dockerfile">Dockerfile</option>
+            <option value="pip">Python requirements</option>
+            <option value="package">Single package</option>
+          </select>
+        </div>
+        <div>
+          <label id="targetLabel">Target path</label>
+          <input type="text" id="target" placeholder="/path/to/project  or  requirements.txt  or  Dockerfile">
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <div style="flex:0 0 auto;display:flex;gap:10px;align-items:center;">
+          <label style="margin:0;"><input type="checkbox" id="genSbom"> Generate SBOM</label>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;">
+        <button class="btn" id="runBtn">Start scan</button>
+        <span id="scanStatus" style="color:var(--muted);font-size:13px;align-self:center;"></span>
+      </div>
     </div>
-    <div id="results" style="margin-top:20px;"></div>
-  </main>
-  <script>
-    async function runScan() {
-      const req = document.getElementById('req').value.trim();
-      const box = document.getElementById('results');
-      box.innerHTML = '<p style="color:#8b949e">Scanning…</p>';
-      try {
-        const r = await fetch('/scan', { method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ requirements: req || 'requirements.txt' }) });
-        const data = await r.json();
-        if (!data.length) { box.innerHTML = '<p style="color:#36cfc9">No CVEs matched the offline rule set.</p>'; return; }
-        box.innerHTML = data.map(f =>
-          `<div class="row ${f.severity}"><strong>${f.component} ${f.version}</strong>
-           <span> — ${f.cve} (${f.severity})</span><br><span style="color:#8b949e">${f.detail||''}</span></div>`
-        ).join('');
-      } catch(e) { box.innerHTML = '<p style="color:#ff7a45">Failed: '+e+'</p>'; }
-    }
-  </script>
+    <div class="card">
+      <h3>Quick examples</h3>
+      <span class="tag">imgscan scan --path ./myproject</span>
+      <span class="tag">imgscan scan --sbom sbom.json</span>
+      <span class="tag">imgscan dockerfile --file Dockerfile</span>
+      <span class="tag">imgscan pip --requirements requirements.txt</span>
+      <span class="tag">imgscan check requests==2.25.1</span>
+    </div>
+  </div>
+
+  <!-- VULNS -->
+  <div class="panel" id="vulns">
+    <div class="card">
+      <div class="row" style="align-items:center;">
+        <div><label>Filter severity</label><select id="fSev"><option value="">All</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></div>
+        <div><label>Filter ecosystem</label><select id="fEco"><option value="">All</option><option>python</option><option>npm</option><option>java</option><option>ruby</option></select></div>
+        <div><label>KEV only</label><select id="fKev"><option value="">No</option><option value="1">Yes (exploited)</option></select></div>
+      </div>
+    </div>
+    <div class="stat-grid" id="vStats"></div>
+    <div class="card"><table id="vTable"><thead><tr><th>Package</th><th>Version</th><th>CVE</th><th>Severity</th><th>CVSS</th><th>KEV</th><th>Fixed</th></tr></thead><tbody></tbody></table>
+      <div class="empty" id="vEmpty">Run a scan to see vulnerabilities.</div>
+    </div>
+  </div>
+
+  <!-- DOCKER -->
+  <div class="panel" id="docker">
+    <div class="stat-grid" id="dStats"></div>
+    <div class="card"><table id="dTable"><thead><tr><th>ID</th><th>Line</th><th>Severity</th><th>Issue</th><th>Remediation</th></tr></thead><tbody></tbody></table>
+      <div class="empty" id="dEmpty">Run a Dockerfile audit to see findings.</div>
+    </div>
+  </div>
+
+  <!-- SBOM -->
+  <div class="panel" id="sbom">
+    <div class="card"><table id="sTable"><thead><tr><th>Name</th><th>Version</th><th>PURL</th><th>Ecosystem</th></tr></thead><tbody></tbody></table>
+      <div class="empty" id="sEmpty">Scan to generate / view SBOM components.</div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="panel" id="history">
+    <div class="card"><table id="hTable"><thead><tr><th>ID</th><th>Target</th><th>Type</th><th>Pkgs</th><th>Vulns</th><th>Time</th></tr></thead><tbody></tbody></table>
+      <div class="empty" id="hEmpty">No scans yet.</div>
+    </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div class="panel" id="export">
+    <div class="card">
+      <h3>Export latest scan</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn ghost" onclick="dl('json')">JSON</button>
+        <button class="btn ghost" onclick="dl('csv')">CSV</button>
+        <button class="btn ghost" onclick="dl('sarif')">SARIF (GitHub Code Scanning)</button>
+      </div>
+      <p style="color:var(--muted);font-size:12px;margin-top:10px;">SARIF output is schema v2.1.0 — upload as a code scanning report in GitHub Actions.</p>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer-footer">ImgScan · SecureNET Toolkit · Offline CVE rules bundled · CISA KEV integrated</div>
+
+<div class="drawer" id="drawer"><span class="close" onclick="closeDrawer()">×</span><div id="drawerBody"></div></div>
+
+<script>
+const $=(s)=>document.querySelector(s);
+const sevBadge=s=>`<span class="sev ${s}">${s}</span>`;
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active'); $('#'+t.dataset.tab).classList.add('active');
+  if(t.dataset.tab==='history')loadHistory();
+});
+$('#scanMode').onchange=()=>{
+  const m=$('#scanMode').value;
+  const lbl={directory:'Target path',sbom:'SBOM file path',dockerfile:'Dockerfile path',pip:'requirements.txt path',package:'package==version'}[m];
+  $('#targetLabel').textContent=lbl;
+};
+$('#runBtn').onclick=async()=>{
+  const mode=$('#scanMode').value, target=$('#target').value.trim();
+  if(!target){alert('Enter a target.');return;}
+  $('#scanStatus').textContent='Scanning…';
+  const r=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode,target,generate_sbom:$('#genSbom').checked})});
+  const j=await r.json();
+  $('#scanStatus').textContent=`Done · ${j.findings} vulns · ${j.docker} docker issues · ${j.comps} components`;
+  loadResults(); loadDocker(); loadSbom();
+};
+async function loadResults(){
+  const j=await (await fetch('/api/results')).json();
+  const fs=j.findings||[];
+  const sev=$('#fSev').value, eco=$('#fEco').value, kev=$('#fKev').value;
+  const f=fs.filter(x=>(!sev||x.severity===sev)&&(!eco||x.ecosystem===eco)&&(!kev||x.in_kev));
+  const tb=$('#vTable tbody'); tb.innerHTML='';
+  $('#vEmpty').style.display=f.length?'none':'block';
+  const counts={CRITICAL:0,HIGH:0,MEDIUM:0,LOW:0};
+  f.forEach(x=>{counts[x.severity]=(counts[x.severity]||0)+1;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${x.package}</td><td class="mono">${x.version}</td><td class="mono">${x.cve_id}</td><td>${sevBadge(x.severity)}</td><td>${x.cvss_score}</td><td>${x.in_kev?'<span class="kev">EXPLOITED</span>':'—'}</td><td class="mono">${x.fixed_version||'—'}</td>`;
+    tr.onclick=()=>openDrawer(x); tb.appendChild(tr);
+  });
+  $('#vStats').innerHTML=Object.entries(counts).map(([k,v])=>`<div class="stat-card"><div class="n">${v}</div><div class="l">${k}</div></div>`).join('')+`<div class="stat-card"><div class="n">${f.length}</div><div class="l">Total</div></div>`;
+}
+async function loadDocker(){
+  const d=await (await fetch('/api/dockerfile')).json();
+  const tb=$('#dTable tbody'); tb.innerHTML='';
+  $('#dEmpty').style.display=d.length?'none':'block';
+  const counts={CRITICAL:0,HIGH:0,MEDIUM:0,LOW:0,INFO:0};
+  d.forEach(x=>{counts[x.severity]=(counts[x.severity]||0)+1;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="mono">${x.check_id}</td><td>${x.line||'—'}</td><td>${sevBadge(x.severity)}</td><td>${x.description}</td><td style="color:var(--muted)">${x.remediation}</td>`;
+    tb.appendChild(tr);
+  });
+  $('#dStats').innerHTML=Object.entries(counts).filter(([k])=>k!=='INFO'||counts.INFO).map(([k,v])=>`<div class="stat-card"><div class="n">${v}</div><div class="l">${k}</div></div>`).join('');
+}
+async function loadSbom(){
+  const c=await (await fetch('/api/sbom')).json();
+  const tb=$('#sTable tbody'); tb.innerHTML='';
+  $('#sEmpty').style.display=c.length?'none':'block';
+  c.forEach(x=>{const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${x.name}</td><td class="mono">${x.version}</td><td class="mono">${x.purl}</td><td>${x.ecosystem}</td>`;
+    tb.appendChild(tr);});
+}
+async function loadHistory(){
+  const h=await (await fetch('/api/history')).json();
+  const tb=$('#hTable tbody'); tb.innerHTML='';
+  $('#hEmpty').style.display=h.length?'none':'block';
+  h.forEach(x=>{const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${x.id}</td><td class="mono">${x.target}</td><td>${x.type}</td><td>${x.packages}</td><td>${x.vulns}</td><td style="color:var(--muted)">${x.time.slice(0,19).replace('T',' ')}</td>`;
+    tb.appendChild(tr);});
+}
+function openDrawer(x){
+  $('#drawerBody').innerHTML=`<h3 style="margin-bottom:10px">${x.cve_id}</h3>
+    <p><b>${x.package}</b> @ ${x.version}</p>
+    <p>${sevBadge(x.severity)} &nbsp; CVSS ${x.cvss_score}</p>
+    <p class="mono" style="color:var(--muted);font-size:12px">${x.cvss_vector||''}</p>
+    ${x.in_kev?'<p class="kev">⚠ EXPLOITED IN WILD (CISA KEV)</p>':''}
+    <p style="margin-top:10px">${x.description}</p>
+    <p style="margin-top:10px">Fix: upgrade to <b class="mono">${x.fixed_version}</b></p>
+    <p class="mono" style="background:var(--bg);padding:8px;border-radius:6px;margin-top:8px">${x.upgrade_command}</p>
+    <p style="margin-top:10px"><a class="mono" style="color:var(--accent)" href="https://nvd.nist.gov/vuln/detail/${x.cve_id}" target="_blank">NVD →</a></p>`;
+  $('#drawer').classList.add('open');
+}
+function closeDrawer(){$('#drawer').classList.remove('open');}
+function dl(fmt){window.open('/api/export?format='+fmt);}
+</script>
 </body>
 </html>
