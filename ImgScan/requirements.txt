@@ -1,2 +1,5 @@
-requests>=2.31
-rich>=13.7
+rich>=13.0.0
+flask>=2.3.0
+reportlab>=3.6.0
+# Optional — best Python coverage (graceful fallback if absent):
+# pip-audit>=2.5.0
