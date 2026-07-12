@@ -1,0 +1,227 @@
+[
+  {
+    "package": "log4j-core",
+    "affected_versions": [
+      "<2.15.0",
+      ">=2.0,<2.15.0"
+    ],
+    "cve_id": "CVE-2021-44228",
+    "severity": "CRITICAL",
+    "cvss_score": 10.0,
+    "description": "Log4Shell: remote code execution via JNDI in logged data (CVE-2021-44228).",
+    "fixed_version": "2.15.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+    "ecosystem": "java",
+    "coordinate": "org.apache.logging.log4j:log4j-core"
+  },
+  {
+    "package": "log4j-core",
+    "affected_versions": [
+      "<2.16.0",
+      ">=2.15.0,<2.16.0"
+    ],
+    "cve_id": "CVE-2021-45046",
+    "severity": "CRITICAL",
+    "cvss_score": 9.0,
+    "description": "Incomplete fix for 44228; RCE via thread context.",
+    "fixed_version": "2.16.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2021-45046",
+    "ecosystem": "java",
+    "coordinate": "org.apache.logging.log4j:log4j-core"
+  },
+  {
+    "package": "log4j-core",
+    "affected_versions": [
+      "<2.17.1",
+      ">=2.16.0,<2.17.1"
+    ],
+    "cve_id": "CVE-2021-45105",
+    "severity": "MEDIUM",
+    "cvss_score": 5.9,
+    "description": "DoS via uncontrolled recursion in lookup evaluation.",
+    "fixed_version": "2.17.1",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2021-45105",
+    "ecosystem": "java",
+    "coordinate": "org.apache.logging.log4j:log4j-core"
+  },
+  {
+    "package": "spring-core",
+    "affected_versions": [
+      "<5.3.18",
+      ">=5.0,<5.3.18"
+    ],
+    "cve_id": "CVE-2022-22965",
+    "severity": "CRITICAL",
+    "cvss_score": 9.8,
+    "description": "Spring4Shell: RCE via data binding on JDK9+ (CVE-2022-22965).",
+    "fixed_version": "5.3.18",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-22965",
+    "ecosystem": "java",
+    "coordinate": "org.springframework:spring-core"
+  },
+  {
+    "package": "spring-beans",
+    "affected_versions": [
+      "<5.3.18",
+      ">=5.0,<5.3.18"
+    ],
+    "cve_id": "CVE-2022-22965",
+    "severity": "CRITICAL",
+    "cvss_score": 9.8,
+    "description": "Spring4Shell: RCE via data binding (CVE-2022-22965).",
+    "fixed_version": "5.3.18",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-22965",
+    "ecosystem": "java",
+    "coordinate": "org.springframework:spring-beans"
+  },
+  {
+    "package": "jackson-databind",
+    "affected_versions": [
+      "<2.13.0",
+      ">=2.0,<2.13.0"
+    ],
+    "cve_id": "CVE-2020-36518",
+    "severity": "HIGH",
+    "cvss_score": 7.5,
+    "description": "DoS via deeply nested JSON (CVE-2020-36518).",
+    "fixed_version": "2.13.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2020-36518",
+    "ecosystem": "java",
+    "coordinate": "com.fasterxml.jackson.core:jackson-databind"
+  },
+  {
+    "package": "jackson-databind",
+    "affected_versions": [
+      "<2.10.0",
+      ">=2.0,<2.10.0"
+    ],
+    "cve_id": "CVE-2019-14540",
+    "severity": "HIGH",
+    "cvss_score": 8.1,
+    "description": "Arbitrary code execution via polymorphic typing.",
+    "fixed_version": "2.10.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2019-14540",
+    "ecosystem": "java",
+    "coordinate": "com.fasterxml.jackson.core:jackson-databind"
+  },
+  {
+    "package": "struts2-core",
+    "affected_versions": [
+      "<2.5.26",
+      ">=2.0,<2.5.26"
+    ],
+    "cve_id": "CVE-2017-5638",
+    "severity": "CRITICAL",
+    "cvss_score": 10.0,
+    "description": "RCE via Jakarta Multipart parser OGNL (CVE-2017-5638).",
+    "fixed_version": "2.5.26",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2017-5638",
+    "ecosystem": "java",
+    "coordinate": "org.apache.struts:struts2-core"
+  },
+  {
+    "package": "shiro-core",
+    "affected_versions": [
+      "<1.9.0",
+      ">=1.0,<1.9.0"
+    ],
+    "cve_id": "CVE-2022-32532",
+    "severity": "HIGH",
+    "cvss_score": 8.8,
+    "description": "Auth bypass via regex request path.",
+    "fixed_version": "1.9.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-32532",
+    "ecosystem": "java",
+    "coordinate": "org.apache.shiro:shiro-core"
+  },
+  {
+    "package": "xstream",
+    "affected_versions": [
+      "<1.4.19",
+      ">=1.0,<1.4.19"
+    ],
+    "cve_id": "CVE-2021-39144",
+    "severity": "CRITICAL",
+    "cvss_score": 9.8,
+    "description": "RCE via crafted XML (CVE-2021-39144).",
+    "fixed_version": "1.4.19",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2021-39144",
+    "ecosystem": "java",
+    "coordinate": "com.thoughtworks.xstream:xstream"
+  },
+  {
+    "package": "tomcat-catalina",
+    "affected_versions": [
+      "<9.0.65",
+      ">=9.0,<9.0.65"
+    ],
+    "cve_id": "CVE-2022-29885",
+    "severity": "MEDIUM",
+    "cvss_score": 5.9,
+    "description": "CSRF in form auth (CVE-2022-29885).",
+    "fixed_version": "9.0.65",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-29885",
+    "ecosystem": "java",
+    "coordinate": "org.apache.tomcat:tomcat-catalina"
+  },
+  {
+    "package": "netty-handler",
+    "affected_versions": [
+      "<4.1.94",
+      ">=4.0,<4.1.94"
+    ],
+    "cve_id": "CVE-2023-4586",
+    "severity": "HIGH",
+    "cvss_score": 7.5,
+    "description": "HTTP request smuggling (CVE-2023-4586).",
+    "fixed_version": "4.1.94",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2023-4586",
+    "ecosystem": "java",
+    "coordinate": "io.netty:netty-handler"
+  },
+  {
+    "package": "commons-text",
+    "affected_versions": [
+      "<1.10.0",
+      ">=1.0,<1.10.0"
+    ],
+    "cve_id": "CVE-2022-42889",
+    "severity": "CRITICAL",
+    "cvss_score": 9.8,
+    "description": "Text4Shell: RCE via string substitution (CVE-2022-42889).",
+    "fixed_version": "1.10.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2022-42889",
+    "ecosystem": "java",
+    "coordinate": "org.apache.commons:commons-text"
+  },
+  {
+    "package": "commons-collections",
+    "affected_versions": [
+      "<3.2.2",
+      ">=3.0,<3.2.2"
+    ],
+    "cve_id": "CVE-2015-7501",
+    "severity": "HIGH",
+    "cvss_score": 8.1,
+    "description": "Deserialization RCE (CVE-2015-7501).",
+    "fixed_version": "3.2.2",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2015-7501",
+    "ecosystem": "java",
+    "coordinate": "commons-collections:commons-collections"
+  },
+  {
+    "package": "guava",
+    "affected_versions": [
+      "<32.0.0",
+      ">=30.0,<32.0.0"
+    ],
+    "cve_id": "CVE-2023-2976",
+    "severity": "HIGH",
+    "cvss_score": 8.8,
+    "description": "Temp dir permission weakness (CVE-2023-2976).",
+    "fixed_version": "32.0.0",
+    "reference": "https://nvd.nist.gov/vuln/detail/CVE-2023-2976",
+    "ecosystem": "java",
+    "coordinate": "com.google.guava:guava"
+  }
+]

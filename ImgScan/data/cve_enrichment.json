@@ -1,0 +1,2642 @@
+{
+  "CVE-2024-35195": {
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-32681": {
+    "cvss_score": 6.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2018-18074": {
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-33503": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-43804": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-37891": {
+    "cvss_score": 6.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-49083": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-0286": {
+    "cvss_score": 7.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-28219": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-50447": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-22817": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2023-36053": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-31047": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-28346": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2024-34064": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-22195": {
+    "cvss_score": 5.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-28493": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-34069": {
+    "cvss_score": 8.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-25577": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-28423": {
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-33430": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-34141": {
+    "cvss_score": 3.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+    "kev": false
+  },
+  "CVE-2020-13091": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-36464": {
+    "cvss_score": 3.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+    "kev": false
+  },
+  "CVE-2020-1747": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2017-18342": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2022-24302": {
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-23727": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-28856": {
+    "cvss_score": 7.0,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-28425": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-23846": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-49081": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-24762": {
+    "cvss_score": 6.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-29217": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2013-7450": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-50781": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-33976": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-45907": {
+    "cvss_score": 7.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-32677": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-40897": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2023-5752": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-37920": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-21503": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-30608": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-42825": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-37076": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-21239": {
+    "cvss_score": 7.4,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-25659": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-35719": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-24258": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2019-18874": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10001": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10002": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10003": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10004": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10005": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10006": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10007": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10008": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10009": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10010": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10011": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10012": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10013": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10014": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10015": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10016": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10017": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10018": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10019": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10020": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10021": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10022": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10023": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10024": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10025": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10026": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10027": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10028": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10029": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10030": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10031": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10032": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10033": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10034": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10035": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10036": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10037": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10038": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10039": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10040": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10041": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10042": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10043": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10044": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10045": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10046": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10047": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10048": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10049": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10050": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10051": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10052": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10053": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10054": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10055": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10056": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10057": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10058": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10059": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10060": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10061": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10062": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10063": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10064": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10065": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10066": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10067": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10068": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10069": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10070": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10071": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10072": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10073": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10074": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10075": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10076": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10077": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10078": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10079": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10080": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10081": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10082": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10083": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10084": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10085": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10086": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10087": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10088": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10089": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10090": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10091": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10092": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10093": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10094": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10095": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10096": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10097": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10098": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10099": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10100": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10101": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10102": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10103": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10104": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10105": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10106": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10107": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10108": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10109": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10110": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10111": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10112": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10113": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10114": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10115": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10116": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10117": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10118": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10119": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10120": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10121": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10122": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10123": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10124": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10125": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10126": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10127": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10128": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10129": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10130": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10131": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10132": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10133": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10134": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10135": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10136": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10137": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10138": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10139": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10140": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10141": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10142": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10143": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10144": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10145": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10146": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10147": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10148": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10149": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10150": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10151": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10152": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10153": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10154": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10155": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10156": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10157": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10158": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10159": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10160": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10161": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10162": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10163": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10164": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10165": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10166": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10167": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10168": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10169": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10170": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10171": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10172": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10173": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10174": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10175": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10176": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10177": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10178": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10179": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10180": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10181": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10182": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10183": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10184": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10185": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10186": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10187": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10188": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10189": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10190": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10191": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10192": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10193": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10194": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10195": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10196": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10197": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10198": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10199": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10200": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10201": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10202": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10203": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10204": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10205": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10206": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10207": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10208": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10209": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10210": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10211": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10212": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10213": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10214": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10215": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10216": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10217": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10218": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10219": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10220": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10221": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10222": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10223": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10224": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10225": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10226": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10227": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10228": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10229": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10230": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10231": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10232": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10233": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10234": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10235": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10236": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10237": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10238": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10239": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10240": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10241": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10242": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10243": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10244": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-29041": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-23337": {
+    "cvss_score": 7.2,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-8203": {
+    "cvss_score": 8.2,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-45857": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-28168": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-31129": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-7660": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-0235": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-0122": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-44906": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2024-45296": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-25883": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-37890": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-32640": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-23529": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2024-27288": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-25896": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-36965": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-37713": {
+    "cvss_score": 8.6,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-23369": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-29078": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2022-24999": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-45590": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2020-8142": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-22499": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-37466": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-32695": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-33987": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-21490": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-26136": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-26115": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-3803": {
+    "cvss_score": 5.3,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-38900": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-22189": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-28849": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-46175": {
+    "cvss_score": 8.2,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10245": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10246": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10247": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10248": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10249": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10250": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10251": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10252": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10253": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10254": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10255": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10256": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10257": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10258": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10259": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10260": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10261": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10262": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10263": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10264": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10265": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10266": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10267": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10268": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10269": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10270": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10271": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10272": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10273": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10274": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10275": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10276": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10277": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10278": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10279": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10280": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10281": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10282": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10283": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10284": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10285": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10286": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10287": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10288": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10289": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10290": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10291": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10292": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10293": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10294": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10295": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10296": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10297": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10298": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10299": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10300": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10301": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10302": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10303": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10304": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10305": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10306": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10307": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10308": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10309": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10310": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10311": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10312": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10313": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10314": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10315": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10316": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10317": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10318": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10319": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10320": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10321": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10322": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10323": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10324": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10325": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10326": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10327": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10328": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10329": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10330": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10331": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10332": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10333": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10334": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10335": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10336": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10337": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10338": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10339": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10340": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10341": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10342": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10343": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10344": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10345": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10346": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10347": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10348": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10349": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10350": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10351": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10352": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10353": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10354": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10355": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10356": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10357": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10358": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10359": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10360": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10361": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10362": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10363": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10364": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10365": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10366": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10367": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10368": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10369": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10370": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10371": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10372": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10373": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10374": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10375": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10376": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10377": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10378": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10379": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10380": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10381": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10382": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10383": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10384": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10385": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10386": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10387": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10388": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10389": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10390": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10391": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10392": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10393": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10394": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10395": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10396": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10397": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10398": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10399": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10400": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10401": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10402": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10403": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10404": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10405": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10406": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10407": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10408": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10409": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10410": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10411": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10412": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10413": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10414": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10415": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10416": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10417": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10418": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10419": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10420": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10421": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10422": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10423": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10424": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10425": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10426": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2024-10427": {
+    "cvss_score": 5.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-44228": {
+    "cvss_score": 10.0,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": true
+  },
+  "CVE-2021-45046": {
+    "cvss_score": 9.0,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": true
+  },
+  "CVE-2021-45105": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-22965": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": true
+  },
+  "CVE-2020-36518": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2019-14540": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2017-5638": {
+    "cvss_score": 10.0,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2022-32532": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2021-39144": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2022-29885": {
+    "cvss_score": 5.9,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-4586": {
+    "cvss_score": 7.5,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2022-42889": {
+    "cvss_score": 9.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "kev": false
+  },
+  "CVE-2015-7501": {
+    "cvss_score": 8.1,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  },
+  "CVE-2023-2976": {
+    "cvss_score": 8.8,
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L",
+    "kev": false
+  }
+}
