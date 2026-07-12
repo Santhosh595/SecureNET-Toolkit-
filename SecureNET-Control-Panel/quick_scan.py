@@ -173,6 +173,15 @@ def quick_scan_cloudsentry(provider="aws", profile=None):
     return _start_job("cloudsentry", args)
 
 
+def quick_scan_imgscan(path="./myproject"):
+    """Start an ImgScan dependency/container CVE scan. Returns job_id.
+
+    Args:
+        path: target directory, manifest, SBOM, or Dockerfile to scan.
+    """
+    return _start_job("imgscan", ["scan", "--path", path, "--no-disclaimer"])
+
+
 def get_result(job_id):
     """Get the status/results for a job.
 

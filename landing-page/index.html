@@ -511,24 +511,27 @@
             </div>
             <div>
               <h3 class="tool-card-title">ImgScan</h3>
-              <p class="tool-card-sub">Container / Dependency CVE Scanner</p>
-            </div>
-          </div>
-          <p class="tool-card-desc">Find known vulnerabilities in requirements.txt (delegates to pip-audit when available, else a built-in offline rule set) and in image SBOMs (CycloneDX/SPDX JSON). Read-only and offline-first.</p>
-          <div class="tool-card-tech">
-            <span class="tech-tag">Python</span>
-            <span class="tech-tag">Flask</span>
-            <span class="tech-tag">pip-audit</span>
-            <span class="tech-tag">Rich</span>
-          </div>
-          <ul class="tool-card-features">
-            <li>Dependency scan via pip-audit + offline rules</li>
-            <li>Image SBOM scan (CycloneDX/SPDX)</li>
-            <li>Version-range CVE matching</li>
-            <li>CLI + Flask dashboard</li>
-          </ul>
-          <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/ImgScan" target="_blank" rel="noopener" class="tool-card-link">View source</a>
-        </div>
+              <p class="tool-card-sub">Dependency & Container CVE Scanner</p>
+              </div>
+              </div>
+              <p class="tool-card-desc">Scan Python, Node.js, Java, and Ruby dependencies for known CVEs. Audit Dockerfiles for 30 security misconfigurations. Parse CycloneDX/SPDX SBOMs. Flags CISA Known Exploited Vulnerabilities. Works offline with bundled CVE rule set.</p>
+              <div class="tool-card-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Flask</span>
+              <span class="tech-tag">pip-audit</span>
+              <span class="tech-tag">CycloneDX</span>
+              <span class="tech-tag">SARIF</span>
+              </div>
+              <ul class="tool-card-features">
+              <li>Multi-ecosystem: Python, Node.js, Java, Ruby</li>
+              <li>30 Dockerfile security checks</li>
+              <li>CISA KEV integration (exploited-in-wild flagging)</li>
+              <li>CycloneDX SBOM parsing + generation</li>
+              <li>pip-audit integration with offline CVE fallback</li>
+              <li>SARIF export for GitHub Code Scanning</li>
+              </ul>
+              <a href="https://github.com/Santhosh595/SecureNET-Toolkit-/tree/main/ImgScan" target="_blank" rel="noopener" class="tool-card-link">View source</a>
+              </div>
 
         <!-- TechFinger -->
         <div class="tool-card">
