@@ -1,0 +1,56 @@
+{
+  "apache": [
+    {"affected": "<2.4.49", "cve": "CVE-2021-41773", "severity": "CRITICAL", "cvss_score": 9.8, "description": "Path traversal & RCE in mod_cgi (CVE-2021-41773)."},
+    {"affected": "<2.4.51", "cve": "CVE-2021-44790", "severity": "CRITICAL", "cvss_score": 9.8, "description": "Buffer overflow in mod_lua multipart (CVE-2021-44790)."},
+    {"affected": "<2.4.58", "cve": "CVE-2023-25690", "severity": "HIGH", "cvss_score": 9.1, "description": "HTTP request splitting in mod_proxy (CVE-2023-25690)."}
+  ],
+  "nginx": [
+    {"affected": "<1.20.1", "cve": "CVE-2021-23017", "severity": "HIGH", "cvss_score": 7.7, "description": "1-byte memory overwrite in resolver (CVE-2021-23017)."},
+    {"affected": "<1.21.6", "cve": "CVE-2022-41741", "severity": "MEDIUM", "cvss_score": 6.1, "description": "Off-by-one in ngx_http_mp4_module (CVE-2022-41741)."}
+  ],
+  "iis": [
+    {"affected": "<10", "cve": "CVE-2017-7269", "severity": "CRITICAL", "cvss_score": 9.8, "description": "Stack buffer overflow in WebDAV (CVE-2017-7269)."}
+  ],
+  "wordpress": [
+    {"affected": "<6.4.2", "cve": "CVE-2024-29803", "severity": "HIGH", "cvss_score": 8.1, "description": "WP_Query SQL injection variant (CVE-2024-29803)."},
+    {"affected": "<6.4.3", "cve": "CVE-2024-31210", "severity": "MEDIUM", "cvss_score": 6.5, "description": "XSS in comment author field (CVE-2024-31210)."}
+  ],
+  "drupal": [
+    {"affected": "<9.5.9", "cve": "CVE-2023-29443", "severity": "CRITICAL", "cvss_score": 9.8, "description": "Remote code execution via form API (CVE-2023-29443)."},
+    {"affected": "<10.1.0", "cve": "CVE-2023-31250", "severity": "HIGH", "cvss_score": 8.1, "description": "Access bypass in JSON:API (CVE-2023-31250)."}
+  ],
+  "joomla": [
+    {"affected": "<4.4.3", "cve": "CVE-2024-21733", "severity": "HIGH", "cvss_score": 8.1, "description": "Improper access control in com_users (CVE-2024-21733)."}
+  ],
+  "magento": [
+    {"affected": "<2.4.6", "cve": "CVE-2024-34102", "severity": "CRITICAL", "cvss_score": 9.8, "description": "Arbitrary file upload (CosmicSting) (CVE-2024-34102)."}
+  ],
+  "laravel": [
+    {"affected": "<9.5.0", "cve": "CVE-2023-0835", "severity": "HIGH", "cvss_score": 8.8, "description": "Improper input validation in cookie (CVE-2023-0835)."},
+    {"affected": "<8.4.0", "cve": "CVE-2021-43617", "severity": "MEDIUM", "cvss_score": 5.3, "description": "Weak password hashing default (CVE-2021-43617)."}
+  ],
+  "express": [
+    {"affected": "<4.19.0", "cve": "CVE-2024-29041", "severity": "MEDIUM", "cvss_score": 5.3, "description": "Open redirect in res.location (CVE-2024-29041)."},
+    {"affected": "<4.17.3", "cve": "CVE-2022-24999", "severity": "HIGH", "cvss_score": 8.8, "description": "qs prototype pollution (CVE-2022-24999)."}
+  ],
+  "django": [
+    {"affected": "<4.2.4", "cve": "CVE-2023-36053", "severity": "MEDIUM", "cvss_score": 5.3, "description": "Email validation bypass via leading dot (CVE-2023-36053)."},
+    {"affected": "<3.2.19", "cve": "CVE-2022-28346", "severity": "HIGH", "cvss_score": 9.8, "description": "SQL injection in QuerySet.annotate (CVE-2022-28346)."}
+  ],
+  "aspnet": [
+    {"affected": "<4.8", "cve": "CVE-2022-41089", "severity": "HIGH", "cvss_score": 8.1, "description": ".NET serialization RCE (CVE-2022-41089)."}
+  ],
+  "jquery": [
+    {"affected": "<3.5.0", "cve": "CVE-2020-11022", "severity": "MEDIUM", "cvss_score": 6.1, "description": "XSS via HTML manipulation (CVE-2020-11022)."},
+    {"affected": "<3.5.0", "cve": "CVE-2020-11023", "severity": "MEDIUM", "cvss_score": 6.1, "description": "XSS via DOM manipulation (CVE-2020-11023)."}
+  ],
+  "react": [
+    {"affected": "<16.13.0", "cve": "CVE-2020-13931", "severity": "MEDIUM", "cvss_score": 5.3, "description": "XSS in react-dom server rendering (CVE-2020-13931)."}
+  ],
+  "bootstrap": [
+    {"affected": "<3.4.1", "cve": "CVE-2019-8331", "severity": "MEDIUM", "cvss_score": 6.1, "description": "XSS in tooltip/data-container (CVE-2019-8331)."}
+  ],
+  "php": [
+    {"affected": "<8.0.0", "cve": "EOL-PHP-7", "severity": "HIGH", "cvss_score": 7.5, "description": "PHP 7.x is EOL (Dec 2023) — no security updates."}
+  ]
+}
