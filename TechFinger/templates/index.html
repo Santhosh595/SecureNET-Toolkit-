@@ -1,46 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechFinger — SecureNET</title>
-  <style>
-    :root { --bg:#0d1117; --card:#161b22; --accent:#06b6d4; --text:#e6edf3; --muted:#8b949e; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); }
-    header { padding:24px; background:var(--card); border-bottom:1px solid #21262d; }
-    header h1 { margin:0; color:var(--accent); }
-    main { max-width:980px; margin:0 auto; padding:24px; }
-    .panel { background:var(--card); border:1px solid #21262d; border-radius:10px; padding:20px; }
-    input { width:100%; padding:12px; background:#0d1117; border:1px solid #30363d; color:var(--text); border-radius:8px; }
-    button { margin-top:12px; padding:10px 18px; background:var(--accent); color:#06222a; border:0; border-radius:8px; font-weight:600; cursor:pointer; }
-    .row { padding:10px 14px; margin:6px 0; background:#0d1117; border-radius:6px; border-left:4px solid var(--accent); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechFinger — Web Technology Fingerprinter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060a10; --surface:#0c1220; --surface-raised:#111827;
+    --border:#1a2538; --border-light:#243044; --text:#e2e8f0;
+    --muted:#64748b; --dim:#475569; --accent:#0ea5e9;
+    --safe:#22c55e; --warn:#f59e0b; --crit:#ef4444; --high:#f97316;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  .mono{font-family:'JetBrains Mono',monospace}
+  header{padding:24px 32px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0c1220,#060a10)}
+  header h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
+  header h1 span{color:var(--accent)}
+  header p{color:var(--muted);font-size:13px;margin-top:4px}
+  .disclaimer-box{margin:20px 32px;padding:12px 16px;border:1px solid var(--warn);border-radius:8px;background:rgba(245,158,11,.07);color:var(--warn);font-size:13px}
+  nav{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--surface)}
+  nav button{background:none;border:none;color:var(--muted);padding:12px 16px;cursor:pointer;font-size:13px;font-weight:500;border-bottom:2px solid transparent}
+  nav button:hover{color:var(--text)}
+  nav button.active{color:var(--accent);border-bottom-color:var(--accent)}
+  main{padding:24px 32px;max-width:1200px}
+  .tab{display:none}
+  .tab.active{display:block}
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px}
+  .panel h2{font-size:15px;margin-bottom:14px;font-weight:600}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  input,select,textarea{width:100%;background:var(--surface-raised);border:1px solid var(--border-light);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px}
+  .row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+  .row>*{flex:1;min-width:160px}
+  .btn{background:var(--accent);color:#04121b;border:none;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px}
+  .btn:hover{opacity:.9}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .b-certain{background:rgba(34,197,94,.16);color:var(--safe)}
+  .b-likely{background:rgba(34,197,94,.10);color:var(--safe)}
+  .b-possible{background:rgba(245,158,11,.14);color:var(--warn)}
+  .b-uncertain{background:rgba(71,85,105,.18);color:var(--dim)}
+  .sev-CRITICAL{background:rgba(239,68,68,.16);color:var(--crit)}
+  .sev-CRIT{background:rgba(239,68,68,.16);color:var(--crit)}
+  .sev-HIGH{background:rgba(249,115,22,.16);color:var(--high)}
+  .sev-MEDIUM{background:rgba(245,158,11,.14);color:var(--warn)}
+  .sev-INFO{background:rgba(14,165,233,.14);color:var(--accent)}
+  .card{background:var(--surface-raised);border:1px solid var(--border-light);border-radius:9px;padding:14px;margin-bottom:10px}
+  .card .tname{font-weight:600;font-size:14px}
+  .card .tmeta{color:var(--muted);font-size:12px;margin-top:4px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--border)}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  .stat{background:var(--surface-raised);border:1px solid var(--border-light);border-radius:9px;padding:16px;text-align:center}
+  .stat .n{font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace}
+  .stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+  .pass{color:var(--safe)} .fail{color:var(--crit)}
+  .ind{font-size:11px;color:var(--muted);margin-top:4px}
+  .muted{color:var(--muted);font-size:13px}
+  .err{color:var(--crit);font-size:13px}
+  .disclaimer-footer{margin:32px;padding:14px 18px;border:1px solid var(--border);border-radius:8px;color:var(--dim);font-size:12px;background:var(--surface)}
+  a{color:var(--accent);text-decoration:none}
+</style>
 </head>
 <body>
-  <header><h1>TechFinger</h1><p>Web technology fingerprinting (WhatWeb/httpx-style)</p></header>
-  <main>
+<header>
+  <h1>Tech<span>Finger</span></h1>
+  <p>Web Technology Fingerprinter &amp; Stack Analyzer — identify server, framework, CMS, CDN, analytics &amp; JS libraries from a single request.</p>
+</header>
+
+<div class="disclaimer-box">
+  ⚠ TechFinger sends a single read-only HTTP request. Only fingerprint sites you own or have permission to assess.
+</div>
+
+<nav>
+  <button class="active" data-tab="scan">Scan</button>
+  <button data-tab="stack">Technology Stack</button>
+  <button data-tab="headers">Security Headers</button>
+  <button data-tab="cves">CVE Correlations</button>
+  <button data-tab="evidence">Raw Evidence</button>
+  <button data-tab="bulk">Bulk Scan</button>
+  <button data-tab="history">History</button>
+</nav>
+
+<main>
+  <!-- 1. SCAN -->
+  <section class="tab active" id="scan">
     <div class="panel">
-      <input id="target" placeholder="https://example.com" />
-      <button onclick="runScan()">Fingerprint</button>
+      <h2>Target Scan</h2>
+      <div class="row">
+        <div>
+          <label>Target URL</label>
+          <input id="url" placeholder="https://example.com">
+        </div>
+        <div style="flex:0 0 220px">
+          <label>User-Agent</label>
+          <select id="ua">
+            <option value="">Default browser UA</option>
+            <option value="googlebot">Googlebot</option>
+            <option value="curl">curl</option>
+            <option value="custom">Custom…</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <label style="flex:0 0 auto"><input type="checkbox" id="full" style="width:auto;vertical-align:middle"> Also fetch robots.txt + sitemap.xml (--full)</label>
+        <button class="btn" id="scanBtn">Start scan</button>
+      </div>
+      <div id="scanMsg" class="muted" style="margin-top:12px"></div>
     </div>
-    <div id="results" style="margin-top:20px;"></div>
-  </main>
-  <script>
-    async function runScan() {
-      const target = document.getElementById('target').value.trim();
-      const box = document.getElementById('results');
-      if (!target) { box.innerHTML = '<p style="color:#ff7a45">Enter a target URL.</p>'; return; }
-      box.innerHTML = '<p style="color:#8b949e">Fingerprinting…</p>';
-      try {
-        const r = await fetch('/scan', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ target }) });
-        const d = await r.json();
-        if (d.error) { box.innerHTML = '<p style="color:#ff7a45">'+d.error+'</p>'; return; }
-        const rows = (d.detected||[]).map(t =>
-          `<div class="row"><strong>${t.category}: ${t.name}</strong></div>`).join('') || '<p style="color:#36cfc9">Nothing identified.</p>';
-        box.innerHTML = `<p style="color:#8b949e">${d.server||''} · HTTP ${d.status} · ${d.title||''}</p>` + rows;
-      } catch(e) { box.innerHTML = '<p style="color:#ff7a45">Failed: '+e+'</p>'; }
-    }
-  </script>
+  </section>
+
+  <!-- 2. STACK -->
+  <section class="tab" id="stack">
+    <div class="panel">
+      <h2>Technology Stack</h2>
+      <div class="grid" id="stackGrid"><div class="muted">Run a scan to populate.</div></div>
+      <h2 style="margin-top:20px">Risk Summary</h2>
+      <div class="grid" id="riskGrid">
+        <div class="stat"><div class="n" style="color:var(--crit)" id="rCrit">0</div><div class="l">Critical</div></div>
+        <div class="stat"><div class="n" style="color:var(--high)" id="rHigh">0</div><div class="l">High</div></div>
+        <div class="stat"><div class="n" style="color:var(--warn)" id="rMed">0</div><div class="l">Medium</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent)" id="rInfo">0</div><div class="l">Info</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. HEADERS -->
+  <section class="tab" id="headers">
+    <div class="panel">
+      <h2>Security Headers</h2>
+      <table id="headerTable"><thead><tr><th>Header</th><th>Status</th><th>Value</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- 4. CVES -->
+  <section class="tab" id="cves">
+    <div class="panel">
+      <h2>CVE Correlations</h2>
+      <table id="cveTable"><thead><tr><th>Tech</th><th>Version</th><th>CVE</th><th>Severity</th><th>CVSS</th><th></th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- 5. EVIDENCE -->
+  <section class="tab" id="evidence">
+    <div class="panel">
+      <h2>Raw Evidence</h2>
+      <div id="evidenceList"><div class="muted">Per-technology matched indicators appear here.</div></div>
+    </div>
+  </section>
+
+  <!-- 6. BULK -->
+  <section class="tab" id="bulk">
+    <div class="panel">
+      <h2>Bulk URL Scan</h2>
+      <label>Paste URLs (one per line)</label>
+      <textarea id="bulkUrls" rows="6" placeholder="https://a.com\nhttps://b.com"></textarea>
+      <div class="row" style="margin-top:12px">
+        <div style="flex:0 0 160px"><label>Delay (s)</label><input id="bulkDelay" class="mono" value="1.0"></div>
+        <label style="flex:0 0 auto"><input type="checkbox" id="bulkFull" style="width:auto;vertical-align:middle"> --full (robots/sitemap)</label>
+        <button class="btn" id="bulkBtn">Scan all</button>
+        <button class="btn" id="bulkCsv" style="background:var(--surface-raised);color:var(--accent);border:1px solid var(--border-light)">Export CSV</button>
+      </div>
+      <div id="bulkMsg" class="muted" style="margin-top:12px"></div>
+      <table id="bulkTable" style="margin-top:14px"><thead><tr><th>URL</th><th>Tech</th><th>CVE</th><th>Crit</th><th>High</th><th>Med</th><th>Info</th><th>WAF</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- 7. HISTORY -->
+  <section class="tab" id="history">
+    <div class="panel">
+      <h2>Scan History</h2>
+      <table id="histTable"><thead><tr><th>ID</th><th>Target</th><th>Time</th><th>Tech</th><th>CVE</th><th>WAF</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+</main>
+
+<div class="disclaimer-footer">
+  TechFinger is a read-only fingerprinting tool. It never modifies the target. Use only on assets you own or are authorized to assess.
+</div>
+
+<script>
+const CAT_LABEL={server:'Server',framework:'Framework',cms:'CMS',cdn:'CDN',analytics:'Analytics',jslibs:'JS Library',favicon:'Favicon'};
+const STATE={current:null, bulk:null};
+let CUSTOM_UA='';
+document.getElementById('ua').addEventListener('change',e=>{
+  if(e.target.value==='custom'){ CUSTOM_UA=prompt('Custom User-Agent:')||''; }
+});
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); document.getElementById(b.dataset.tab).classList.add('active');
+  if(b.dataset.tab==='history') loadHistory();
+}));
+function uaValue(){
+  const v=document.getElementById('ua').value;
+  if(v==='googlebot')return 'Googlebot/2.1 (+http://www.google.com/bot.html)';
+  if(v==='curl')return 'curl/8.0';
+  if(v==='custom')return CUSTOM_UA;
+  return '';
+}
+function sevBadge(s){return `<span class="badge sev-${s}">${s}</span>`;}
+function confBadge(l){const m={CERTAIN:'b-certain',LIKELY:'b-likely',POSSIBLE:'b-possible',UNCERTAIN:'b-uncertain'};return `<span class="badge ${m[l]||'b-uncertain'}">${l}</span>`;}
+
+async function doScan(){
+  const btn=document.getElementById('scanBtn');btn.disabled=true;
+  const msg=document.getElementById('scanMsg');msg.textContent='Scanning…';
+  const body={url:document.getElementById('url').value.trim(),full:document.getElementById('full').checked,user_agent:uaValue()};
+  try{
+    const r=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d=await r.json();
+    if(d.error){msg.innerHTML=`<span class="err">${d.error}</span>`;return;}
+    STATE.current=d; renderScan(d); msg.textContent='Scan complete.';
+  }catch(e){msg.innerHTML=`<span class="err">${e}</span>`;}
+  finally{btn.disabled=false;}
+}
+function renderScan(d){
+  const grid=document.getElementById('stackGrid');grid.innerHTML='';
+  const order=['server','framework','cms','cdn','analytics','jslibs','favicon'];
+  const byCat={};d.technologies.forEach(t=>{(byCat[t.category]=byCat[t.category]||[]).push(t);});
+  if(!d.technologies.length)grid.innerHTML='<div class="muted">No technologies identified.</div>';
+  order.forEach(c=>{(byCat[c]||[]).forEach(t=>{
+    const ver=t.version?`${t.name} ${t.version}`:`${t.name} (version unknown)`;
+    grid.insertAdjacentHTML('beforeend',`<div class="card"><div class="tname">${t.name}</div>
+      <div class="tmeta">${CAT_LABEL[t.category]||t.category} · ${ver}</div>
+      <div style="margin-top:8px">${confBadge(t.label)} ${sevBadge(t.risk)}</div></div>`);});});
+  // risk
+  const tally={CRITICAL:0,HIGH:0,MEDIUM:0,INFO:0};
+  d.technologies.forEach(t=>{for(const k in tally){if(t.risk.toUpperCase().startsWith(k.slice(0,4))){tally[k]++;break;}}});
+  document.getElementById('rCrit').textContent=tally.CRITICAL;
+  document.getElementById('rHigh').textContent=tally.HIGH;
+  document.getElementById('rMed').textContent=tally.MEDIUM;
+  document.getElementById('rInfo').textContent=tally.INFO;
+  // headers
+  const ht=document.querySelector('#headerTable tbody');ht.innerHTML='';
+  d.headers.forEach(h=>{ht.insertAdjacentHTML('beforeend',`<tr><td>${h.name}</td>
+    <td class="${h.present?'pass':'fail'}">${h.present?'✓ PRESENT':'✗ MISSING'}</td>
+    <td>${h.present?h.value.slice(0,60):sevBadge(h.severity)}</td></tr>`);});
+  // cves
+  const ct=document.querySelector('#cveTable tbody');ct.innerHTML='';
+  if(!d.cves.length)ct.innerHTML='<tr><td colspan="6" class="muted">No CVE correlations.</td></tr>';
+  d.cves.forEach(c=>{ct.insertAdjacentHTML('beforeend',`<tr><td>${c.tech}</td><td>${c.version||'?'}</td>
+    <td class="mono">${c.cve}</td><td>${sevBadge(c.severity)}</td><td>${c.cvss}</td>
+    <td><a href="https://nvd.nist.gov/vuln/detail/${c.cve}" target="_blank" rel="noopener">NVD ↗</a></td></tr>`);});
+  // evidence
+  const el=document.getElementById('evidenceList');el.innerHTML='';
+  if(!d.technologies.length)el.innerHTML='<div class="muted">No evidence.</div>';
+  d.technologies.forEach(t=>{
+    const ind=t.indicators.map(i=>`${i.source}: <code>${i.pattern}</code>`).join('<br>');
+    el.insertAdjacentHTML('beforeend',`<div class="card"><div class="tname">${t.name} ${confBadge(t.label)}</div>
+      <div class="ind">${ind||'favicon hash match'}</div></div>`);});
+}
+document.getElementById('scanBtn').addEventListener('click',doScan);
+
+async function doBulk(){
+  const btn=document.getElementById('bulkBtn');btn.disabled=true;
+  const msg=document.getElementById('bulkMsg');msg.textContent='Bulk scanning…';
+  const urls=document.getElementById('bulkUrls').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const body={urls,delay:parseFloat(document.getElementById('bulkDelay').value)||1,full:document.getElementById('bulkFull').checked};
+  try{
+    const r=await fetch('/api/bulk',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d=await r.json();STATE.bulk=d.results;renderBulk(d.results);msg.textContent=`Done: ${d.results.length} URLs.`;
+  }catch(e){msg.innerHTML=`<span class="err">${e}</span>`;}
+  finally{btn.disabled=false;}
+}
+function renderBulk(rows){
+  const t=document.querySelector('#bulkTable tbody');t.innerHTML='';
+  rows.forEach(r=>{const k=r.risk;t.insertAdjacentHTML('beforeend',`<tr><td>${r.url}</td><td>${r.tech_count}</td>
+    <td>${r.cve_count}</td><td>${k.CRITICAL}</td><td>${k.HIGH}</td><td>${k.MEDIUM}</td><td>${k.INFO}</td>
+    <td>${r.waf?'yes':'—'}</td></tr>`);});
+}
+document.getElementById('bulkBtn').addEventListener('click',doBulk);
+document.getElementById('bulkCsv').addEventListener('click',()=>{
+  if(!STATE.bulk)return;
+  const rows=[['url','status','tech_count','cve_count','critical','high','medium','info','waf']];
+  STATE.bulk.forEach(r=>{const k=r.risk;rows.push([r.url,r.status,r.tech_count,r.cve_count,k.CRITICAL,k.HIGH,k.MEDIUM,k.INFO,r.waf]);});
+  const csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='techfinger_bulk.csv';a.click();
+});
+async function loadHistory(){
+  const r=await fetch('/api/history');const rows=await r.json();
+  const t=document.querySelector('#histTable tbody');t.innerHTML='';
+  rows.forEach(s=>{t.insertAdjacentHTML('beforeend',`<tr><td>${s.id}</td><td>${s.target_url}</td>
+    <td>${s.timestamp}</td><td>${s.tech_count}</td><td>${s.cve_count}</td><td>${s.waf_detected?'yes':'—'}</td></tr>`);});
+}
+document.getElementById('url').addEventListener('keydown',e=>{if(e.key==='Enter')doScan();});
+</script>
 </body>
 </html>
