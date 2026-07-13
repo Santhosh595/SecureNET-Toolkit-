@@ -1,22 +1,61 @@
-# TechFinger — LEARN.md
+# 🛡️ TechFinger — Learn Before You Use
 
-## What problem does TechFinger solve?
+New to web technology fingerprinting? This guide gets you started — no security background needed.
 
-Before attacking or defending a web app you need to know what it's built from. WhatWeb fingerprints
-thousands of technologies from response signatures. TechFinger shows the mechanism with a compact
-rule set and regex matching.
+## What is fingerprinting?
 
-## Key concept — signature matching
+Every website is built from *technologies*: a web server (Apache, nginx, IIS),
+a framework (Django, Laravel, Express), a CMS (WordPress, Drupal), a CDN
+(Cloudflare, CloudFront), analytics (Google Analytics), and JavaScript libraries
+(jQuery, React, Bootstrap). These leave **telltale traces** in the HTTP response —
+server headers, HTML comments, cookie names, meta tags, and file paths.
 
-Each rule pairs a technology with a pattern and a location (header / body / cookie / server).
-TechFinger builds per-location "haystacks" once, then runs regexes against the right one. This is
-how real fingerprinting tools separate "PHP revealed in a cookie" from "nginx in the Server header."
+TechFinger reads those traces from a **single HTTP GET** and tells you the stack.
 
-## Analogy
+## Why does it matter?
 
-Think of TechFinger as a **detective reading clues at a doorway**: the doormat (server header),
-the welcome mat text (body), and the mailbox label (cookies) each hint at who lives inside.
+- **Attack surface**: an exposed `Apache/2.4.49` header tells an attacker exactly
+  which CVE to try (CVE-2021-41773, CVSS 9.8).
+- **Outdated libraries**: jQuery < 3.5.0 ships known XSS vectors.
+- **Missing defenses**: no `Strict-Transport-Security` → SSL-strip risk.
+- **CVE correlation**: TechFinger maps each detected tech + version to known CVEs.
 
-## Read-only by design
+## The 7 categories (27 signatures)
 
-TechFinger only sends a single GET and reads the response — it never probes, fuzzes, or writes.
+| # | Category | Example signatures |
+|---|----------|--------------------|
+| 1 | Server | Apache, Nginx, IIS, LiteSpeed |
+| 2 | Framework | Django, Laravel, Rails, Express, ASP.NET |
+| 3 | CMS | WordPress, Drupal, Joomla, Magento, Shopify |
+| 4 | CDN | Cloudflare, CloudFront, Fastly |
+| 5 | Analytics | Google Analytics, Hotjar/Clarity |
+| 6 | JS Libraries | jQuery, React, Bootstrap |
+| 7 | Security Headers | HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Permissions-Policy |
+
+## Confidence scoring (how sure are we?)
+
+Each signature has indicators, each with a weight (0-100). TechFinger takes the
+**highest single weight** (not additive) and adds +10 if **3+ indicators** match:
+
+- `CERTAIN` 90-100 · `LIKELY` 70-89 · `POSSIBLE` 50-69 · `UNCERTAIN` <50
+
+## Quick start
+
+```bash
+pip install requests beautifulsoup4 rich flask
+python main.py https://example.com --no-disclaimer
+python main.py --bulk urls.txt --csv out.csv --delay 2
+python dashboard.py   # http://localhost:5017
+```
+
+## Cautions
+
+- **Read-only.** TechFinger never modifies the target. Only scan sites you own or
+  are authorized to assess.
+- **Realistic UA.** The default User-Agent is a normal browser, so WAFs don't
+  block the request. If a WAF challenge page is returned, TechFinger still reports
+  the CDN/WAF (e.g. Cloudflare) it detected.
+- **Single request per target** by default. `--full` adds `robots.txt` + `sitemap.xml`.
+- **Bulk rate-limit**: 1 request/sec by default (`--delay` to override).
+- Signatures are **JSON** in `signatures/` — add your own without touching code.
+  See `SIGNATURES.md`.

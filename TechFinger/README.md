@@ -1,60 +1,98 @@
-# TechFinger — Web Technology Fingerprinting (WhatWeb/httpx-style)
+# TechFinger — Web Technology Fingerprinter & Stack Analyzer
 
-**Author:** Santhosh L
-**License:** MIT
-**Maps to trending tools:** [urbanadventurer/whatweb](https://github.com/urbanadventurer/whatweb) / [projectdiscovery/httpx](https://github.com/projectdiscovery/httpx)
+> WhatWeb / httpx-style fingerprinting: identify server software, frameworks,
+> CMS platforms, CDN providers, analytics tools, and JavaScript libraries
+> from a single HTTP request — then correlate detected versions with known CVEs.
 
-## Overview
+TechFinger inspects **response headers, HTML body, cookies, meta tags,
+HTML comments, JS/CSS file URLs, inline JS, favicon hash, plus optional
+`robots.txt` / `sitemap.xml`** to detect **27+ signatures across 7 categories**,
+score confidence, assess header coverage, and map versions to CVEs.
 
-TechFinger identifies the technologies behind a web target by inspecting HTTP response headers,
-cookies, and body signatures — the SecureNET-styled, Python-native answer to **WhatWeb** and
-**httpx**. It detects servers (nginx/Apache/IIS), frameworks (Django/Flask/Laravel/ASP.NET),
-CMS platforms (WordPress/Drupal/Joomla/Shopify), CDNs, analytics, JS libraries, and security
-headers (HSTS/CSP). Fully **read-only**.
+## 7 categories (27 signatures)
 
-## CLI Usage
+| # | Category | Signatures |
+|---|----------|-------------|
+| 1 | Server | Apache, Nginx, Microsoft IIS, LiteSpeed |
+| 2 | Framework | Django, Laravel, Ruby on Rails, Express.js, ASP.NET |
+| 3 | CMS | WordPress, Drupal, Joomla, Magento, Shopify |
+| 4 | CDN | Cloudflare, AWS CloudFront, Fastly |
+| 5 | Analytics | Google Analytics, Hotjar / Clarity |
+| 6 | JS Libraries | jQuery, React, Bootstrap |
+| 7 | Security Headers | HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Permissions-Policy |
+
+## Confidence scoring
+
+- Each indicator has a `confidence_weight` (0-100). Final = **highest single weight**
+  (not additive); **+10 boost if 3+ indicators match** (capped 100).
+- Labels: `CERTAIN` 90-100 · `LIKELY` 70-89 · `POSSIBLE` 50-69 · `UNCERTAIN` <50.
+- Version extracted from `version_patterns` (first match wins).
+
+## CVE correlation
+
+Detected tech + version is checked against `data/tech_cve_map.json`
+(e.g. `WordPress 6.2.3 → CVE-2024-29803 (HIGH)`). Includes
+Apache, nginx, IIS, WordPress, Drupal, Joomla, Magento, Laravel, Express,
+Django, ASP.NET, jQuery, React, Bootstrap, PHP EOL rules.
+
+## Usage
 
 ```bash
-python main.py https://example.com
+# Single target
 python main.py https://example.com --no-disclaimer
-```
+python main.py https://example.com --full          # also robots.txt + sitemap.xml
 
-## Web Dashboard
+# Custom UA / WAF evasion friendliness
+python main.py https://example.com --user-agent "Googlebot/2.1"
 
-```bash
+# Bulk
+python main.py --bulk urls.txt --csv out.csv --delay 2
+
+# Dashboard (port 5017)
 python dashboard.py
-# Open http://127.0.0.1:5017
 ```
 
-## Detection Categories
+### CLI flags
 
-| Category | Examples |
-|----------|----------|
-| Server | nginx, Apache, Microsoft-IIS, Cloudflare |
-| Framework | Django, Flask, Express, Laravel, PHP, ASP.NET |
-| CMS | WordPress, Drupal, Joomla, Shopify |
-| CDN | Cloudflare, Akamai, Amazon CloudFront |
-| Analytics | Google Analytics, Matomo |
-| JS-Lib | React, Vue, jQuery |
-| Security | HSTS, Content-Security-Policy |
+| Flag | Description |
+|------|-------------|
+| `--full` | Also fetch `robots.txt` + `sitemap.xml` |
+| `--delay N` | Seconds between bulk requests (default 1) |
+| `--user-agent` | Custom User-Agent (default: realistic browser UA) |
+| `--timeout N` | Request timeout (default 8s) |
+| `--bulk FILE` | Scan URLs from file (one per line) |
+| `--csv FILE` | Export bulk results to CSV |
+| `--no-disclaimer` | Skip the authorization prompt |
 
-## Project Structure
+## Dashboard (`localhost:5017`)
 
-```
-TechFinger/
-├── main.py            # CLI entry point (Rich tables)
-├── engine.py          # Signature-based fingerprint engine
-├── database.py        # SQLite persistence
-├── dashboard.py       # Flask web dashboard
-├── requirements.txt
-└── README.md
-```
+1. **Scan** — URL input, UA selector, `--full` toggle.
+2. **Technology Stack** — category cards, confidence badges, version, risk summary.
+3. **Security Headers** — pass/fail grid with current values.
+4. **CVE Correlations** — tech / version / CVE / severity / CVSS + NVD link.
+5. **Raw Evidence** — which indicators matched per technology (transparency).
+6. **Bulk Scan** — upload URLs, results table, CSV export.
+7. **History** — past scans with tech/CVE summary.
 
-## Legal Disclaimer
+## SQLite schema (5 tables)
 
-**TechFinger is for authorized reconnaissance only.** Scan only hosts you own or have explicit
-permission to test.
+`scans` · `technologies` · `header_checks` · `cve_correlations` · `raw_indicators`.
 
-## License
+## Tech stack
 
-MIT License — free for personal, educational, and commercial use.
+Python 3.8+ · `requests` · `beautifulsoup4` · `rich` · `flask` · `sqlite3` (stdlib).
+
+## Signatures are JSON (community-extensible)
+
+All rules live in `signatures/*.json` (one file per category) — **no Python changes
+needed to add a detection**. See `SIGNATURES.md` for the format.
+
+## Safety
+
+- **Read-only**: a single GET (or GET + robots/sitemap with `--full`). Never modifies the target.
+- **Realistic browser User-Agent** by default, so WAFs don't block the scan.
+- **WAF detection**: if a challenge page is returned, TechFinger still reports
+  the CDN/WAF it identified.
+- **Rate-limited** bulk scans (1 req/s, configurable).
+- **Disclaimer**: *"TechFinger sends a single read-only HTTP request. Only
+  fingerprint sites you own or have permission to assess."*
