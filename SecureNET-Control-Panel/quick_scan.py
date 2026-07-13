@@ -182,6 +182,15 @@ def quick_scan_imgscan(path="./myproject"):
     return _start_job("imgscan", ["scan", "--path", path, "--no-disclaimer"])
 
 
+def quick_scan_techfinger(url="https://example.com"):
+    """Start a TechFinger fingerprint scan. Returns job_id.
+
+    Args:
+        url: target URL to fingerprint.
+    """
+    return _start_job("techfinger", [url, "--no-disclaimer"])
+
+
 def get_result(job_id):
     """Get the status/results for a job.
 

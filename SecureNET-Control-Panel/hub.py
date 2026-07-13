@@ -30,6 +30,7 @@ from quick_scan import (quick_scan_headerscan, quick_scan_portmap, quick_scan_ha
                          quick_scan_pathprobe,
                          quick_scan_cloudsentry,
                          quick_scan_imgscan,
+                         quick_scan_techfinger,
                          get_result)
 
 # Load config
@@ -381,6 +382,14 @@ def quickscan_imgscan():
     data = request.get_json(silent=True) or {}
     path = data.get("path", "./myproject")
     job_id = quick_scan_imgscan(path)
+    return jsonify({"job_id": job_id, "status": "pending"})
+
+
+@app.route("/api/quickscan/techfinger", methods=["POST"])
+def quickscan_techfinger():
+    data = request.get_json()
+    url = data.get("url", "https://example.com")
+    job_id = quick_scan_techfinger(url)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
