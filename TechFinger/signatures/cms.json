@@ -1,0 +1,90 @@
+[
+  {
+    "id": "CMS-001",
+    "name": "WordPress",
+    "category": "cms",
+    "confidence": 90,
+    "indicators": [
+      {"source": "header", "field": "x-powered-by", "pattern": "WordPress", "confidence_weight": 80},
+      {"source": "body", "pattern": "/wp-content/", "confidence_weight": 90},
+      {"source": "body", "pattern": "/wp-includes/", "confidence_weight": 90},
+      {"source": "meta", "attribute": "generator", "pattern": "WordPress (.*)", "version_group": 1, "confidence_weight": 100},
+      {"source": "cookie", "name_pattern": "wordpress_.*", "confidence_weight": 70}
+    ],
+    "version_patterns": [
+      {"source": "meta", "attribute": "generator", "regex": "WordPress ([\\d.]+)"},
+      {"source": "body", "regex": "\\?ver=([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "wordpress", "version_required": true},
+    "tags": ["cms", "php", "blog", "open-source"],
+    "website": "https://wordpress.org"
+  },
+  {
+    "id": "CMS-002",
+    "name": "Drupal",
+    "category": "cms",
+    "confidence": 90,
+    "indicators": [
+      {"source": "meta", "attribute": "generator", "pattern": "Drupal", "confidence_weight": 100},
+      {"source": "header", "field": "x-generator", "pattern": "Drupal", "confidence_weight": 95},
+      {"source": "body", "pattern": "/sites/default/files/", "confidence_weight": 85},
+      {"source": "cookie", "name_pattern": "SESS[a-f0-9]{32}", "confidence_weight": 75}
+    ],
+    "version_patterns": [
+      {"source": "meta", "attribute": "generator", "regex": "Drupal (\\d[\\d.]*)"}
+    ],
+    "cve_check": {"lookup_key": "drupal", "version_required": true},
+    "tags": ["cms", "php", "open-source"],
+    "website": "https://www.drupal.org"
+  },
+  {
+    "id": "CMS-003",
+    "name": "Joomla",
+    "category": "cms",
+    "confidence": 90,
+    "indicators": [
+      {"source": "meta", "attribute": "generator", "pattern": "Joomla", "confidence_weight": 100},
+      {"source": "body", "pattern": "/media/jui/", "confidence_weight": 85},
+      {"source": "cookie", "name_pattern": "joomla_.*", "confidence_weight": 75}
+    ],
+    "version_patterns": [
+      {"source": "meta", "attribute": "generator", "regex": "Joomla!? (\\d[\\d.]*)"}
+    ],
+    "cve_check": {"lookup_key": "joomla", "version_required": true},
+    "tags": ["cms", "php", "open-source"],
+    "website": "https://www.joomla.org"
+  },
+  {
+    "id": "CMS-004",
+    "name": "Magento",
+    "category": "cms",
+    "confidence": 88,
+    "indicators": [
+      {"source": "cookie", "name_pattern": "frontend|mage_.*", "confidence_weight": 85},
+      {"source": "body", "pattern": "/skin/frontend/", "confidence_weight": 85},
+      {"source": "header", "field": "x-magento", "pattern": ".*", "confidence_weight": 90}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "magento/(\\d[\\d.]*)/"}
+    ],
+    "cve_check": {"lookup_key": "magento", "version_required": true},
+    "tags": ["cms", "e-commerce", "php"],
+    "website": "https://magento.com"
+  },
+  {
+    "id": "CMS-005",
+    "name": "Shopify",
+    "category": "cms",
+    "confidence": 90,
+    "indicators": [
+      {"source": "body", "pattern": "cdn\\.shopify\\.com", "confidence_weight": 95},
+      {"source": "header", "field": "x-shopid", "pattern": ".*", "confidence_weight": 90},
+      {"source": "cookie", "name_pattern": "_shopify_y", "confidence_weight": 80}
+    ],
+    "version_patterns": [],
+    "cve_check": {"lookup_key": "shopify", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "tags": ["cms", "e-commerce", "saas"],
+    "website": "https://www.shopify.com"
+  }
+]

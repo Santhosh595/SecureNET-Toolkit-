@@ -1,0 +1,82 @@
+[
+  {
+    "id": "SEC-001",
+    "name": "Strict-Transport-Security",
+    "category": "security",
+    "confidence": 100,
+    "header_name": "strict-transport-security",
+    "indicators": [
+      {"source": "header", "field": "strict-transport-security", "pattern": ".*", "confidence_weight": 100}
+    ],
+    "pass_if_present": true,
+    "fail_severity": "CRITICAL",
+    "missing_note": "No HSTS — downgrade/SSL-strip risk.",
+    "cve_check": {"lookup_key": null, "version_required": false},
+    "tags": ["security-header", "tls"],
+    "website": "https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security"
+  },
+  {
+    "id": "SEC-002",
+    "name": "Content-Security-Policy",
+    "category": "security",
+    "confidence": 100,
+    "header_name": "content-security-policy",
+    "indicators": [
+      {"source": "header", "field": "content-security-policy", "pattern": ".*", "confidence_weight": 100}
+    ],
+    "pass_if_present": true,
+    "fail_severity": "HIGH",
+    "missing_note": "No CSP — XSS risk not mitigated.",
+    "cve_check": {"lookup_key": null, "version_required": false},
+    "tags": ["security-header", "xss"],
+    "website": "https://developer.mozilla.org/docs/Web/HTTP/CSP"
+  },
+  {
+    "id": "SEC-003",
+    "name": "X-Frame-Options",
+    "category": "security",
+    "confidence": 100,
+    "header_name": "x-frame-options",
+    "indicators": [
+      {"source": "header", "field": "x-frame-options", "pattern": ".*", "confidence_weight": 100}
+    ],
+    "pass_if_present": true,
+    "fail_severity": "MEDIUM",
+    "missing_note": "No X-Frame-Options — clickjacking risk.",
+    "cve_check": {"lookup_key": null, "version_required": false},
+    "tags": ["security-header", "clickjacking"],
+    "website": "https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options"
+  },
+  {
+    "id": "SEC-004",
+    "name": "X-Content-Type-Options",
+    "category": "security",
+    "confidence": 100,
+    "header_name": "x-content-type-options",
+    "indicators": [
+      {"source": "header", "field": "x-content-type-options", "pattern": ".*", "confidence_weight": 100}
+    ],
+    "pass_if_present": true,
+    "fail_severity": "MEDIUM",
+    "missing_note": "No X-Content-Type-Options: nosniff — MIME-sniffing risk.",
+    "cve_check": {"lookup_key": null, "version_required": false},
+    "tags": ["security-header", "mime"],
+    "website": "https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Content-Type-Options"
+  },
+  {
+    "id": "SEC-005",
+    "name": "Permissions-Policy",
+    "category": "security",
+    "confidence": 100,
+    "header_name": "permissions-policy",
+    "indicators": [
+      {"source": "header", "field": "permissions-policy", "pattern": ".*", "confidence_weight": 100}
+    ],
+    "pass_if_present": true,
+    "fail_severity": "MEDIUM",
+    "missing_note": "No Permissions-Policy — browser features unrestricted.",
+    "cve_check": {"lookup_key": null, "version_required": false},
+    "tags": ["security-header", "privacy"],
+    "website": "https://developer.mozilla.org/docs/Web/HTTP/Headers/Permissions-Policy"
+  }
+]

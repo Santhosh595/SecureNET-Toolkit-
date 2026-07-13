@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CDN-001",
+    "name": "Cloudflare",
+    "category": "cdn",
+    "confidence": 95,
+    "indicators": [
+      {"source": "header", "field": "cf-ray", "pattern": ".*", "confidence_weight": 95},
+      {"source": "header", "field": "server", "pattern": "cloudflare", "confidence_weight": 90},
+      {"source": "header", "field": "cf-cache-status", "pattern": ".*", "confidence_weight": 90}
+    ],
+    "version_patterns": [],
+    "cve_check": {"lookup_key": "cloudflare", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "tags": ["cdn", "waf", "proxy"],
+    "website": "https://www.cloudflare.com"
+  },
+  {
+    "id": "CDN-002",
+    "name": "AWS CloudFront",
+    "category": "cdn",
+    "confidence": 95,
+    "indicators": [
+      {"source": "header", "field": "via", "pattern": "CloudFront", "confidence_weight": 90},
+      {"source": "header", "field": "x-amz-cf-id", "pattern": ".*", "confidence_weight": 95},
+      {"source": "header", "field": "x-cache", "pattern": "cloudfront", "confidence_weight": 85}
+    ],
+    "version_patterns": [],
+    "cve_check": {"lookup_key": "cloudfront", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "tags": ["cdn", "aws", "proxy"],
+    "website": "https://aws.amazon.com/cloudfront/"
+  },
+  {
+    "id": "CDN-003",
+    "name": "Fastly",
+    "category": "cdn",
+    "confidence": 92,
+    "indicators": [
+      {"source": "header", "field": "x-served-by", "pattern": "Fastly|cache-fastly", "confidence_weight": 90},
+      {"source": "header", "field": "fastly-debug-digest", "pattern": ".*", "confidence_weight": 95},
+      {"source": "header", "field": "via", "pattern": "varnish", "confidence_weight": 70}
+    ],
+    "version_patterns": [],
+    "cve_check": {"lookup_key": "fastly", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "tags": ["cdn", "proxy", "edge"],
+    "website": "https://www.fastly.com"
+  }
+]

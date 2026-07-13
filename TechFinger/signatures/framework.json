@@ -1,0 +1,89 @@
+[
+  {
+    "id": "FWRK-001",
+    "name": "Django",
+    "category": "framework",
+    "confidence": 85,
+    "indicators": [
+      {"source": "body", "pattern": "csrfmiddlewaretoken", "confidence_weight": 90},
+      {"source": "header", "field": "x-frame-options", "pattern": "SAMEORIGIN", "confidence_weight": 50},
+      {"source": "cookie", "name_pattern": "csrftoken", "confidence_weight": 85},
+      {"source": "body", "pattern": "/static/admin/", "confidence_weight": 90}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "/static/admin/(?:css|js)/([\\d.]+)/"}
+    ],
+    "cve_check": {"lookup_key": "django", "version_required": true},
+    "tags": ["framework", "python", "web"],
+    "website": "https://www.djangoproject.com"
+  },
+  {
+    "id": "FWRK-002",
+    "name": "Laravel",
+    "category": "framework",
+    "confidence": 85,
+    "indicators": [
+      {"source": "cookie", "name_pattern": "laravel_session|XSRF-TOKEN", "confidence_weight": 90},
+      {"source": "body", "pattern": "laravel_session", "confidence_weight": 80},
+      {"source": "header", "field": "x-powered-by", "pattern": "PHP", "confidence_weight": 40}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "x-powered-by", "regex": "PHP/([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "laravel", "version_required": true},
+    "tags": ["framework", "php", "web"],
+    "website": "https://laravel.com"
+  },
+  {
+    "id": "FWRK-003",
+    "name": "Ruby on Rails",
+    "category": "framework",
+    "confidence": 85,
+    "indicators": [
+      {"source": "cookie", "name_pattern": "_session_id|_rails_session", "confidence_weight": 85},
+      {"source": "header", "field": "x-runtime", "pattern": "[\\d.]+", "confidence_weight": 70},
+      {"source": "body", "pattern": "data-rails-", "confidence_weight": 80}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "rails/([\\d.]+)/"}
+    ],
+    "cve_check": {"lookup_key": "rails", "version_required": true},
+    "tags": ["framework", "ruby", "web"],
+    "website": "https://rubyonrails.org"
+  },
+  {
+    "id": "FWRK-004",
+    "name": "Express.js",
+    "category": "framework",
+    "confidence": 85,
+    "indicators": [
+      {"source": "header", "field": "x-powered-by", "pattern": "Express", "confidence_weight": 90},
+      {"source": "cookie", "name_pattern": "connect.sid", "confidence_weight": 80}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "express/([\\d.]+)/"}
+    ],
+    "cve_check": {"lookup_key": "express", "version_required": true},
+    "tags": ["framework", "nodejs", "web"],
+    "website": "https://expressjs.com"
+  },
+  {
+    "id": "FWRK-005",
+    "name": "ASP.NET",
+    "category": "framework",
+    "confidence": 85,
+    "indicators": [
+      {"source": "header", "field": "x-powered-by", "pattern": "ASP.NET", "confidence_weight": 85},
+      {"source": "header", "field": "x-aspnet-version", "pattern": "[\\d.]+", "confidence_weight": 80},
+      {"source": "cookie", "name_pattern": "ASP.NET_SessionId", "confidence_weight": 85}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "x-aspnet-version", "regex": "([\\d.]+)"},
+      {"source": "header", "field": "x-powered-by", "regex": "ASP.NET(?: MVC)? ([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "aspnet", "version_required": true},
+    "risk_if_version_exposed": "MEDIUM",
+    "tags": ["framework", "microsoft", "web"],
+    "website": "https://dotnet.microsoft.com"
+  }
+]

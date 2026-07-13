@@ -1,0 +1,71 @@
+[
+  {
+    "id": "SERVER-001",
+    "name": "Apache",
+    "category": "server",
+    "confidence": 90,
+    "indicators": [
+      {"source": "header", "field": "server", "pattern": "Apache/([\\d.]+)", "version_group": 1, "confidence_weight": 95},
+      {"source": "header", "field": "server", "pattern": "Apache", "confidence_weight": 80}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "server", "regex": "Apache/([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "apache", "version_required": true},
+    "risk_if_version_exposed": "MEDIUM",
+    "tags": ["server", "http", "open-source"],
+    "website": "https://httpd.apache.org"
+  },
+  {
+    "id": "SERVER-002",
+    "name": "Nginx",
+    "category": "server",
+    "confidence": 90,
+    "indicators": [
+      {"source": "header", "field": "server", "pattern": "nginx/([\\d.]+)", "version_group": 1, "confidence_weight": 95},
+      {"source": "header", "field": "server", "pattern": "nginx", "confidence_weight": 85},
+      {"source": "header", "field": "x-served-by", "pattern": "nginx", "confidence_weight": 70}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "server", "regex": "nginx/([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "nginx", "version_required": true},
+    "risk_if_version_exposed": "MEDIUM",
+    "tags": ["server", "http", "reverse-proxy"],
+    "website": "https://nginx.org"
+  },
+  {
+    "id": "SERVER-003",
+    "name": "Microsoft-IIS",
+    "category": "server",
+    "confidence": 90,
+    "indicators": [
+      {"source": "header", "field": "server", "pattern": "Microsoft-IIS/([\\d.]+)", "version_group": 1, "confidence_weight": 95},
+      {"source": "header", "field": "server", "pattern": "Microsoft-IIS", "confidence_weight": 85}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "server", "regex": "Microsoft-IIS/([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "iis", "version_required": true},
+    "risk_if_version_below": {"value": "10", "severity": "HIGH", "reason": "IIS < 10 is EOL"},
+    "risk_if_version_exposed": "MEDIUM",
+    "tags": ["server", "windows", "microsoft"],
+    "website": "https://www.iis.net"
+  },
+  {
+    "id": "SERVER-004",
+    "name": "LiteSpeed",
+    "category": "server",
+    "confidence": 90,
+    "indicators": [
+      {"source": "header", "field": "server", "pattern": "LiteSpeed", "confidence_weight": 90}
+    ],
+    "version_patterns": [
+      {"source": "header", "field": "server", "regex": "LiteSpeed/([\\d.]+)"}
+    ],
+    "cve_check": {"lookup_key": "litespeed", "version_required": false},
+    "risk_if_version_exposed": "LOW",
+    "tags": ["server", "http", "commercial"],
+    "website": "https://www.litespeedtech.com"
+  }
+]

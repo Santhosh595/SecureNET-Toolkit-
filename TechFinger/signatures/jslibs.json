@@ -1,0 +1,55 @@
+[
+  {
+    "id": "JSLIB-001",
+    "name": "jQuery",
+    "category": "jslibs",
+    "confidence": 88,
+    "indicators": [
+      {"source": "body", "pattern": "jquery[.-]?min\\.js", "confidence_weight": 90},
+      {"source": "body", "pattern": "jQuery\\.fn\\.jquery", "confidence_weight": 85}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "jquery[.-]([\\d.]+)[.-]?min\\.js", "version_group": 1},
+      {"source": "body", "regex": "jQuery\\.fn\\.jquery\\s*=\\s*[\"']([\\d.]+)[\"']", "version_group": 1}
+    ],
+    "cve_check": {"lookup_key": "jquery", "version_required": true},
+    "risk_if_version_below": {"value": "3.5.0", "severity": "MEDIUM", "reason": "jQuery < 3.5.0 has known XSS vectors"},
+    "tags": ["javascript", "library", "dom"],
+    "website": "https://jquery.com"
+  },
+  {
+    "id": "JSLIB-002",
+    "name": "React",
+    "category": "jslibs",
+    "confidence": 88,
+    "indicators": [
+      {"source": "body", "pattern": "__REACT_DEVTOOLS_GLOBAL_HOOK__", "confidence_weight": 90},
+      {"source": "body", "pattern": "react(\\.production|\\.development)?\\.min\\.js", "confidence_weight": 90},
+      {"source": "body", "pattern": "data-reactroot", "confidence_weight": 80}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "react@([\\d.]+)/", "version_group": 1},
+      {"source": "body", "regex": "react[.-]([\\d.]+)[.-]?(production|development)?\\.min\\.js", "version_group": 1}
+    ],
+    "cve_check": {"lookup_key": "react", "version_required": true},
+    "tags": ["javascript", "library", "ui"],
+    "website": "https://react.dev"
+  },
+  {
+    "id": "JSLIB-003",
+    "name": "Bootstrap",
+    "category": "jslibs",
+    "confidence": 88,
+    "indicators": [
+      {"source": "body", "pattern": "bootstrap[.-]?min\\.css", "confidence_weight": 90},
+      {"source": "body", "pattern": "bootstrap\\.bundle\\.min\\.js", "confidence_weight": 90}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "bootstrap/([\\d.]+)/", "version_group": 1},
+      {"source": "body", "regex": "bootstrap[.-]([\\d.]+)[.-]?min\\.(css|js)", "version_group": 1}
+    ],
+    "cve_check": {"lookup_key": "bootstrap", "version_required": true},
+    "tags": ["javascript", "css", "ui"],
+    "website": "https://getbootstrap.com"
+  }
+]

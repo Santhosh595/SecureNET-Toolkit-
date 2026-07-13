@@ -1,0 +1,37 @@
+[
+  {
+    "id": "ANLT-001",
+    "name": "Google Analytics",
+    "category": "analytics",
+    "confidence": 90,
+    "indicators": [
+      {"source": "body", "pattern": "gtag\\('config', 'G-", "confidence_weight": 95},
+      {"source": "body", "pattern": "gtag\\('config', 'UA-", "confidence_weight": 95},
+      {"source": "body", "pattern": "google-analytics\\.com/analytics\\.js", "confidence_weight": 90}
+    ],
+    "version_patterns": [
+      {"source": "body", "regex": "gtag\\('config', '(G-[A-Z0-9]+|UA-\\d+-\\d+)'", "version_group": 1}
+    ],
+    "cve_check": {"lookup_key": "googleanalytics", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "notes": "GA4 (G-) vs Universal Analytics (UA-). Privacy/GDPR consideration.",
+    "tags": ["analytics", "privacy", "tracking"],
+    "website": "https://analytics.google.com"
+  },
+  {
+    "id": "ANLT-002",
+    "name": "Hotjar / Clarity",
+    "category": "analytics",
+    "confidence": 88,
+    "indicators": [
+      {"source": "body", "pattern": "static\\.hotjar\\.com", "confidence_weight": 92},
+      {"source": "body", "pattern": "clarity\\.ms/tag/", "confidence_weight": 92}
+    ],
+    "version_patterns": [],
+    "cve_check": {"lookup_key": "hotjar", "version_required": false},
+    "risk_if_version_exposed": "INFO",
+    "notes": "Session-recording tools. Privacy/GDPR consideration.",
+    "tags": ["analytics", "privacy", "session-recording"],
+    "website": "https://www.hotjar.com"
+  }
+]
