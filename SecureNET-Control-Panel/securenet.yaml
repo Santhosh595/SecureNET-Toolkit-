@@ -182,3 +182,13 @@ tools:
     description: Web technology fingerprinting (WhatWeb/httpx-style)
     color: "#06b6d4"
     icon: fingerprint
+
+  apiguard:
+    enabled: true
+    port: 5018
+    path: ./APIGuard
+    entry: dashboard.py
+    name: APIGuard
+    description: OWASP API Top 10 Security Tester
+    color: "#0ea5e9"
+    icon: shield
