@@ -3,420 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APIGuard — OWASP API Security Tester</title>
+<title>APIGuard — OWASP API Security Top 10 Tester</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#060a10; --surface:#0c1220; --surface-raised:#111827;
-    --border:#1a2538; --border-light:#243044; --text:#e2e8f0;
-    --muted:#64748b; --dim:#475569; --accent:#0ea5e9;
-    --safe:#22c55e; --warn:#f59e0b; --crit:#ef4444; --high:#f97316;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-  .app{max-width:1400px;margin:0 auto;padding:20px}
-  header{display:flex;align-items:center;gap:14px;padding:20px 0;border-bottom:1px solid var(--border)}
-  header h1{font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#fff}
-  header span{color:var(--muted);font-size:13px;font-weight:400}
-  .tabs{display:flex;gap:4px;padding:16px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}
-  .tab{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);transition:all 0.15s;background:transparent;border:none;white-space:nowrap}
-  .tab:hover{color:var(--text);background:var(--surface-raised)}
-  .tab.active{color:var(--accent);background:rgba(14,165,233,0.1)}
-  .tab-content{display:none;padding:20px 0}
-  .tab-content.active{display:block}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
-  .card h3{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:12px}
-  label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
-  input,select,textarea{width:100%;padding:10px 14px;background:var(--surface-raised);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:'JetBrains Mono',monospace}
-  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
-  .btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
-  .btn-primary{background:var(--accent);color:#fff}
-  .btn-primary:hover{background:#0c8dcc}
-  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-  .btn-outline:hover{background:var(--surface-raised)}
-  .btn-sm{padding:6px 12px;font-size:11px}
-  grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-  .sev-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
-  .sev-CRITICAL{background:rgba(239,68,68,0.15);color:var(--crit);border:1px solid var(--crit)}
-  .sev-HIGH{background:rgba(249,115,22,0.15);color:var(--high);border:1px solid var(--high)}
-  .sev-MEDIUM{background:rgba(245,158,11,0.15);color:var(--warn);border:1px solid var(--warn)}
-  .sev-LOW{background:rgba(100,116,139,0.15);color:var(--muted);border:1px solid var(--border-light)}
-  .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
-  .dot-safe{background:var(--safe)}
-  .dot-warn{background:var(--warn)}
-  .dot-crit{background:var(--crit)}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
-  .stat-card .num{font-size:28px;font-weight:700;color:#fff}
-  .stat-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
-  table{width:100%;border-collapse:collapse;font-size:12px}
-  th{text-align:left;padding:10px 12px;color:var(--muted);font-weight:500;text-transform:uppercase;font-size:10px;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
-  td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-  tr:hover td{background:var(--surface-raised)}
-  pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;overflow-x:auto;font-size:12px;font-family:'JetBrains Mono',monospace}
-  .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;background:rgba(14,165,233,0.1);color:var(--accent)}
-  .flex-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-  .owasp-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all 0.15s}
-  .owasp-card.pass{border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.04)}
-  .owasp-card.fail{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.04)}
-  .owasp-card .code{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px}
-  .detail-drawer{display:none;background:var(--surface-raised);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px}
-  .detail-drawer.open{display:block}
-  .toast{position:fixed;bottom:20px;right:20px;background:var(--surface-raised);border:1px solid var(--border);border-radius:8px;padding:12px 20px;font-size:13px;z-index:100;opacity:0;transition:opacity 0.3s}
-  .toast.show{opacity:1}
-  .loading{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top:2px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+:root{--bg:#060a10;--surface:#0c1220;--surface-raised:#111827;--border:#1a2538;--border-light:#243044;--text:#e2e8f0;--muted:#64748b;--dim:#475569;--accent:#0ea5e9;--safe:#22c55e;--warn:#f59e0b;--crit:#ef4444;--high:#f97316;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:"Inter",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.mono{font-family:"JetBrains Mono",monospace;}
+nav{position:sticky;top:0;z-index:10;background:rgba(6,10,16,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;}
+.nav-logo .badge{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;}
+.nav-links{margin-left:auto;display:flex;gap:6px;}
+.nav-links a{color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;}
+.nav-links a:hover{color:var(--text);background:var(--surface);}
+.hero{padding:54px 24px 30px;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(circle at 50% -20%,rgba(14,165,233,.12),transparent 60%);}
+.hero h1{font-size:38px;font-weight:800;letter-spacing:-.5px;}
+.hero .accent{color:var(--accent);}
+.hero p{color:var(--muted);max-width:640px;margin:14px auto 0;font-size:15px;}
+.disclaimer-box{max-width:760px;margin:22px auto 0;background:var(--surface);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);}
+.disclaimer-box b{color:var(--text);}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 24px 60px;}
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:22px;flex-wrap:wrap;}
+.tab{padding:10px 16px;cursor:pointer;border:none;background:none;color:var(--muted);font-size:14px;font-weight:600;border-bottom:2px solid transparent;font-family:inherit;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.panel{display:none;}
+.panel.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;}
+.card h3{font-size:15px;margin-bottom:12px;font-weight:700;}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+input[type=text],input[type=password],select{width:100%;background:var(--surface-raised);border:1px solid var(--border-light);border-radius:8px;color:var(--text);padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:13px;}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.row>*{flex:1;min-width:200px;}
+.btn{background:var(--accent);color:#04121c;border:none;border-radius:8px;padding:11px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+.btn:hover{filter:brightness(1.08);}
+.btn.ghost{background:var(--surface-raised);color:var(--text);border:1px solid var(--border-light);}
+.btn.danger{background:var(--crit);}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.stat-card .n{font-size:28px;font-weight:800;}
+.stat-card .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:10px;border-bottom:1px solid var(--border);font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
+td{padding:10px;border-bottom:1px solid var(--border);}
+tr:hover td{background:var(--surface);}
+.sev{font-family:"JetBrains Mono",monospace;font-weight:700;padding:2px 8px;border-radius:6px;font-size:11px;}
+.sev.CRITICAL{background:rgba(239,68,68,.15);color:var(--crit);}
+.sev.HIGH{background:rgba(249,115,22,.15);color:var(--high);}
+.sev.MEDIUM{background:rgba(245,158,11,.15);color:var(--warn);}
+.sev.LOW{background:rgba(34,197,94,.12);color:var(--safe);}
+.sev.INFO{background:rgba(71,85,105,.2);color:var(--dim);}
+.empty{color:var(--dim);text-align:center;padding:30px;font-size:14px;}
+.disclaimer-footer{text-align:center;color:var(--dim);font-size:12px;padding:24px;border-top:1px solid var(--border);}
+.tag{display:inline-block;background:var(--surface-raised);border:1px solid var(--border-light);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);margin:2px;}
+.drawer{position:fixed;top:0;right:0;width:420px;height:100%;background:var(--surface-raised);border-left:1px solid var(--border-light);padding:24px;transform:translateX(100%);transition:.25s;z-index:20;overflow-y:auto;}
+.drawer.open{transform:translateX(0);}
+.drawer .close{position:absolute;top:14px;right:18px;cursor:pointer;color:var(--muted);font-size:20px;}
+.code-block{background:var(--surface-raised);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:"JetBrains Mono",monospace;font-size:12px;overflow-x:auto;white-space:pre;color:var(--muted);}
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <header>
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-    <div><h1>APIGuard</h1><span>OWASP API Security Tester — Port 5018</span></div>
-  </header>
-  <div class="tabs">
-    <button class="tab active" data-tab="setup">Setup</button>
-    <button class="tab" data-tab="coverage">OWASP Coverage</button>
-    <button class="tab" data-tab="findings">Findings</button>
-    <button class="tab" data-tab="endpoints">Endpoints</button>
-    <button class="tab" data-tab="history">History</button>
-    <button class="tab" data-tab="report">Report</button>
+<nav>
+  <div class="nav-logo"><span class="badge">🛡</span> SecureNET <span style="color:var(--muted);font-weight:500;">/ APIGuard</span></div>
+  <div class="nav-links">
+    <a href="https://github.com/Santhosh595/SecureNET-Toolkit-" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>API<span class="accent">Guard</span></h1>
+  <p>OWASP API Security Top 10 Tester — automatically test REST APIs for BOLA, broken auth, injection, SSRF, misconfigurations, and more.</p>
+</div>
+
+<div class="wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-panel="scan">Scan</button>
+    <button class="tab" data-panel="results">Results</button>
+    <button class="tab" data-panel="owasp">OWASP Top 10</button>
+    <button class="tab" data-panel="endpoints">Endpoints</button>
+    <button class="tab" data-panel="history">History</button>
+    <button class="tab" data-panel="settings">Settings</button>
   </div>
 
-  <!-- TAB 1: Setup -->
-  <div class="tab-content active" id="tab-setup">
+  <!-- 1. SCAN -->
+  <div class="panel active" id="scan">
     <div class="card">
-      <h3>Scan Configuration</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <h3>Target API</h3>
+      <div class="row">
         <div>
-          <label>Target API URL</label>
-          <input id="scan-url" value="https://api.example.com" placeholder="https://api.example.com">
+          <label>API Base URL</label>
+          <input id="url" placeholder="https://api.example.com">
         </div>
         <div>
-          <label>Auth</label>
-          <input id="scan-auth" placeholder='bearer TOKEN or "none"'>
+          <label>Auth Mode</label>
+          <select id="authMode">
+            <option value="none">None (unauthenticated)</option>
+            <option value="bearer">Bearer Token</option>
+            <option value="apikey">API Key (header)</option>
+            <option value="basic">Basic Auth</option>
+            <option value="cookie">Cookie</option>
+            <option value="oauth">OAuth2</option>
+          </select>
         </div>
         <div>
-          <label>OpenAPI/Swagger Spec (path)</label>
-          <input id="scan-spec" placeholder="/path/to/openapi.json">
-        </div>
-        <div>
-          <label>Categories (comma-separated, leave blank = ALL)</label>
-          <input id="scan-categories" placeholder="API1,API3,API8">
+          <label>Auth Value</label>
+          <input id="authValue" placeholder="token or key value" type="password">
         </div>
       </div>
-      <div class="flex-row" style="margin-top:16px">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">
-          <input type="checkbox" id="scan-unsafe" style="width:auto"> Enable POST/PUT/DELETE (--unsafe)
+      <div class="row" style="margin-top:12px">
+        <div>
+          <label>Test Category</label>
+          <select id="category">
+            <option value="all">All (API1–API10 + Injection)</option>
+            <option value="api1">API1 — BOLA/IDOR</option>
+            <option value="api2">API2 — Broken Authentication</option>
+            <option value="api3">API3 — Excessive Data / Mass Assignment</option>
+            <option value="api4">API4 — Rate Limiting</option>
+            <option value="api5">API5 — Broken Function Level Auth</option>
+            <option value="api6">API6 — Business Flow</option>
+            <option value="api7">API7 — SSRF</option>
+            <option value="api8">API8 — Misconfiguration</option>
+            <option value="api9">API9 — Inventory</option>
+            <option value="api10">API10 — Unsafe Consumption</option>
+            <option value="injection">Injection (SQL/NoSQL/Cmd/HTML)</option>
+          </select>
+        </div>
+        <div style="min-width:120px">
+          <label>OpenAPI Spec</label>
+          <input id="spec" placeholder="path to spec file (optional)">
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)">
+          <input type="checkbox" id="unsafe" style="width:auto">
+          Enable <code style="color:var(--crit)">--unsafe</code> mode (destructive requests)
         </label>
-        <button class="btn btn-primary" onclick="startScan()">Start Scan</button>
-      </div>
-    </div>
-    <div id="scan-progress" style="display:none">
-      <div class="card">
-        <div class="flex-row" style="justify-content:space-between">
-          <h3><span class="loading" style="margin-right:8px"></span>Scan Running...</h3>
-          <button class="btn btn-outline btn-sm" onclick="checkProgress()">Refresh</button>
-        </div>
-        <div id="scan-result"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 2: OWASP Coverage -->
-  <div class="tab-content" id="tab-coverage">
-    <div class="card">
-      <h3>OWASP API Top 10 (2023) Coverage</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Click a category card to filter findings.</p>
-      <grid id="coverage-grid"></grid>
-    </div>
-  </div>
-
-  <!-- TAB 3: Findings -->
-  <div class="tab-content" id="tab-findings">
-    <div class="card">
-      <div class="flex-row" style="justify-content:space-between;margin-bottom:12px">
-        <h3>Vulnerability Findings</h3>
-        <div class="flex-row">
-          <select id="filter-severity" style="width:120px" onchange="loadFindings()">
-            <option value="">All Severities</option>
-            <option value="CRITICAL">Critical</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
-          </select>
-          <select id="filter-owasp" style="width:120px" onchange="loadFindings()">
-            <option value="">All Categories</option>
-          </select>
-          <button class="btn btn-outline btn-sm" onclick="loadFindings()">Refresh</button>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn" id="scanBtn">Start Scan</button>
+          <button class="btn ghost" id="exportBtn" style="display:none">Export JSON</button>
         </div>
       </div>
-      <div id="findings-table"><p style="color:var(--muted);font-size:13px">Run a scan to populate findings.</p></div>
-      <div class="detail-drawer" id="finding-detail"></div>
-    </div>
-  </div>
-
-  <!-- TAB 4: Endpoints -->
-  <div class="tab-content" id="tab-endpoints">
-    <div class="card">
-      <div class="flex-row" style="justify-content:space-between;margin-bottom:12px">
-        <h3>Discovered Endpoints</h3>
-        <button class="btn btn-outline btn-sm" onclick="loadEndpoints()">Refresh</button>
+      <div id="scanMsg" class="mono" style="margin-top:12px;font-size:13px;color:var(--muted)"></div>
+      <div id="progressWrap" style="display:none;margin-top:14px">
+        <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+          <div id="progressBar" style="height:100%;background:var(--accent);border-radius:3px;transition:width .3s;width:0%"></div>
+        </div>
+        <div id="progressText" class="mono" style="margin-top:6px;font-size:12px;color:var(--muted);text-align:center">Scanning...</div>
       </div>
-      <div id="endpoints-table"><p style="color:var(--muted);font-size:13px">Run a scan to populate endpoints.</p></div>
+    </div>
+    <div class="stat-grid" id="statGrid" style="display:none">
+      <div class="stat-card"><div class="n" style="color:var(--crit)" id="sCrit">0</div><div class="l">Critical</div></div>
+      <div class="stat-card"><div class="n" style="color:var(--high)" id="sHigh">0</div><div class="l">High</div></div>
+      <div class="stat-card"><div class="n" style="color:var(--warn)" id="sMed">0</div><div class="l">Medium</div></div>
+      <div class="stat-card"><div class="n" style="color:var(--accent)" id="sInfo">0</div><div class="l">Info</div></div>
+      <div class="stat-card"><div class="n" style="color:var(--muted)" id="sTotal">0</div><div class="l">Total Findings</div></div>
+      <div class="stat-card"><div class="n" style="color:var(--muted)" id="sTests">0</div><div class="l">Tests Run</div></div>
     </div>
   </div>
 
-  <!-- TAB 5: History -->
-  <div class="tab-content" id="tab-history">
+  <!-- 2. RESULTS -->
+  <div class="panel" id="results">
+    <div class="card">
+      <h3>Findings</h3>
+      <div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <select id="filterSev" style="width:auto;padding:6px 10px;background:var(--surface-raised);border:1px solid var(--border-light);border-radius:6px;color:var(--text);font-size:12px">
+          <option value="">All severities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+        <input id="filterApi" placeholder="Filter by OWASP category (e.g. API1)" style="width:200px;padding:6px 10px;font-size:12px">
+      </div>
+      <table><thead><tr><th>OWASP</th><th>Method</th><th>Endpoint</th><th>Test</th><th>Severity</th><th>Evidence</th></tr></thead>
+        <tbody id="findingsBody"><tr><td colspan="6" class="empty">Run a scan to see findings.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. OWASP -->
+  <div class="panel" id="owasp">
+    <div class="card">
+      <h3>OWASP API Security Top 10 — Coverage</h3>
+      <table><thead><tr><th>Category</th><th>Description</th><th>Status</th><th>Findings</th></tr></thead>
+        <tbody id="owaspBody">
+          <tr><td>API1</td><td>Broken Object Level Authorization (BOLA)</td><td>—</td><td>—</td></tr>
+          <tr><td>API2</td><td>Broken Authentication</td><td>—</td><td>—</td></tr>
+          <tr><td>API3</td><td>Excessive Data / Mass Assignment</td><td>—</td><td>—</td></tr>
+          <tr><td>API4</td><td>Rate Limiting</td><td>—</td><td>—</td></tr>
+          <tr><td>API5</td><td>Broken Function Level Auth</td><td>—</td><td>—</td></tr>
+          <tr><td>API6</td><td>Business Flow</td><td>—</td><td>—</td></tr>
+          <tr><td>API7</td><td>SSRF</td><td>—</td><td>—</td></tr>
+          <tr><td>API8</td><td>Security Misconfiguration</td><td>—</td><td>—</td></tr>
+          <tr><td>API9</td><td>Improper Inventory</td><td>—</td><td>—</td></tr>
+          <tr><td>API10</td><td>Unsafe Consumption</td><td>—</td><td>—</td></tr>
+          <tr><td>INJ</td><td>Injection (SQL/NoSQL/Cmd/HTML)</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. ENDPOINTS -->
+  <div class="panel" id="endpoints">
+    <div class="card">
+      <h3>Discovered Endpoints</h3>
+      <table><thead><tr><th>Method</th><th>Path</th><th>Status</th><th>Source</th></tr></thead>
+        <tbody id="endpointsBody"><tr><td colspan="4" class="empty">No endpoints discovered yet.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. HISTORY -->
+  <div class="panel" id="history">
     <div class="card">
       <h3>Scan History</h3>
-      <div id="history-table"><p style="color:var(--muted);font-size:13px">Loading...</p></div>
+      <table><thead><tr><th>ID</th><th>Target</th><th>Findings</th><th>Tests</th><th>Time</th></tr></thead>
+        <tbody id="historyBody"><tr><td colspan="5" class="empty">No scans yet.</td></tr></tbody>
+      </table>
     </div>
   </div>
 
-  <!-- TAB 6: Report -->
-  <div class="tab-content" id="tab-report">
+  <!-- 6. SETTINGS -->
+  <div class="panel" id="settings">
     <div class="card">
-      <h3>Export Report</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Select a scan and export format.</p>
-      <div class="flex-row">
-        <select id="report-scan" style="width:250px">
-          <option value="">Latest scan</option>
-        </select>
-        <button class="btn btn-outline btn-sm" onclick="exportReport('json')">JSON</button>
-        <button class="btn btn-outline btn-sm" onclick="exportReport('csv')">CSV</button>
-        <button class="btn btn-outline btn-sm" onclick="exportReport('sarif')">SARIF</button>
+      <h3>Settings & Info</h3>
+      <div class="row">
+        <div><label>Tool Version</label><div class="mono" id="sVersion">—</div></div>
+        <div><label>Status</label><div class="mono" id="sStatus">—</div></div>
+      </div>
+      <h3 style="margin-top:20px">Safety Constraints</h3>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7">
+        <p>🔒 <b>BOLA fuzzing</b> limited to resource ID ±1, ±2 only</p>
+        <p>🔒 <b>Rate-limit testing</b> stops after 20 requests</p>
+        <p>🔒 <b>SSRF probes</b> use 127.0.0.1 only — no external callbacks</p>
+        <p>🔒 <b>Injection</b> sends single-char first, stops on 500</p>
+        <p>🔒 <b>Bearers tokens</b> stored as <code>[REDACTED]</code> in database</p>
+        <p>🔒 <b>Destructive requests</b> require <code>--unsafe</code> flag explicitly</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="disclaimer-footer">
+  APIGuard is a read-only API security testing tool. Only test APIs you own or are authorized to assess. Unauthorized scanning is illegal.
+</div>
 
 <script>
-const API = '/api';
-let currentScanId = null;
+const CAT_LABEL = {
+  "API1":"api1","API2":"api2","API3":"api3","API4":"api4","API5":"api5",
+  "API6":"api6","API7":"api7","API8":"api8","API9":"api9","API10":"api10","INJECTION":"injection"
+};
+let LAST_RESULT = null;
 
 // Tab switching
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-    if (tab.dataset.tab === 'coverage') loadCoverage();
-    if (tab.dataset.tab === 'findings') loadFindings();
-    if (tab.dataset.tab === 'endpoints') loadEndpoints();
-    if (tab.dataset.tab === 'history') loadHistory();
-    if (tab.dataset.tab === 'report') loadReportScans();
-  });
-});
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  document.getElementById(b.dataset.panel).classList.add("active");
+  if (b.dataset.panel === "history") loadHistory();
+}));
 
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-async function api(path, opts = {}) {
-  const r = await fetch(API + path, opts);
-  return r.json();
-}
+function sev(s) { return `<span class="sev ${s}">${s}</span>`; }
 
 // Scan
-async function startScan() {
-  const url = document.getElementById('scan-url').value;
-  if (!url) return toast('Enter a target URL');
-  const body = {
-    url, auth: document.getElementById('scan-auth').value,
-    spec: document.getElementById('scan-spec').value,
-    categories: document.getElementById('scan-categories').value,
-    unsafe: document.getElementById('scan-unsafe').checked,
-  };
-  const r = await api('/scan', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-  if (r.error) return toast(r.error);
-  document.getElementById('scan-progress').style.display = 'block';
-  toast('Scan started for ' + url);
-  // Poll for completion
-  const poll = setInterval(async () => {
-    const p = await api('/scan/progress');
-    if (p.status !== 'running') {
-      clearInterval(poll);
-      currentScanId = p.scan_id || null;
-      document.getElementById('scan-result').innerHTML = `<p>Scan complete — ${p.findings_count || 0} findings (${p.duration || '?'}s)</p>`;
-      toast('Scan finished');
-      loadCoverage(); loadFindings(); loadHistory();
+async function doScan() {
+  const btn = document.getElementById("scanBtn");
+  btn.disabled = true;
+  const msg = document.getElementById("scanMsg");
+  msg.textContent = "Scanning...";
+  const pw = document.getElementById("progressWrap");
+  pw.style.display = "block";
+  document.getElementById("progressBar").style.width = "10%";
+  const url = document.getElementById("url").value.trim();
+  if (!url) { msg.innerHTML = `<span style="color:var(--crit)">Error: URL required</span>`; btn.disabled = false; pw.style.display = "none"; return; }
+  const mode = document.getElementById("authMode").value;
+  const val = document.getElementById("authValue").value.trim();
+  const auth = val ? mode + " " + val : "none";
+  const body = { url, auth, category: document.getElementById("category").value, spec: document.getElementById("spec").value.trim(), unsafe: document.getElementById("unsafe").checked };
+  try {
+    const r = await fetch("/api/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const d = await r.json();
+    document.getElementById("progressBar").style.width = "100%";
+    if (d.error) { msg.innerHTML = `<span style="color:var(--crit)">${d.error}</span>`; btn.disabled = false; return; }
+    LAST_RESULT = d;
+    renderResults(d);
+    msg.textContent = `Scan complete. ${d.summary.total} findings, ${d.tests_run} tests.`;
+    document.getElementById("exportBtn").style.display = "inline-block";
+  } catch (e) { msg.innerHTML = `<span style="color:var(--crit)">${e}</span>`; }
+  finally { btn.disabled = false; setTimeout(() => { pw.style.display = "none"; }, 500); }
+}
+document.getElementById("scanBtn").addEventListener("click", doScan);
+document.getElementById("url").addEventListener("keydown", e => { if (e.key === "Enter") doScan(); });
+
+function renderResults(d) {
+  const sum = d.summary || {};
+  document.getElementById("sCrit").textContent = sum.critical || 0;
+  document.getElementById("sHigh").textContent = sum.high || 0;
+  document.getElementById("sMed").textContent = sum.medium || 0;
+  document.getElementById("sInfo").textContent = sum.info || 0;
+  document.getElementById("sTotal").textContent = sum.total || 0;
+  document.getElementById("sTests").textContent = d.tests_run || 0;
+  document.getElementById("statGrid").style.display = "grid";
+
+  // Findings table
+  const fb = document.getElementById("findingsBody");
+  fb.innerHTML = "";
+  const f = d.findings || [];
+  if (!f.length) { fb.innerHTML = '<tr><td colspan="6" class="empty">No findings.</td></tr>'; }
+  f.forEach(r => {
+    fb.insertAdjacentHTML("beforeend",
+      `<tr><td>${r.owasp_category||"?"}</td><td>${r.method||"?"}</td><td>${r.endpoint||"?"}</td>
+      <td>${r.test_name||""}</td><td>${sev(r.severity)}</td><td style="font-size:12px">${(r.evidence||"").slice(0,60)}</td></tr>`);
+  });
+
+  // OWASP table
+  const counts = {};
+  f.forEach(r => { const c = r.owasp_category; if (c) counts[c] = (counts[c]||0) + 1; });
+  document.querySelectorAll("#owaspBody tr").forEach(row => {
+    const cat = row.cells[0].textContent.trim();
+    const c = counts[cat];
+    if (c) {
+      row.cells[2].innerHTML = '<span style="color:var(--safe);font-weight:600">✓ Tested</span>';
+      row.cells[3].textContent = c;
     }
-  }, 2000);
-}
+  });
 
-function checkProgress() {
-  // Manual refresh
-}
-
-// OWASP Coverage
-const OWASP_CATEGORIES = {
-  'API1':'Broken Object Level Authorization','API2':'Broken Authentication','API3':'Broken Object Property Level Auth',
-  'API4':'Unrestricted Resource Consumption','API5':'Broken Function Level Authorization','API6':'Unrestricted Access to Sensitive Business Flows',
-  'API7':'Server Side Request Forgery','API8':'Security Misconfiguration','API9':'Improper Inventory Management',
-  'API10':'Unsafe Consumption of APIs','INJECTION':'Injection (Bonus)'
-};
-
-async function loadCoverage() {
-  const findings = await api('/findings');
-  const grid = document.getElementById('coverage-grid');
-  const cats = {};
-  for (const [code, name] of Object.entries(OWASP_CATEGORIES)) {
-    const catFindings = findings.filter(f => f.owasp_category === code);
-    const hasCrit = catFindings.some(f => f.severity === 'CRITICAL');
-    const hasHigh = catFindings.some(f => f.severity === 'HIGH');
-    const hasFindings = catFindings.length > 0;
-    const status = !hasFindings ? 'PASS' : (hasCrit ? 'FAIL' : (hasHigh ? 'PARTIAL' : 'PASS'));
-    const dotClass = status === 'PASS' ? 'dot-safe' : (status === 'FAIL' ? 'dot-crit' : 'dot-warn');
-    grid.innerHTML += `
-      <div class="owasp-card ${status === 'FAIL' ? 'fail' : (status === 'PASS' ? 'pass' : '')}" onclick="filterFindings('${code}')" style="cursor:pointer">
-        <div class="code">${code}</div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:6px">${name}</div>
-        <div class="flex-row" style="gap:6px;font-size:11px;color:var(--muted)">
-          <span><span class="status-dot ${dotClass}"></span>${status}</span>
-          <span>${catFindings.length} finding(s)</span>
-        </div>
-        ${hasCrit ? `<span class="sev-badge sev-CRITICAL">CRITICAL</span>` : ''}
-        ${hasHigh ? `<span class="sev-badge sev-HIGH">HIGH</span>` : ''}
-      </div>`;
-  }
-}
-
-// Findings
-async function loadFindings() {
-  const sev = document.getElementById('filter-severity').value;
-  const owasp = document.getElementById('filter-owasp').value;
-  let url = '/findings';
-  const params = new URLSearchParams();
-  if (sev) params.set('severity', sev);
-  if (owasp) params.set('owasp', owasp);
-  const qs = params.toString();
-  if (qs) url += '?' + qs;
-  const findings = await api(url);
-  const container = document.getElementById('findings-table');
-  if (!findings.length) return container.innerHTML = '<p style="color:var(--muted)">No findings match filters.</p>';
-  let html = `<table><thead><tr><th>OWASP</th><th>Endpoint</th><th>Method</th><th>Severity</th><th>Test</th><th></th></tr></thead><tbody>`;
-  for (const f of findings) {
-    html += `<tr>
-      <td><span class="tag">${f.owasp_category}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${(f.endpoint || '').substring(0,35)}</td>
-      <td>${f.method || ''}</td>
-      <td><span class="sev-badge sev-${f.severity}">${f.severity}</span></td>
-      <td>${(f.test_name || '').substring(0,40)}</td>
-      <td><button class="btn btn-outline btn-sm" onclick="showDetail(${f.id})">Detail</button></td>
-    </tr>`;
-  }
-  html += '</tbody></table>';
-  container.innerHTML = html;
-  // Populate OWASP filter
-  const owaspSelect = document.getElementById('filter-owasp');
-  const currentVal = owaspSelect.value;
-  owaspSelect.innerHTML = '<option value="">All Categories</option>';
-  for (const code of Object.keys(OWASP_CATEGORIES)) {
-    owaspSelect.innerHTML += `<option value="${code}">${code}</option>`;
-  }
-  owaspSelect.value = currentVal;
-}
-
-async function showDetail(id) {
-  const findings = await api('/findings');
-  const f = findings.find(x => x.id === id);
-  if (!f) return;
-  const drawer = document.getElementById('finding-detail');
-  drawer.classList.add('open');
-  drawer.innerHTML = `
-    <div class="flex-row" style="justify-content:space-between;margin-bottom:12px">
-      <h3 style="text-transform:none">${f.test_name}</h3>
-      <span class="sev-badge sev-${f.severity}">${f.severity}</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:12px">
-      <div><strong style="color:var(--muted)">OWASP:</strong> ${f.owasp_category}</div>
-      <div><strong style="color:var(--muted)">CWE:</strong> ${f.cwe_ref || 'N/A'}</div>
-      <div><strong style="color:var(--muted)">Endpoint:</strong> <code>${f.method} ${f.endpoint}</code></div>
-      <div><strong style="color:var(--muted)">CVSS:</strong> ${f.cvss_score || 'N/A'}</div>
-    </div>
-    <div style="margin-top:12px"><strong style="color:var(--muted);font-size:12px">Evidence</strong>
-      <pre>${f.evidence || 'N/A'}</pre></div>
-    <div style="margin-top:8px"><strong style="color:var(--muted);font-size:12px">Remediation</strong>
-      <pre style="background:var(--surface)">${f.remediation || 'N/A'}</pre></div>
-    <div style="margin-top:8px"><strong style="color:var(--muted);font-size:12px">Request</strong>
-      <pre>${(f.request_sent || '').substring(0,300)}</pre></div>
-    <div style="margin-top:8px"><strong style="color:var(--muted);font-size:12px">Response</strong>
-      <pre>${(f.response_received || '').substring(0,300)}</pre></div>
-    <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="document.getElementById('finding-detail').classList.remove('open')">Close</button>`;
-}
-
-function filterFindings(code) {
-  document.getElementById('filter-owasp').value = code;
-  document.querySelector('[data-tab="findings"]').click();
-}
-
-// Endpoints
-async function loadEndpoints() {
-  if (!currentScanId) return document.getElementById('endpoints-table').innerHTML = '<p style="color:var(--muted)">No active scan.</p>';
-  const eps = await api('/endpoints?scan_id=' + currentScanId);
-  const container = document.getElementById('endpoints-table');
-  if (!eps.length) return container.innerHTML = '<p style="color:var(--muted)">No endpoints found.</p>';
-  let html = `<table><thead><tr><th>Method</th><th>Path</th><th>Auth Required</th><th>Source</th></tr></thead><tbody>`;
-  for (const e of eps) {
-    html += `<tr>
-      <td><span class="tag">${e.method}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${e.path}</td>
-      <td>${e.auth_required ? 'Yes' : 'No'}</td>
-      <td>${e.source || 'discovered'}</td>
-    </tr>`;
-  }
-  html += '</tbody></table>';
-  container.innerHTML = html;
+  // Endpoints
+  const eb = document.getElementById("endpointsBody");
+  eb.innerHTML = "";
+  const ep = d.endpoints || [];
+  if (!ep.length) { eb.innerHTML = '<tr><td colspan="4" class="empty">No endpoints.</td></tr>'; }
+  ep.forEach(e => {
+    eb.insertAdjacentHTML("beforeend",
+      `<tr><td>${e.method||""}</td><td>${e.path||""}</td><td>${e.status||"?"}</td><td>${e.source||"discovered"}</td></tr>`);
+  });
 }
 
 // History
 async function loadHistory() {
-  const scans = await api('/history');
-  const container = document.getElementById('history-table');
-  if (!scans.length) return container.innerHTML = '<p style="color:var(--muted)">No scans yet.</p>';
-  let html = `<table><thead><tr><th>ID</th><th>Target</th><th>Auth</th><th>Endpoints</th><th>Findings</th><th>Duration</th><th>Timestamp</th></tr></thead><tbody>`;
-  for (const s of scans) {
-    html += `<tr>
-      <td>#${s.id}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${(s.target||'').substring(0,35)}</td>
-      <td>${s.auth_type || 'none'}</td>
-      <td>${s.endpoints_found || 0}</td>
-      <td>${s.findings_count || 0}</td>
-      <td>${s.duration ? s.duration.toFixed(1) + 's' : '-'}</td>
-      <td style="font-size:11px;color:var(--muted)">${(s.timestamp||'').substring(0,19).replace('T',' ')}</td>
-    </tr>`;
-  }
-  html += '</tbody></table>';
-  container.innerHTML = html;
+  const tb = document.getElementById("historyBody");
+  try {
+    const r = await fetch("/api/history");
+    const rows = await r.json();
+    tb.innerHTML = "";
+    if (!rows.length) { tb.innerHTML = '<tr><td colspan="5" class="empty">No scans yet.</td></tr>'; }
+    rows.forEach(s => {
+      const t = s.timestamp || "";
+      tb.insertAdjacentHTML("beforeend",
+        `<tr><td>${s.id}</td><td style="max-width:280px;overflow:hidden;text-overflow:ellipsis">${s.target_url||s.target||""}</td>
+        <td>${s.findings_count||0}</td><td>${s.tests_run||0}</td><td>${t.slice(0,19)}</td></tr>`);
+    });
+  } catch (e) { tb.innerHTML = `<tr><td colspan="5" class="empty">Error loading history.</td></tr>`; }
 }
 
-// Report
-async function loadReportScans() {
-  const scans = await api('/history');
-  const sel = document.getElementById('report-scan');
-  sel.innerHTML = '<option value="">Latest scan</option>';
-  for (const s of scans) {
-    sel.innerHTML += `<option value="${s.id}">#${s.id} — ${(s.target||'').substring(0,30)}</option>`;
-  }
-}
+// Export
+document.getElementById("exportBtn").addEventListener("click", () => {
+  if (!LAST_RESULT) return;
+  const blob = new Blob([JSON.stringify(LAST_RESULT, null, 2)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "apiguard_results.json"; a.click();
+});
 
-function exportReport(fmt) {
-  const scanId = document.getElementById('report-scan').value;
-  let url = `/export/${fmt}`;
-  if (scanId) url += `?scan_id=${scanId}`;
-  window.open(url, '_blank');
-}
-
-// Init
-loadHistory();
+// Init status
+fetch("/api/status").then(r => r.json()).then(d => {
+  document.getElementById("sVersion").textContent = d.version;
+  document.getElementById("sStatus").textContent = d.status;
+}).catch(() => {});
 </script>
 </body>
 </html>
