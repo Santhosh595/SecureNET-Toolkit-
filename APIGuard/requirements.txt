@@ -1,0 +1,5 @@
+requests>=2.25.0
+flask>=2.0.0
+pyyaml>=5.4.0
+rich>=10.0.0
+reportlab>=3.6.0
