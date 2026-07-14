@@ -31,6 +31,7 @@ from quick_scan import (quick_scan_headerscan, quick_scan_portmap, quick_scan_ha
                          quick_scan_cloudsentry,
                          quick_scan_imgscan,
                          quick_scan_techfinger,
+                         quick_scan_apiguard,
                          get_result)
 
 # Load config
@@ -390,6 +391,16 @@ def quickscan_techfinger():
     data = request.get_json()
     url = data.get("url", "https://example.com")
     job_id = quick_scan_techfinger(url)
+    return jsonify({"job_id": job_id, "status": "pending"})
+
+
+@app.route("/api/quickscan/apiguard", methods=["POST"])
+def quickscan_apiguard():
+    data = request.get_json(silent=True) or {}
+    url = data.get("url", "https://api.example.com")
+    auth = data.get("auth", "none")
+    spec = data.get("spec", "")
+    job_id = quick_scan_apiguard(url, auth, spec)
     return jsonify({"job_id": job_id, "status": "pending"})
 
 
