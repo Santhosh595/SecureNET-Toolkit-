@@ -29,6 +29,7 @@ TOOL_MODULES = {
     "cloudsentry": os.path.join(TOOLKIT_ROOT, "CloudSentry", "main.py"),
     "imgscan": os.path.join(TOOLKIT_ROOT, "ImgScan", "main.py"),
     "techfinger": os.path.join(TOOLKIT_ROOT, "TechFinger", "main.py"),
+    "apiguard": os.path.join(TOOLKIT_ROOT, "APIGuard", "main.py"),
 }
 
 _jobs = {}
@@ -189,6 +190,20 @@ def quick_scan_techfinger(url="https://example.com"):
         url: target URL to fingerprint.
     """
     return _start_job("techfinger", [url, "--no-disclaimer"])
+
+
+def quick_scan_apiguard(url="https://api.example.com", auth="none", spec=""):
+    """Start an APIGuard scan on an API URL. Returns job_id.
+
+    Args:
+        url: target API base URL.
+        auth: auth string (bearer TOKEN, etc.).
+        spec: optional OpenAPI spec file path.
+    """
+    args = [url, "--auth", auth, "--no-disclaimer"]
+    if spec:
+        args += ["--spec", spec]
+    return _start_job("apiguard", args)
 
 
 def get_result(job_id):
