@@ -125,6 +125,13 @@ def save_finding(
         return cur.lastrowid or 0
 
 
+def get_scan(scan_id: int) -> Optional[Dict[str, Any]]:
+    """Get a single scan by ID."""
+    with get_db() as conn:
+        row = conn.execute("SELECT * FROM scans WHERE id=?", (scan_id,)).fetchone()
+        return dict(row) if row else None
+
+
 def get_scans(limit: int = 20) -> List[Dict[str, Any]]:
     with get_db() as conn:
         rows = conn.execute("SELECT * FROM scans ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
