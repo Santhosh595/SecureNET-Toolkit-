@@ -37,7 +37,7 @@ Analyze any website's HTTP response headers for security misconfigurations. Chec
 
 ### PortMap — Multi-threaded Port Scanner
 
-Scan any host for open ports using raw sockets — no Nmap dependency. Identifies running services on 70+ known ports, assigns risk levels (LOW / MEDIUM / HIGH), and provides actionable risk notes. Supports 4 scan profiles with multi-threaded scanning (100 workers). Works as both a CLI tool and a web dashboard with live polling.
+Scan any host for open ports using raw sockets — no Nmap dependency. Identifies running services on 60+ known ports, assigns risk levels (LOW / MEDIUM / HIGH), and provides actionable risk notes. Supports 4 scan profiles with multi-threaded scanning (100 workers). Works as both a CLI tool and a web dashboard with live polling.
 
 **Tech:** Python, Sockets, Threading, Flask, Rich
 
@@ -45,7 +45,7 @@ Scan any host for open ports using raw sockets — no Nmap dependency. Identifie
 
 ### HashDetect — Hash Identifier & Cracker
 
-Identify hash types from any string using length and pattern matching. Supports 18+ hash formats with confidence scoring and algorithm category tagging. Optional wordlist-based cracking for weak hashes (MD5, SHA-1, etc.). Fully local processing.
+Identify hash types from any string using length and pattern matching. Supports 17 hash formats with confidence scoring and algorithm category tagging. Optional wordlist-based cracking for weak hashes (MD5, SHA-1, etc.). Fully local processing.
 
 **Tech:** Python, Flask, hashlib, Rich
 
@@ -352,7 +352,7 @@ python dashboard.py
 cd CloudSentry
 pip install -r requirements.txt
 
-# INFO mode (no credentials required) — lists all 60 checks
+# INFO mode (no credentials required) — lists all 55 checks
 python main.py --info
 
 # Live audit of one provider (uses detected credentials)
