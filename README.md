@@ -352,7 +352,7 @@ python dashboard.py
 cd CloudSentry
 pip install -r requirements.txt
 
-# INFO mode (no credentials required) — lists all 55 checks
+# INFO mode (no credentials required) — lists all 60 checks (25 AWS / 20 GCP / 15 Azure)
 python main.py --info
 
 # Live audit of one provider (uses detected credentials)
