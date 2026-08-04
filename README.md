@@ -5,7 +5,7 @@
 
 ## Overview
 
-SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **seventeen** independent security tools and a unified control panel dashboard: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor, a log anomaly monitor (LogSentry), a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), and a web technology fingerprinter (WhatWeb/httpx-style).
+SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **eighteen** independent security tools and a unified control panel dashboard: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor (DNSAudit), a log anomaly monitor (LogSentry), an OWASP API Security Top 10 tester (APIGuard), a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), and a web technology fingerprinter (WhatWeb/httpx-style).
 
 All tools are lightweight, offline-first (except for target URL/header lookups), and designed for developers, security students, and penetration testers.
 
@@ -37,7 +37,7 @@ Analyze any website's HTTP response headers for security misconfigurations. Chec
 
 ### PortMap — Multi-threaded Port Scanner
 
-Scan any host for open ports using raw sockets — no Nmap dependency. Identifies running services on 70+ known ports, assigns risk levels (LOW / MEDIUM / HIGH), and provides actionable risk notes. Supports 4 scan profiles with multi-threaded scanning (100 workers). Works as both a CLI tool and a web dashboard with live polling.
+Scan any host for open ports using raw sockets — no Nmap dependency. Identifies running services on 60+ known ports, assigns risk levels (LOW / MEDIUM / HIGH), and provides actionable risk notes. Supports 4 scan profiles with multi-threaded scanning (100 workers). Works as both a CLI tool and a web dashboard with live polling.
 
 **Tech:** Python, Sockets, Threading, Flask, Rich
 
@@ -45,7 +45,7 @@ Scan any host for open ports using raw sockets — no Nmap dependency. Identifie
 
 ### HashDetect — Hash Identifier & Cracker
 
-Identify hash types from any string using length and pattern matching. Supports 18+ hash formats with confidence scoring and algorithm category tagging. Optional wordlist-based cracking for weak hashes (MD5, SHA-1, etc.). Fully local processing.
+Identify hash types from any string using length and pattern matching. Supports 17 hash formats with confidence scoring and algorithm category tagging. Optional wordlist-based cracking for weak hashes (MD5, SHA-1, etc.). Fully local processing.
 
 **Tech:** Python, Flask, hashlib, Rich
 
@@ -91,6 +91,22 @@ Scan codebases, git history, and environment configs for 50+ types of hardcoded 
 
 [View source](SecretSniff/) | [README](SecretSniff/README.md)
 
+### DNSAudit — Comprehensive DNS Security Auditor
+
+Audit DNS configuration across 12 categories: email authentication (SPF/DKIM/DMARC), DNSSEC validation, zone-transfer exposure, subdomain takeover detection, DNS hijacking indicators, mail server config, nameserver health, CAA, DNS inventory, and DANE/TLSA. Grades domains A–F with prioritized remediation plans. Supports custom resolvers, bulk scanning, and JSON/PDF report export.
+
+**Tech:** Python, dnspython, Flask, Requests, Rich
+
+[View source](DNSAudit/) | [README](DNSAudit/README.md)
+
+### LogSentry — Multi-Source Log Analyzer & Threat Detector
+
+Ingest logs from 6 formats (Linux auth, Apache/Nginx access & error, Windows Event Logs, UFW/iptables, JSON/CSV), normalize them into a unified schema, run 15 detection rules mapped to MITRE ATT&CK, correlate events across sources, and generate incident reports — all offline. Real-time monitoring plus historical analysis modes, with ATT&CK Navigator JSON export and JSON/CSV/PDF reports.
+
+**Tech:** Python, Flask, Rich, Watchdog, SQLite
+
+[View source](LogSentry/) | [README](LogSentry/README.md)
+
 ### VulnProbe — Template-Based Vulnerability Scanner (Nuclei-style)
 
 Send templated HTTP requests to a target and evaluate matchers (status / word / regex) to surface misconfigurations, exposed files, and version disclosure. Checks are read-only and safe; new checks are added by dropping a `.yaml` template — no code changes.
@@ -131,9 +147,17 @@ Identify the technologies behind a web target by inspecting response headers, co
 
 [View source](TechFinger/) | [README](TechFinger/README.md)
 
+### APIGuard — OWASP API Security Top 10 Tester
+
+Automated security testing for REST APIs against the OWASP API Security Top 10 (API1–API10) plus injection. Discovers endpoints from OpenAPI specs or a 545-entry built-in wordlist, authenticates via 6 modes (bearer, API key, basic, cookie, OAuth2, none), and runs targeted probes for BOLA, broken auth, excessive data exposure, mass assignment, rate-limit gaps, BFLA, SSRF, misconfigurations, and more. Read-only by default; destructive tests require the `--unsafe` flag. Maps findings to known CVEs and exports JSON/PDF reports.
+
+**Tech:** Python, Flask, Requests, PyYAML, Rich
+
+[View source](APIGuard/) | [README](APIGuard/README.md)
+
 ### SecureNET Control Panel
 
-Unified web dashboard that orchestrates all 17 security tools. Launch, monitor, and manage every tool from a single interface with real-time health checks, unified alerts, and quick-scan capabilities.
+Unified web dashboard that orchestrates all 18 security tools. Launch, monitor, and manage every tool from a single interface with real-time health checks, unified alerts, and quick-scan capabilities.
 
 - [View source](SecureNET-Control-Panel/) | [README](SecureNET-Control-Panel/README.md)
 
@@ -142,7 +166,7 @@ Unified web dashboard that orchestrates all 17 security tools. Launch, monitor, 
 ```bash
 # Clone the repository
 git clone https://github.com/Santhosh595/SecureNET-Toolkit-.git
-cd SecureNET-Toolkit--main
+cd SecureNET-Toolkit-
 ```
 
 ### FileGuard
@@ -328,7 +352,7 @@ python dashboard.py
 cd CloudSentry
 pip install -r requirements.txt
 
-# INFO mode (no credentials required) — lists all 60 checks
+# INFO mode (no credentials required) — lists all 60 checks (25 AWS / 20 GCP / 15 Azure)
 python main.py --info
 
 # Live audit of one provider (uses detected credentials)
@@ -350,6 +374,10 @@ python main.py --requirements requirements.txt
 
 # Scan an image SBOM (CycloneDX/SPDX JSON)
 python main.py --sbom sbom.json
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5016
 ```
 
 ### TechFinger
@@ -364,6 +392,63 @@ python main.py https://example.com
 # Web dashboard
 python dashboard.py
 # Open http://127.0.0.1:5017
+```
+
+### DNSAudit
+
+```bash
+cd DNSAudit
+pip install -r requirements.txt
+
+# Basic audit
+python main.py example.com
+
+# Specific categories only
+python main.py example.com --categories "SPF,DKIM,DMARC"
+
+# Bulk scan
+python main.py bulk --file domains.txt --output results.json
+
+# Web dashboard
+python main.py dashboard
+# Open http://127.0.0.1:5900
+```
+
+### LogSentry
+
+```bash
+cd LogSentry
+pip install -r requirements.txt
+
+# Historical analysis of a log file
+python main.py analyze --file /var/log/auth.log
+
+# Real-time monitoring
+python main.py monitor --file /var/log/auth.log
+
+# Cross-source correlation
+python main.py correlate --files auth.log access.log --type auth,web
+
+# Web dashboard
+python main.py dashboard
+# Open http://127.0.0.1:5000
+```
+
+### APIGuard
+
+```bash
+cd APIGuard
+pip install -r requirements.txt
+
+# Scan an API with bearer authentication (read-only)
+python main.py https://api.example.com/v2 --auth "bearer TOKEN"
+
+# Filter by OWASP category
+python main.py https://api.example.com --auth "bearer TOKEN" --category api1,api2
+
+# Web dashboard
+python dashboard.py
+# Open http://127.0.0.1:5018
 ```
 
 ## Running Tests
@@ -381,8 +466,9 @@ python -m pytest test_sniffer.py -v
 ## Project Structure
 
 ```
-SecureNET-Toolkit--main/
+SecureNET-Toolkit-/
 ├── .gitignore
+├── LICENSE
 ├── README.md
 ├── FileGuard-AES-SHA256/
 │   ├── main.py              # GUI application (Tkinter)
@@ -496,6 +582,62 @@ SecureNET-Toolkit--main/
 │   │   └── templates/
 │   │       └── index.html   # Dashboard UI
 │   └── README.md            # Tool documentation
+├── VulnProbe/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── engine/              # Template matching engine
+│   ├── templates/           # YAML check templates + dashboard UI
+│   ├── dashboard.py         # Flask web dashboard
+│   └── README.md            # Tool documentation
+├── PathProbe/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── wordlists/           # Common path wordlists
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
+├── CloudSentry/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── providers/           # AWS / GCP / Azure check modules
+│   ├── catalog.py           # Check registry
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
+├── ImgScan/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
+├── TechFinger/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── dashboard.py         # Flask web dashboard
+│   ├── templates/
+│   │   └── index.html       # Dashboard UI
+│   └── README.md            # Tool documentation
+├── DNSAudit/
+│   ├── main.py              # CLI entry point (Rich tables)
+│   ├── resolver.py          # DNS resolution engine
+│   ├── scorer.py            # A–F grading logic
+│   ├── reporter.py          # JSON/PDF report generation
+│   ├── dashboard/           # Flask web dashboard
+│   └── README.md            # Tool documentation
+├── LogSentry/
+│   ├── main.py              # CLI entry point (analyze/monitor/correlate)
+│   ├── ingester/            # Log format parsers
+│   ├── normalizer.py        # Unified schema normalization
+│   ├── rules/               # 15 detection rules
+│   ├── mitre/               # ATT&CK mappings
+│   ├── dashboard/           # Flask web dashboard (port 5000)
+│   └── README.md            # Tool documentation
+├── APIGuard/
+│   ├── main.py              # CLI entry point (Rich output)
+│   ├── analyzer/            # OWASP API Top 10 probes
+│   ├── discovery/           # Endpoint discovery (OpenAPI + wordlist)
+│   ├── auth/                # 6 authentication modes
+│   ├── dashboard.py         # Flask web dashboard (port 5018)
+│   ├── tests/               # Unit tests
+│   └── README.md            # Tool documentation
 ├── SecureNET-Control-Panel/
 │   ├── hub.py                # Main Flask app (control panel)
 │   ├── start_all.py          # Master launcher script
@@ -550,6 +692,7 @@ SecureNET-Toolkit--main/
 | CloudSentry | Yes | Yes | — | — | — | — | — | Yes | — | Yes | boto3 / GCP / Azure |
 | ImgScan | Yes | Yes | — | — | — | — | — | Yes | — | Yes | — |
 | TechFinger | Yes | Yes | Yes | — | — | — | — | Yes | — | — | — |
+| APIGuard | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes | — |
 | Control Panel | Yes | Yes | Yes | — | — | — | — | Yes | — | Yes | — |
 
 ## Scoring Methodology (HeaderScan)
