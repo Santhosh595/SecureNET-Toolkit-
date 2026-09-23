@@ -1,5 +1,7 @@
 # SecureNET Toolkit
 
+[![CI](https://github.com/Santhosh595/SecureNET-Toolkit-/actions/workflows/ci.yml/badge.svg)](https://github.com/Santhosh595/SecureNET-Toolkit-/actions/workflows/ci.yml)
+
 **Author:** Santhosh L
 **License:** MIT
 
@@ -462,6 +464,13 @@ python -m pytest test_main.py -v
 cd network-sniffer
 python -m pytest test_sniffer.py -v
 ```
+
+## Continuous Integration
+
+GitHub Actions now runs on every push and pull request to:
+
+- validate Python syntax across the repository
+- run unit tests for `FileGuard-AES-SHA256` and `network-sniffer`
 
 ## Project Structure
 
