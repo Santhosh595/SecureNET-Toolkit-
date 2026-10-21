@@ -3,6 +3,9 @@
 **Author:** Santhosh L
 **License:** MIT
 
+[![CI](https://github.com/Santhosh595/SecureNET-Toolkit-/actions/workflows/ci.yml/badge.svg)](https://github.com/Santhosh595/SecureNET-Toolkit-/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+
 ## Overview
 
 SecureNET Toolkit is an open-source cybersecurity toolkit built with Python. It provides **eighteen** independent security tools and a unified control panel dashboard: a file encryption system, a network intrusion detection system, an HTTP security header analyzer, a multi-threaded port scanner, a hash identifier & cracker, a real-time ARP spoof detector, a subdomain enumerator, a JWT security analyzer, an SSL/TLS security scanner, a hardcoded secret scanner, a DNS security auditor (DNSAudit), a log anomaly monitor (LogSentry), an OWASP API Security Top 10 tester (APIGuard), a template-based HTTP vulnerability scanner (Nuclei-style), a web content/path discovery tool (feroxbuster-style), a multi-cloud security posture checker (Prowler/ScoutSuite-style), a container/dependency CVE scanner (Trivy-style), and a web technology fingerprinter (WhatWeb/httpx-style).
@@ -462,6 +465,10 @@ python -m pytest test_main.py -v
 cd network-sniffer
 python -m pytest test_sniffer.py -v
 ```
+
+Both suites also run in CI on every push and pull request, on Python 3.10,
+3.11 and 3.12. They need no network and no display — `tkinter` is imported
+by FileGuard's `main.py`, but the tested code paths never open a window.
 
 ## Project Structure
 
