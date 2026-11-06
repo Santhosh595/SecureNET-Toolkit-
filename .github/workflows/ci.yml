@@ -1,15 +1,20 @@
 # CI: run the test suites on every push to main and every PR targeting it.
 #
 # This repo is a collection of standalone tools, each with its own
-# requirements.txt. Two of them have real pytest suites:
+# requirements.txt. Seven of them have real pytest suites:
 #
 #   FileGuard-AES-SHA256/test_main.py  -- encryption, hashing, key handling
 #   network-sniffer/test_sniffer.py    -- detection database and detectors
+#   HeaderScan/test_analyzer.py        -- HTTP header checkers + scoring
+#   JWTInspect/tests/test_parser.py    -- JWT parsing (offline)
+#   HashDetect/test_detector.py        -- hash-type identification
+#   PortMap/test_scanner.py            -- service/risk maps, IP checks
+#   DNSAudit/test_scorer.py            -- DNS category scoring + grade caps
 #
-# The other sub-projects have no tests. Their API test files under
-# APIGuard/tests/ are OWASP API Security Top 10 test definitions
-# (api1_bola.py, api7_ssrf.py, ...), not pytest modules, and are not
-# collected here.
+# HeaderScan/test.yml is a manual workflow, not a test suite. Their API
+# test files under APIGuard/tests/ are OWASP API Security Top 10 test
+# definitions (api1_bola.py, api7_ssrf.py, ...), not pytest modules, and
+# are not collected here.
 #
 # The suites need no network and no display: tkinter is imported by
 # FileGuard's main.py but never opens a window in the tested code paths.
@@ -42,9 +47,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install cryptography pytest
+          python -m pip install cryptography pytest requests rich flask
 
       - name: Run test suites
         run: |
-          python -m pytest FileGuard-AES-SHA256/test_main.py -v
-          python -m pytest network-sniffer/test_sniffer.py -v
+          python -m pytest FileGuard-AES-SHA256/test_main.py HeaderScan/test_analyzer.py HashDetect/test_detector.py PortMap/test_scanner.py DNSAudit/test_scorer.py -v
+          python -m pytest network-sniffer/test_sniffer.py JWTInspect/tests/test_parser.py -v

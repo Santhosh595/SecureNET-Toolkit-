@@ -121,7 +121,29 @@ def detect_hash(hash_input: str) -> DetectionResult:
                                is_valid_hex=False, is_base64=False,
                                error="Empty input")
 
-    normalized = hash_input.strip().lower()
+    stripped = hash_input.strip()
+    normalized = stripped.lower()
+
+    # Bcrypt/Argon2 use $-prefixed encodings ($2b$12$..., $argon2id$...) which
+    # are neither hex nor base64. Match them against the raw input before the
+    # hex/base64 gate, otherwise they always return "not valid hex or base64".
+    for name, _length, pattern, category, crackable, note in HASH_TYPES:
+        if name == "bcrypt" and len(stripped) == 60 and re.match(r"^\$2[ab]\$\d{2}$", stripped[:7]):
+            # $2b$12$ prefix + 53 chars: use the table pattern literally (raw, not lowercased)
+            if re.match(r"^\$2[ab]\$\d{2}\$.{53}$", stripped):
+                return DetectionResult(
+                    input_hash=hash_input, normalized_hash=normalized,
+                    is_valid_hex=False, is_base64=False,
+                    matches=[HashMatch(name="bcrypt", confidence=Confidence.HIGH.value,
+                                       length=60, category=category.value,
+                                       crackable=crackable, note=note)])
+        elif name in ("bcrypt", "Argon2") and re.match(pattern, stripped):
+            return DetectionResult(
+                input_hash=hash_input, normalized_hash=normalized,
+                is_valid_hex=False, is_base64=False,
+                matches=[HashMatch(name=name, confidence=Confidence.HIGH.value,
+                                   length=len(stripped), category=category.value,
+                                   crackable=crackable, note=note)])
 
     # Check if it's base64-encoded (not a hash)
     is_b64 = _is_base64(hash_input.strip()) and not _is_hex(normalized)
